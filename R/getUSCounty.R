@@ -1,4 +1,4 @@
-#' @keywords spatial
+#' @keywords locator
 #' @export
 #' @title Return US County Name at Specified Locations
 #' @param lon vector of longitudes in decimal degrees
@@ -12,13 +12,13 @@
 #'     Specification of \code{stateCodes} limits spatial searching to the specified states
 #'     and greatly improves performance.
 #'     
-#'     If \code{allData=TRUE} additional data is returned.
-#' @return vector of counties
+#'     If \code{allData=TRUE}, additional data is returned.
+#' @return Vector of county names in English.
 #' @examples
 #' \dontrun{
 #' lon <- seq(-140,-90)
 #' lat <- seq(20,70)
-#' getCountry(lon,lat)
+#' getUSCounty(lon,lat)
 #' }
 #' @references \url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}
 #' @seealso getSpatialData
@@ -60,3 +60,4 @@ getUSCounty <- function(lon, lat, dataset='USCensusCounties', stateCodes=NULL, a
   
   
 }
+

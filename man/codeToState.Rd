@@ -14,7 +14,7 @@ codeToState(stateCodes, countryCodes = NULL, dataset = "StateTable")
 \item{dataset}{name of dataset containing state-level identifiers -- defaults to 'StateTable'}
 }
 \value{
-vector of English state names or NA
+A vector of English state names or NA.
 }
 \description{
 Converts a vector of ISO 3166-2 alpha-2 state codes to the corresponding English names.
@@ -26,5 +26,5 @@ download, convert and install the necessary spatial data.
 \seealso{
 convertNaturalEarthAdm1
 }
-\keyword{spatial}
+\keyword{conversion}
 

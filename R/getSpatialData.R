@@ -1,13 +1,13 @@
-#' @keywords spatial
+#' @keywords locator
 #' @export
 #' @import sp
 #' @title Return Spatial Data Associated with a Set of Locations
-#' @param spDF SpatialPolygonsDataframe
+#' @param spDF object of class SpatialPolygonsDataFrame
 #' @param lon vector of longitudes in decimal degrees
 #' @param lat vector of latitudes in decimal degrees
 #' @description Returns a dataframe or vector of data.
 #' @details Any spatial polygon may be passed in.
-#' @return vector or dataframe of data
+#' @return Vector or dataframe of data.
 getSpatialData <- function(spDF, lon, lat) {
   
   # Sanity check -- same number of lats and lons and datetimes
@@ -24,5 +24,4 @@ getSpatialData <- function(spDF, lon, lat) {
   
   return(locationsDF)
 }
-
 

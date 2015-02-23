@@ -18,5 +18,5 @@ getSpatialDataDir
 
 setSpatialDataDir
 }
-\keyword{spatial}
+\keyword{environment}
 

@@ -12,10 +12,10 @@ installSpatialData(dataset = NULL, ...)
 \item{...}{additional arguments needed by some \code{convert~} functions}
 }
 \value{
-character name of the installed dataset
+Character name of the installed dataset.
 }
 \description{
-Install a named spatial dataset
+Install a named spatial dataset.
 }
-\keyword{spatial}
+\keyword{environment}
 

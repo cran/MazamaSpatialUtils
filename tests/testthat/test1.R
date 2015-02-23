@@ -150,9 +150,9 @@ test_that("subsetting with countryCodes works", {
 test_that("allData returns are correct dimension and type", {
   
   expect_is(getCountryCode(2, 47, allData=TRUE), "data.frame")
-  expect_equal(dim(getCountryCode(2, 47, allData=TRUE)), c(1,7))
+  expect_equal(dim(getCountryCode(2, 47, allData=TRUE)), c(1,11))
   expect_is(getCountryCode(c(120,-17), c(-1.5,15), allData=TRUE), "data.frame")
-  expect_equal(dim(getCountryCode(c(120,-17), c(-1.5,15), allData=TRUE)), c(2,7))
+  expect_equal(dim(getCountryCode(c(120,-17), c(-1.5,15), allData=TRUE)), c(2,11))
   
 #   expect_is(getStateCode(2, 47, allData=TRUE), "data.frame")
 #   expect_equal(dim(getStateCode(2, 47, allData=TRUE)), c(1,52))

@@ -7,15 +7,15 @@
 getSpatialDataDir()
 }
 \value{
-absolute path string
+Absolute path string.
 }
 \description{
-Returns the package data directory where spatial data are located.
+Returns the package data directory where spatial data is located.
 }
 \seealso{
 dataDir
 
 setSpatialDataDir
 }
-\keyword{spatial}
+\keyword{environment}
 

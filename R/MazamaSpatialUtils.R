@@ -5,6 +5,7 @@
 #' with uniformly named identifiers including:
 #' \itemize{
 #' \item{ countryCode -- ISO 3166-1 alpha-2}
+#' \item{ countryName -- Country name}
 #' \item{ stateCode -- ISO 3166-2 alpha-2}
 #' \item{ timezone -- Olson timezone}
 #' }
@@ -43,101 +44,41 @@ NULL
 NULL
 
 
-#' @docType data
-#' @keywords datasets
-#' @name CountryTable
-#' @title Dataframe of World Countries
-#' @format A Dataframe with 246 rows and 15 columns
-#' @description Data associated with the TM_WORLD_BORDERS_SMPL dataset obtained
-#' from \url{http://thematicmapping.org/downloads/}. Core data include:
-#' \itemize{
-#' \item{countryCode}
-#' \item{countryName}
-#' \item{latitude}
-#' \item{longitude}
-#' }
-#' 
-#' Additional variables can be seen with \code{names(CountryTable)}
-#' @details CountryTable.RData is created during initialization and is stored
-#' in the directory specified with \code{setSpatialDataDir()}.
-#' @seealso setSpatialDataDir
-NULL
-
-
-#' @docType data
-#' @keywords datasets
-#' @name StateTable
-#' @title Dataframe of World States
-#' @format A Dataframe with 4647 rows and 52 columns
-#' @description Data associated with the ne_10m_admin_1 dataset obtained
-#' from \url{http//www.naturalearthdata.com/download}. Core data include:
-#' \itemize{
-#' \item{countryCode}
-#' \item{stateCode}
-#' \item{stateName}
-#' }
-#' 
-#' Additional variables can be seen with \code{names(StateTable)}
-#' @details StateTable.RData is created during initialization and is stored
-#' in the directory specified with \code{setSpatialDataDir()}.
-NULL
-
-
-#' @docType data
-#' @keywords datasets
-#' @name TimezoneTable
-#' @title Dataframe of World Timezones
-#' @format A Dataframe with 408 rows and 6 columns
-#' @description Data associated with the tz_world dataset obtained
-#' from \url{http://efele.net/maps/tz/world/}. Core data include:
-#' \itemize{
-#' \item{timezone}
-#' \item{countryCode}
-#' \item{latitude}
-#' \item{longitude}
-#' }
-#' 
-#' Additional variables can be seen with \code{names(TimezoneTable)}
-#' @details TimezoneTable.RData is created during initialization and is stored
-#' in the directory specified with \code{setSpatialDataDir()}.
-NULL
-
-
 # ----- Internal Package State -------------------------------------------------
 
 #' @docType data
-#' @keywords spatial
+#' @keywords environment
 #' @name SpatialDataDir
 #' @title Directory for Spatial Data
-#' @format absolute path string
+#' @format Absolute path string.
 #' @description This package maintains an internal directory location which users can set
 #' using \code{setSpatialDataDir()}.  All package functions use this directory whenever datasets
 #' are created or loaded.
 #' 
-#' The default setting when the package is loaded is \code{getwd()}
+#' The default setting when the package is loaded is \code{getwd()}.
 #' @seealso getSpatialDataDir
 #' @seealso setSpatialDataDir
 spatialEnv <- new.env(parent = emptyenv())
 spatialEnv$dataDir <- getwd()
 
-#' @keywords spatial
+#' @keywords environment
 #' @export
 #' @title Get Package Data Directory
-#' @description Returns the package data directory where spatial data are located.
-#' @return absolute path string
+#' @description Returns the package data directory where spatial data is located.
+#' @return Absolute path string.
 #' @seealso dataDir
 #' @seealso setSpatialDataDir
 getSpatialDataDir <- function() {
   spatialEnv$dataDir
 }
 
-#' @keywords spatial
+#' @keywords environment
 #' @export
 #' @title Set Package Data Directory
 #' @param dataDir directory where spatial datasets are created
-#' @description Sets the package data directory where spatial data are located.
+#' @description Sets the package data directory where spatial data is located.
 #' If the directory does not exist, it will be created.
-#' @return silently returns previous value of data directory
+#' @return Silently returns previous value of data directory.
 #' @seealso SpatialDataDir
 #' @seealso getSpatialDataDir
 setSpatialDataDir <- function(dataDir) {
@@ -157,12 +98,35 @@ setSpatialDataDir <- function(dataDir) {
 
 # ----- Code <-> Name conversion functions  ------------------------------------
 
-#' @keywords spatial
+#' @keywords conversion
+#' @export
+#' @title Convert Between ISO2 and ISO3 Country Codes
+#' @param countryCodes vector of country codes to be converted
+#' @description Converts a vector of ISO 3166-1 alpha-2 codes to the corresponding ISO 3166-1 alpha-3 codes or vice versa.
+#' @return A vector of ISO country codes
+codeToCode <- function(countryCodes) {
+  countryTable <- MazamaSpatialUtils::SimpleCountries@data  
+  if ( all(str_length(countryCodes) == 2) ) {
+    # Create a vector of ISO3 identified by countryCode
+    allISO3 <- countryTable$ISO3
+    names(allISO3) <- countryTable$countryCode
+    return(as.character(allISO3[countryCodes]))
+  } else if ( all(str_length(countryCodes) == 3) ) {
+    # Create a vector of ISO2 identified by ISO3
+    allISO2 <- countryTable$countryCode
+    names(allISO2) <- countryTable$ISO3
+    return(as.character(allISO2[countryCodes]))    
+  } else {
+    stop('countryCodes must be either all ISO 3166-1 alpha-2 or all ISO 3166-1 alpha-3', call.=FALSE)
+  }
+}
+
+#' @keywords conversion
 #' @export
 #' @title Convert Country Codes to Country Names
 #' @param countryCodes vector of country codes to be converted
-#' @description Converts a vecctor of ISO 3166-1 alpha-2 codes to the corresponding English names.
-#' @return vector of English country names or NA
+#' @description Converts a vector of ISO 3166-1 alpha-2 codes to the corresponding English names.
+#' @return A vector of English country names or NA.
 codeToCountry <- function(countryCodes) {
   countryTable <- MazamaSpatialUtils::SimpleCountries@data
   # Create a vector of countryNames identified by countryCode
@@ -171,12 +135,12 @@ codeToCountry <- function(countryCodes) {
   return(as.character(allNames[countryCodes]))
 }
 
-#' @keywords spatial
+#' @keywords conversion
 #' @export
 #' @title Convert Country Names to Country Codes
 #' @param countryNames vector of country names to be converted
 #' @description Converts a vector of English country names to the corresponding ISO 3166-1 alpha-2 codes.
-#' @return vector of ISO 3166-1 alpha-2 codes or NA
+#' @return A vector of ISO 3166-1 alpha-2 codes or NA.
 countryToCode <- function(countryNames) {
   countryTable <- MazamaSpatialUtils::SimpleCountries@data
   # Create a vector of countryCodes identified by countryName
@@ -185,7 +149,7 @@ countryToCode <- function(countryNames) {
   return(as.character(allCodes[countryNames]))
 }
 
-#' @keywords spatial
+#' @keywords conversion
 #' @export
 #' @title Convert State Codes to State Names
 #' @param stateCodes vector of state codes to be converted
@@ -194,7 +158,7 @@ countryToCode <- function(countryNames) {
 #' @description Converts a vector of ISO 3166-2 alpha-2 state codes to the corresponding English names.
 #' @details For this function to work, you must first run \code{initializeSpatialData()} to
 #' download, convert and install the necessary spatial data.
-#' @return vector of English state names or NA
+#' @return A vector of English state names or NA.
 #' @seealso convertNaturalEarthAdm1
 codeToState <- function(stateCodes, countryCodes=NULL, dataset='StateTable') {
   # Sanity check
@@ -212,16 +176,16 @@ codeToState <- function(stateCodes, countryCodes=NULL, dataset='StateTable') {
   return(as.character(allStates[stateCodes]))
 }
 
-#' @keywords spatial
+#' @keywords conversion
 #' @export
 #' @title Convert State Names to State Codes
 #' @param stateNames state names to be converted
-#' @param countryCodes ISO 3166-2 alpha-2 countryCodes the state might be found in
+#' @param countryCodes ISO 3166-2 alpha-2 country codes the state might be found in
 #' @param dataset name of dataset containing state-level identifiers -- defaults to 'StateTable'
-#' @description Converts a vector of state names to a ISO 3166-2 two character state codes.
+#' @description Converts a vector of state names to an ISO 3166-2 two character state codes.
 #' @details For this function to work, you must first run \code{initializeSpatialData()} to
 #' download, convert and install the necessary spatial data.
-#' @return vector of ISO 3166-2 codes or NA
+#' @return A vector of ISO 3166-2 codes or NA.
 #' @seealso convertNaturalEarthAdm1
 stateToCode <- function(stateNames, countryCodes=NULL, dataset='StateTable') {
   # Sanity check
@@ -242,27 +206,30 @@ stateToCode <- function(stateNames, countryCodes=NULL, dataset='StateTable') {
 
 # ----- Initialization----------------------------------------------------------
 
-#' @keywords spatial
 #' @export
 #' @title Install Core Datasets
-#' @description Three core datasets must be installed before the functionality
-#' in \pkg{MazamaSpatialUtils} becomes useful. Running \code{initializeSpatialData()} will
-#' install these datasets in the the directory specified by \code{setSpatialDataDir()}
-#' @return nothing
+#' @description Four core datasets can be installed to enhance the base the functionality
+#' in \pkg{MazamaSpatialUtils}. Running \code{initializeSpatialData()} will
+#' install these datasets in the the directory specified by \code{setSpatialDataDir()}.
+#' 
+#' The core datastes are:
+#' \itemize{
+#' \item{\code{TMWorldBorders} -- high resolution country polygons (higher resolution than \code{SimpleCountries})}
+#' \item{\code{NaturalEarthAdm1} -- state/province polygons throughout the world}
+#' \item{\code{USCensusCounties} -- county polygons in the United States}
+#' \item{\code{WorldTimezones} -- high resolution timezone polygons (higher resolution than \code{SimpleTimezones})}
+#' }
+#' @return Nothing.
 #' @seealso setSpatialDataDir
 initializeSpatialData <- function() {
-  # Install and load Country, State and Timezone datasets
-  installSpatialData('TMWorldBordersSimple')
-  loadSpatialData('TMWorldBordersSimple')
+  # Install high resolution and load Country, State and Timezone datasets
+  installSpatialData('TMWorldBorders')
+  loadSpatialData('TMWorldBorders')
   installSpatialData('NaturalEarthAdm1')
   loadSpatialData('NaturalEarthAdm1')
   installSpatialData('USCensusCounties')
   loadSpatialData('USCensusCounties')
   installSpatialData('WorldTimezones')
   loadSpatialData('WorldTimezones')
-  # Load the associated data tables
-  loadSpatialData('CountryTable')
-  loadSpatialData('StateTable')
-  loadSpatialData('TimezoneTable')
 }
 

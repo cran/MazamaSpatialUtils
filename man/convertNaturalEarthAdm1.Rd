@@ -4,32 +4,35 @@
 \alias{convertNaturalEarthAdm1}
 \title{Convert Level 1 (State) Borders Shapefile}
 \usage{
-convertNaturalEarthAdm1(nameOnly = FALSE, ...)
+convertNaturalEarthAdm1(nameOnly = FALSE)
 }
 \arguments{
 \item{nameOnly}{logical specifying whether to only return the name without creating the file}
-
-\item{...}{additional arguments (unused)}
 }
 \value{
-name of the dataset being created
+Name of the dataset being created.
 }
 \description{
 Returns a SpatialPolygonsDataFrame for a 1st level administrative divisions
 }
 \details{
+A state border shapefile is downloaded and converted to a
+SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
+in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
+
 Within the \pkg{MazamaSpatialUtils} package the phrase 'state' refers to administrative
 divisions beneath the level of the country or nation. This makes sense in the United 'States'. In
 other countries this level is known as 'province', 'territory' or some other term.
 }
 \references{
 \url{http//www.naturalearthdata.com/download}
+
+\url{http://www.statoids.com/ihasc.html}
 }
 \seealso{
 setSpatialDataDir
 
 getState, getStateCode
 }
-\keyword{shapefile}
-\keyword{spatial,}
+\keyword{datagen}
 

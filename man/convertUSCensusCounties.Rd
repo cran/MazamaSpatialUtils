@@ -4,24 +4,21 @@
 \alias{convertUSCensusCounties}
 \title{Convert US County Borders Shapefile}
 \usage{
-convertUSCensusCounties(nameOnly = FALSE, ...)
+convertUSCensusCounties(nameOnly = FALSE)
 }
 \arguments{
 \item{nameOnly}{logical specifying whether to only return the name without creating the file}
-
-\item{...}{additional arguments (unused)}
 }
 \value{
-Large SpatialPolygonsDataFrame
+Large SpatialPolygonsDataFrame.
 }
 \description{
 A US county borders shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting file wil be created
+SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
 }
 \references{
 \url{http://www2.census.gov/geo/tiger/GENZ2013}
 }
-\keyword{shapefile}
-\keyword{spatial,}
+\keyword{datagen}
 

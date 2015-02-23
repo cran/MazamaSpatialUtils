@@ -12,12 +12,11 @@ convertLayer(dsn = "", layerName = "")
 \item{layerName}{layer argument to readOGR}
 }
 \value{
-SpatialPolygonsDataFrame
+An object of class \code{SpatialPolygonsDataFrame}
 }
 \description{
-Raw shapfiles are read in using the \code{readOGR()} function from the \pkg{rgdal} package.
-Spatial data are reprojected on to a standard projection with \code{"+proj=longlat"} before being returned.
+Raw shapefiles are read in using the \code{readOGR()} function from the \pkg{rgdal} package.
+Spatial data are reprojected onto a standard projection with \code{"+proj=longlat"} before being returned.
 }
-\keyword{shapefile}
-\keyword{spatial,}
+\keyword{internal}
 

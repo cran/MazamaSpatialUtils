@@ -1,25 +1,25 @@
-#' @keywords spatial
+#' @keywords locator
 #' @export
 #' @title Return State Names at Specified Locations
 #' @param lon vector of longitudes in decimal degrees
 #' @param lat vector of latitudes in decimal degrees
 #' @param dataset name of spatial dataset to use -- defaults to 'NaturalEarthAdm1'
-#' @param countryCodes vector of country codes, defaults to \code{NULL}
+#' @param countryCodes vector of country codes -- defaults to \code{NULL}
 #' @param allData logical specifying whether to return a full dataframe
 #' @description Uses spatial comparison to determine which 'state' polygons the 
 #'     locations fall into and returns the ISO 3166-2 2-character state code
 #'     strings for those polygons.
 #'     
 #'     Specification of \code{countryCodes} limits spatial searching to the specified
-#'     countrieis and greatly improves performance.
+#'     countries and greatly improves performance.
 #'     
-#'     If \code{allData=TRUE} additional data is returned.
-#' @return vector of ISO-3166-2 alpha-2 state codes
+#'     If \code{allData=TRUE}, additional data is returned.
+#' @return Vector of state names in English.
 #' @examples
 #' \dontrun{
 #' lon <- seq(-140,-90)
 #' lat <- seq(20,70)
-#' getCountryCode(lon,lat)
+#' getState(lon,lat)
 #' }
 #' @seealso getSpatialData
 getState <- function(lon, lat, dataset='NaturalEarthAdm1', countryCodes=NULL, allData=FALSE) {
@@ -60,3 +60,4 @@ getState <- function(lon, lat, dataset='NaturalEarthAdm1', countryCodes=NULL, al
   
   
 }
+

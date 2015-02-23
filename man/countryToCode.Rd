@@ -10,10 +10,10 @@ countryToCode(countryNames)
 \item{countryNames}{vector of country names to be converted}
 }
 \value{
-vector of ISO 3166-1 alpha-2 codes or NA
+A vector of ISO 3166-1 alpha-2 codes or NA.
 }
 \description{
 Converts a vector of English country names to the corresponding ISO 3166-1 alpha-2 codes.
 }
-\keyword{spatial}
+\keyword{conversion}
 

@@ -1,4 +1,4 @@
-#' @keywords spatial
+#' @keywords environment
 #' @export
 #' @title Load a Named Spatial Dataset into the Global Environment
 #' @param dataset name of dataset
@@ -6,7 +6,6 @@
 #' searched for the specified dataset.  Set this location with \code{setSpatialDataDir()}.
 #' @seealso getSpatialDataDir
 #' @seealso setSpatialDataDir
-
 loadSpatialData <- function(dataset=NULL) {
   
   # Use package internal data directory
@@ -22,4 +21,4 @@ loadSpatialData <- function(dataset=NULL) {
   }
   
 }
-  
+

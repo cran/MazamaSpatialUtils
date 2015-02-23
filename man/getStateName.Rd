@@ -14,12 +14,12 @@ getStateName(lon, lat, dataset = "NaturalEarthAdm1", countryCodes = NULL,
 
 \item{dataset}{name of spatial dataset to use -- defaults to 'NaturalEarthAdm1'}
 
-\item{countryCodes}{vector of country codes, defaults to \code{NULL}}
+\item{countryCodes}{vector of country codes -- defaults to \code{NULL}}
 
 \item{allData}{logical specifying whether to return a full dataframe}
 }
 \value{
-vector of ISO-3166-2 alpha-2 state codes
+Vector of state names in English
 }
 \description{
 Uses spatial comparison to determine which 'state' polygons the
@@ -27,19 +27,19 @@ Uses spatial comparison to determine which 'state' polygons the
     strings for those polygons.
 
     Specification of \code{countryCodes} limits spatial searching to the specified
-    countrieis and greatly improves performance.
+    countries and greatly improves performance.
 
-    If \code{allData=TRUE} additional data is returned.
+    If \code{allData=TRUE}, additional data is returned.
 }
 \examples{
 \dontrun{
 lon <- seq(-140,-90)
 lat <- seq(20,70)
-getCountryCode(lon,lat)
+getStateName(lon,lat)
 }
 }
 \seealso{
 getSpatialData
 }
-\keyword{spatial}
+\keyword{locator}
 

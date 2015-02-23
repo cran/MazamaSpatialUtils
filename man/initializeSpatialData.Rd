@@ -7,15 +7,22 @@
 initializeSpatialData()
 }
 \value{
-nothing
+Nothing.
 }
 \description{
-Three core datasets must be installed before the functionality
-in \pkg{MazamaSpatialUtils} becomes useful. Running \code{initializeSpatialData()} will
-install these datasets in the the directory specified by \code{setSpatialDataDir()}
+Four core datasets can be installed to enhance the base the functionality
+in \pkg{MazamaSpatialUtils}. Running \code{initializeSpatialData()} will
+install these datasets in the the directory specified by \code{setSpatialDataDir()}.
+
+The core datastes are:
+\itemize{
+\item{\code{TMWorldBorders} -- high resolution country polygons (higher resolution than \code{SimpleCountries})}
+\item{\code{NaturalEarthAdm1} -- state/province polygons throughout the world}
+\item{\code{USCensusCounties} -- county polygons in the United States}
+\item{\code{WorldTimezones} -- high resolution timezone polygons (higher resolution than \code{SimpleTimezones})}
+}
 }
 \seealso{
 setSpatialDataDir
 }
-\keyword{spatial}
 

@@ -4,15 +4,13 @@
 \alias{convertTMWorldBordersSimple}
 \title{Convert World Borders Shapefile}
 \usage{
-convertTMWorldBordersSimple(nameOnly = FALSE, ...)
+convertTMWorldBordersSimple(nameOnly = FALSE)
 }
 \arguments{
 \item{nameOnly}{logical specifying whether to only return the name without creating the file}
-
-\item{...}{additional arguments (unused)}
 }
 \value{
-name of the dataset being created
+Name of the dataset being created.
 }
 \description{
 A world borders shapefile is downloaded and converted to a
@@ -21,7 +19,7 @@ in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataD
 }
 \details{
 This shapefile is a greatly simplified version of the TMWorldBorders shapefile and is especially suited
-for spacial searches. This is the default dataset used in \code{getCountry()} and \code{getCountryCode()}.
+for spatial searches. This is the default dataset used in \code{getCountry()} and \code{getCountryCode()}.
 Users may wish to use a higher resolution dataset when plotting.
 }
 \references{
@@ -32,6 +30,5 @@ setSpatialDataDir
 
 getCountry, getCountryCode
 }
-\keyword{shapefile}
-\keyword{spatial,}
+\keyword{datagen}
 

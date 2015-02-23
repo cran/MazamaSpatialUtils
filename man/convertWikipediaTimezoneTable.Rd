@@ -7,7 +7,7 @@
 convertWikipediaTimezoneTable()
 }
 \value{
-dataframe with 399 rows and 6 columns
+Dataframe with 399 rows and 6 columns.
 }
 \description{
 Returns a dataframe version of the Wikipedia timezone table with the following columns:
@@ -22,11 +22,10 @@ Returns a dataframe version of the Wikipedia timezone table with the following c
 }
 \details{
 Older named timezones from the table which are linked to more modern
-equivalents are not included int the returned dataframe.
+equivalents are not included in the returned dataframe.
 }
 \references{
 \url{http://en.wikipedia.org/wiki/List_of_tz_database_time_zones}
 }
-\keyword{spatial,}
-\keyword{timezone}
+\keyword{datagen}
 

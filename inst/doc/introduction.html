@@ -10,7 +10,7 @@
 
 <meta name="author" content="Mazama Science" />
 
-<meta name="date" content="2015-02-10" />
+<meta name="date" content="2015-02-22" />
 
 <title>Introduction to MazamaSpatialUtils</title>
 
@@ -54,7 +54,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="header">
 <h1 class="title">Introduction to MazamaSpatialUtils</h1>
 <h4 class="author"><em>Mazama Science</em></h4>
-<h4 class="date"><em>2015-02-10</em></h4>
+<h4 class="date"><em>2015-02-22</em></h4>
 </div>
 
 
@@ -142,11 +142,16 @@ lat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">47.
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getCountryCode</span>(lon, lat)</code></pre>
 <pre><code>## [1] &quot;US&quot; &quot;US&quot; &quot;PL&quot; &quot;FR&quot;</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getCountry</span>(lon, lat, <span class="dt">allData=</span><span class="ot">TRUE</span>)</code></pre>
-<pre><code>##   FIPS ISO3  UN countryCode   countryName longitude latitude
-## 1   US  USA 840          US United States   -98.606   39.622
-## 2   US  USA 840          US United States   -98.606   39.622
-## 3   PL  POL 616          PL        Poland    19.401   52.125
-## 4   FR  FRA 250          FR        France     2.550   46.565</code></pre>
+<pre><code>##   FIPS countryCode ISO3 UN_country   countryName        area
+## 1   US          US  USA        840 United States 9.15896e+12
+## 2   US          US  USA        840 United States 9.15896e+12
+## 3   PL          PL  POL        616        Poland 3.06290e+11
+## 4   FR          FR  FRA        250        France 5.50100e+11
+##   population2005 UN_region UN_subregion longitude latitude
+## 1      299846449        19           21   -98.606   39.622
+## 2      299846449        19           21   -98.606   39.622
+## 3       38195558       150          151    19.401   52.125
+## 4       60990544       150          155     2.550   46.565</code></pre>
 </div>
 <div id="getstate-and-getstatecode" class="section level2">
 <h2><code>getState()</code> and <code>getStateCode()</code></h2>

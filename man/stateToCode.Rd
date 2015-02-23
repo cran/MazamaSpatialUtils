@@ -9,15 +9,15 @@ stateToCode(stateNames, countryCodes = NULL, dataset = "StateTable")
 \arguments{
 \item{stateNames}{state names to be converted}
 
-\item{countryCodes}{ISO 3166-2 alpha-2 countryCodes the state might be found in}
+\item{countryCodes}{ISO 3166-2 alpha-2 country codes the state might be found in}
 
 \item{dataset}{name of dataset containing state-level identifiers -- defaults to 'StateTable'}
 }
 \value{
-vector of ISO 3166-2 codes or NA
+A vector of ISO 3166-2 codes or NA.
 }
 \description{
-Converts a vector of state names to a ISO 3166-2 two character state codes.
+Converts a vector of state names to an ISO 3166-2 two character state codes.
 }
 \details{
 For this function to work, you must first run \code{initializeSpatialData()} to
@@ -26,5 +26,5 @@ download, convert and install the necessary spatial data.
 \seealso{
 convertNaturalEarthAdm1
 }
-\keyword{spatial}
+\keyword{conversion}
 

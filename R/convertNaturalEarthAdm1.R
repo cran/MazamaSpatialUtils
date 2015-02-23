@@ -1,28 +1,27 @@
-#' @keywords spatial, shapefile
+#' @keywords datagen
 #' @export
 #' @title Convert Level 1 (State) Borders Shapefile
 #' @param nameOnly logical specifying whether to only return the name without creating the file
-#' @param ... additional arguments (unused)
 #' @description Returns a SpatialPolygonsDataFrame for a 1st level administrative divisions
-#' @description A state border shapefile is downloaded and converted to a 
-#' SpatialPolygonsDataFrame with additional columns of data. The resulting file wil be created
+#' @details A state border shapefile is downloaded and converted to a 
+#' SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 #' in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
-#' @details Within the \pkg{MazamaSpatialUtils} package the phrase 'state' refers to administrative
+#' 
+#' Within the \pkg{MazamaSpatialUtils} package the phrase 'state' refers to administrative
 #' divisions beneath the level of the country or nation. This makes sense in the United 'States'. In
 #' other countries this level is known as 'province', 'territory' or some other term.
-#' @return name of the dataset being created
+#' @return Name of the dataset being created.
 #' @references \url{http//www.naturalearthdata.com/download}
+#' @references \url{http://www.statoids.com/ihasc.html}
 #' @seealso setSpatialDataDir
 #' @seealso getState, getStateCode
-
-convertNaturalEarthAdm1 <- function(nameOnly=FALSE, ...) {
+convertNaturalEarthAdm1 <- function(nameOnly=FALSE) {
   
   # Use package internal data directory
   dataDir <- getSpatialDataDir()
   
   # Specify the name of the dataset and file being created
   datasetName <- 'NaturalEarthAdm1'
-  fileName <- paste0(datasetName,'.RData')
     
   if (nameOnly) return(datasetName)
   
@@ -30,56 +29,68 @@ convertNaturalEarthAdm1 <- function(nameOnly=FALSE, ...) {
   adm <- 1
   level <- "states_provinces"
 
-  # Build appropriate request URL for natural earth data
-  url = paste0("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_",
-               adm, "_",
-               level, ".zip")
+  # Build appropriate request URL for Natural Earth data
+  url <- paste0("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_",
+                adm, "_",
+                level, ".zip")
   
   filePath <- paste(dataDir,basename(url),sep='/')
   download.file(url,filePath)
   unzip(filePath,exdir=paste0(dataDir, "/adm"))
-  
-  dsnPath <- paste(dataDir,'adm',sep='/')
-  
+    
   # Convert shapefile into SpatialPolygonsDataFrame
+  dsnPath <- paste(dataDir,'adm',sep='/')
   shpName <- paste("ne", "10m_admin", adm, level, sep="_")
-  spDF <- convertLayer(dsn='adm',layerName=shpName)
+  spDF <- convertLayer(dsn=dsnPath,layerName=shpName)
+
+  # Rationalize naming:
+  # * human readable full nouns with descriptive prefixes
+  # * generally lowerCamelCase
+  # with internal standards:
+  # * countryCode (ISO 3166-1 alpha-2)
+  # * stateCode (ISO 3166-2 alpha-2)
+  # * longitude (decimal degrees E)
+  # * latitude (decimal degrees N)
   
-  # Extract state code from a code_hasc formated string
-  extractStateCode <- function(x) {
-    split <- strsplit(x, ".", fixed=TRUE)[[1]]
-    if (length(split) > 1) {
-      return(split[[2]])
-    } else {
-      return(NA)
-    }
-  }
+  #   > names(spDF@data)
+  #   [1] "adm1_code"  "OBJECTID_1" "diss_me"    "adm1_cod_1" "iso_3166_2" "wikipedia"  "iso_a2"     "adm0_sr"    "name"      
+  #   [10] "name_alt"   "name_local" "type"       "type_en"    "code_local" "code_hasc"  "note"       "hasc_maybe" "region"    
+  #   [19] "region_cod" "provnum_ne" "gadm_level" "check_me"   "scalerank"  "datarank"   "abbrev"     "postal"     "area_sqkm" 
+  #   [28] "sameascity" "labelrank"  "featurecla" "name_len"   "mapcolor9"  "mapcolor13" "fips"       "fips_alt"   "woe_id"    
+  #   [37] "woe_label"  "woe_name"   "latitude"   "longitude"  "sov_a3"     "adm0_a3"    "adm0_label" "admin"      "geonunit"  
+  #   [46] "gu_a3"      "gn_id"      "gn_name"    "gns_id"     "gns_name"   "gn_level"   "gn_region"  "gn_a1_code" "region_sub"
+  #   [55] "sub_code"   "gns_level"  "gns_lang"   "gns_adm1"   "gns_region"
   
-  # Uniform naming
+  
+  # NOTE:  Lots of useful potentially useful information here. We will just add the core identifiers
   spDF$countryCode <- spDF$iso_a2
-  spDF$stateCode <- unlist(lapply(spDF$code_hasc, extractStateCode))
+  ### countryCode <- str_split_fixed(spDF$code_hasc,'\\.',5)[,1] # alternative way to get countryCode
+  spDF$stateCode <- str_split_fixed(spDF$code_hasc,'\\.',5)[,2]
+  spDF$countryName <- MazamaSpatialUtils::codeToCountry(spDF$countryCode)
   spDF$stateName <- spDF$name
+  
+  # Rationalize units:
+  # * SI  
+  spDF$area <- spDF$area_sqkm * 1e6  
 
   # Use NA instead of -99 and -90 for missing values
   spDF@data[spDF@data == -99] <- NA
   spDF@data[spDF@data == -90] <- NA
   
+  # Subset this dataframe to include only obviously useful columns
+  usefulColumns <- c('countryCode','countryName','stateCode','stateName','latitude','longitude','area',
+                     'postal','code_hasc','fips','gns_lang','gns_adm1')
   # Remove columns that are more than 80% NA
-  spDF <- spDF[,colSums(is.na(spDF@data))<(nrow(spDF)*0.8)]
+  spDF <- spDF[,usefulColumns]
   
-  # Save dataframe as table in data directory
-  table <- spDF@data
-
   # Assign a name and save the data
   assign(datasetName,spDF)
-  save(list=c(datasetName),file=paste0(dataDir,"/",datasetName,".RData"))
+  save(list=c(datasetName),file=paste0(dataDir,"/",datasetName,'.RData'))
   
-  # For this 'special' dataset we will create an extra datatable
-  StateTable <- spDF@data
-  save(list=c("StateTable"),file=paste0(dataDir,'/StateTable.RData'))
-  
+  # Clean up
   unlink(filePath, force=TRUE)
   unlink(dsnPath, recursive=TRUE, force=TRUE)
   
   invisible(datasetName)
 }
+

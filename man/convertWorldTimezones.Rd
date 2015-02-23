@@ -4,19 +4,17 @@
 \alias{convertWorldTimezones}
 \title{Create Timezone Dataset}
 \usage{
-convertWorldTimezones(nameOnly = FALSE, ...)
+convertWorldTimezones(nameOnly = FALSE)
 }
 \arguments{
 \item{nameOnly}{logical specifying whether to only return the name without creating the file}
-
-\item{...}{additional arguments (unused)}
 }
 \value{
-name of the dataset being created
+Name of the dataset being created.
 }
 \description{
 A world timezone shapefile is downloaded from \url{http://efele.net/maps/tz/world/}
-and converted to a SpatialPolygonsDataFrame with additional columns of data. The resulting file wil be created
+and converted to a SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
 }
 \seealso{
@@ -24,6 +22,5 @@ setSpatialDataDir
 
 convertWikipediaTimezoneTable
 }
-\keyword{shapefile}
-\keyword{spatial,}
+\keyword{datagen}
 

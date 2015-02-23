@@ -1,6 +1,7 @@
-#' @keywords spatial, timezone
-#' @import stringr
+#' @keywords datagen
 #' @export
+#' @import stringr
+#' @import rvest
 #' @title Convert Wikipedia Timezone Table to Dataframe
 #' @description Returns a dataframe version of the Wikipedia timezone table with the following columns:
 #' \itemize{
@@ -12,10 +13,9 @@
 #'   \item{latitude -- latitude of the Olson timezone city}
 #' }
 #' @details Older named timezones from the table which are linked to more modern 
-#' equivalents are not included int the returned dataframe.
-#' @return dataframe with 399 rows and 6 columns
+#' equivalents are not included in the returned dataframe.
+#' @return Dataframe with 399 rows and 6 columns.
 #' @references \url{http://en.wikipedia.org/wiki/List_of_tz_database_time_zones}
-
 convertWikipediaTimezoneTable <- function() {
   
   url <- "http://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
@@ -40,10 +40,16 @@ convertWikipediaTimezoneTable <- function() {
   # Assume the relevant list is the first table and parse that into a dataframe
   tzTable <- rvest::html_table(tables[[1]])
   
-  # Assign Mazama Science uniform naming
+  # Rationalize naming:
+  # * human readable full nouns with descriptive prefixes
+  # * generally lowerCamelCase
+  # with internal standards:
+  # * timezone (Olson timezone)
+  # * longitude (decimal degrees E)
+  # * latitude (decimal degrees N)
   names(tzTable) <- c('countryCode','coordinates','timezone','comments','UTC_offset','UTC_DST_offset','notes')
   
-  # NOTE:  rvest::html_table has no argument to specify na.strings so "NA" is converted to NA
+  ### NOTE:  rvest::html_table has no argument to specify na.strings so "NA" is converted to NA
   tzTable$countryCode[tzTable$timezone == 'Africa/Windhoek'] <- "NA"
   
   # Remove all rows where the Notes say "Link to ..."

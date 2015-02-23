@@ -19,7 +19,7 @@ getUSCounty(lon, lat, dataset = "USCensusCounties", stateCodes = NULL,
 \item{allData}{logical specifying whether a full dataframe should be returned}
 }
 \value{
-vector of counties
+Vector of county names in English.
 }
 \description{
 Uses spatial comparison to determine which county polygons the
@@ -28,13 +28,13 @@ Uses spatial comparison to determine which county polygons the
     Specification of \code{stateCodes} limits spatial searching to the specified states
     and greatly improves performance.
 
-    If \code{allData=TRUE} additional data is returned.
+    If \code{allData=TRUE}, additional data is returned.
 }
 \examples{
 \dontrun{
 lon <- seq(-140,-90)
 lat <- seq(20,70)
-getCountry(lon,lat)
+getUSCounty(lon,lat)
 }
 }
 \references{
@@ -43,5 +43,5 @@ getCountry(lon,lat)
 \seealso{
 getSpatialData
 }
-\keyword{spatial}
+\keyword{locator}
 

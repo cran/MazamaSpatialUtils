@@ -7,14 +7,14 @@
 getSpatialData(spDF, lon, lat)
 }
 \arguments{
-\item{spDF}{SpatialPolygonsDataframe}
+\item{spDF}{object of class SpatialPolygonsDataFrame}
 
 \item{lon}{vector of longitudes in decimal degrees}
 
 \item{lat}{vector of latitudes in decimal degrees}
 }
 \value{
-vector or dataframe of data
+Vector or dataframe of data.
 }
 \description{
 Returns a dataframe or vector of data.
@@ -22,5 +22,5 @@ Returns a dataframe or vector of data.
 \details{
 Any spatial polygon may be passed in.
 }
-\keyword{spatial}
+\keyword{locator}
 

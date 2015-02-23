@@ -1,17 +1,16 @@
-#' @keywords spatial
+#' @keywords locator
 #' @export
-#' @title Return Countriy Names at Specified Locations
-#' @param lon Vector of longitudes in decimal degrees
-#' @param lat Vector of latitudes in decimal degrees
+#' @title Return Country Names at Specified Locations
+#' @param lon vector of longitudes in decimal degrees
+#' @param lat vector of latitudes in decimal degrees
 #' @param dataset name of spatial dataset to use -- defaults to 'SimpleCountries'
 #' @param countryCodes vector of countryCodes -- defaults to \code{NULL}
 #' @param allData logical specifying whether a full dataframe should be returned
 #' @description Uses spatial comparison to determine which country polygons the 
-#'     locations fall into and returns the country name and country code
-#'     strings for those polygons.
+#'     locations fall into and returns the country name for those polygons.
 #'     
-#'     If \code{allData=TRUE} additional data is returned.
-#' @return vector of English country names
+#'     If \code{allData=TRUE}, additional data is returned.
+#' @return Vector of country names in English.
 #' @examples
 #' lon <- seq(0,50)
 #' lat <- seq(0,50)
@@ -57,3 +56,4 @@ getCountry <- function(lon, lat, dataset='SimpleCountries', countryCodes=NULL, a
   
   
 }
+

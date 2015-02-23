@@ -14,21 +14,21 @@ getTimezone(lon, lat, dataset = "SimpleTimezones", countryCodes = NULL,
 
 \item{dataset}{name of spatial dataset to use -- defaults to 'SimpleTimezones'}
 
-\item{countryCodes}{vector of countryCodes, defaults to \code{NULL}}
+\item{countryCodes}{vector of countryCodes -- defaults to \code{NULL}}
 
 \item{allData}{logical specifying whether to return a full dataframe}
 }
 \value{
-vector of Olson timezones
+Vector of Olson timezones.
 }
 \description{
 Uses spatial comparison to determine which timezone polygons the
     locations fall into and returns the Olson timezone strings for those polygons.
 
     Specification of \code{countryCodes} limits spatial searching to the specified
-    countrieis and greatly improves performance.
+    countries and greatly improves performance.
 
-    If \code{allData=TRUE} additional data is returned.
+    If \code{allData=TRUE}, additional data is returned.
 }
 \examples{
 lon <- seq(-120,-60,5)
@@ -43,5 +43,5 @@ SimpleTimezones
 
 getSpatialData
 }
-\keyword{spatial}
+\keyword{locator}
 

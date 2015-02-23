@@ -10,10 +10,10 @@ setSpatialDataDir(dataDir)
 \item{dataDir}{directory where spatial datasets are created}
 }
 \value{
-silently returns previous value of data directory
+Silently returns previous value of data directory.
 }
 \description{
-Sets the package data directory where spatial data are located.
+Sets the package data directory where spatial data is located.
 If the directory does not exist, it will be created.
 }
 \seealso{
@@ -21,5 +21,5 @@ SpatialDataDir
 
 getSpatialDataDir
 }
-\keyword{spatial}
+\keyword{environment}
 

@@ -1,22 +1,21 @@
-#' @keywords spatial
+#' @keywords locator
 #' @export
 #' @title Return Country ISO Codes at Specified Locations
-#' @param lon Vector of longitudes in decimal degrees
-#' @param lat Vector of latitudes in decimal degrees
+#' @param lon vector of longitudes in decimal degrees
+#' @param lat vector of latitudes in decimal degrees
 #' @param dataset name of spatial dataset to use -- defaults to 'SimpleCountries'
 #' @param countryCodes vector of countryCodes -- defaults to \code{NULL}
 #' @param allData logical specifying whether a full dataframe should be returned
 #' @description Uses spatial comparison to determine which country polygons the 
-#'     locations fall into and returns the country name and country code
-#'     strings for those polygons.
+#'     locations fall into and returns the country code strings for those polygons.
 #'     
-#'     If \code{allData=TRUE} additional data is returned.
+#'     If \code{allData=TRUE}, additional data is returned.
 #' @details Countries polygons are from \url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}.
-#' @return vector of country codes
+#' @return Vector of ISO-3166-1 alpha-2 country codes.
 #' @examples
 #' lon <- seq(0,50)
 #' lat <- seq(0,50)
-#' getCountry(lon,lat)
+#' getCountryCode(lon,lat)
 #' @seealso SimpleCountries
 #' @seealso getSpatialData
 getCountryCode <- function(lon, lat, dataset='SimpleCountries', countryCodes=NULL, allData=FALSE) {
@@ -57,3 +56,4 @@ getCountryCode <- function(lon, lat, dataset='SimpleCountries', countryCodes=NUL
   
   
 }
+

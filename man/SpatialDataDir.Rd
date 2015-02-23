@@ -5,7 +5,7 @@
 \alias{SpatialDataDir}
 \alias{spatialEnv}
 \title{Directory for Spatial Data}
-\format{absolute path string}
+\format{Absolute path string.}
 \usage{
 spatialEnv
 }
@@ -14,12 +14,12 @@ This package maintains an internal directory location which users can set
 using \code{setSpatialDataDir()}.  All package functions use this directory whenever datasets
 are created or loaded.
 
-The default setting when the package is loaded is \code{getwd()}
+The default setting when the package is loaded is \code{getwd()}.
 }
 \seealso{
 getSpatialDataDir
 
 setSpatialDataDir
 }
-\keyword{spatial}
+\keyword{environment}
 

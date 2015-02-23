@@ -4,19 +4,17 @@
 \alias{convertTMWorldBorders}
 \title{Convert World Borders Shapefile}
 \usage{
-convertTMWorldBorders(nameOnly = FALSE, ...)
+convertTMWorldBorders(nameOnly = FALSE)
 }
 \arguments{
 \item{nameOnly}{logical specifying whether to only return the name without creating the file}
-
-\item{...}{additional arguments (unused)}
 }
 \value{
-name of the dataset being created
+Name of the dataset being created.
 }
 \description{
 A world borders shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting file wil be created
+SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
 }
 \references{
@@ -27,6 +25,5 @@ setSpatialDataDir
 
 getCountry, getCountryCode
 }
-\keyword{shapefile}
-\keyword{spatial,}
+\keyword{datagen}
 

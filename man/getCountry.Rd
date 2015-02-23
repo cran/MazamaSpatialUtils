@@ -2,15 +2,15 @@
 % Please edit documentation in R/getCountry.R
 \name{getCountry}
 \alias{getCountry}
-\title{Return Countriy Names at Specified Locations}
+\title{Return Country Names at Specified Locations}
 \usage{
 getCountry(lon, lat, dataset = "SimpleCountries", countryCodes = NULL,
   allData = FALSE)
 }
 \arguments{
-\item{lon}{Vector of longitudes in decimal degrees}
+\item{lon}{vector of longitudes in decimal degrees}
 
-\item{lat}{Vector of latitudes in decimal degrees}
+\item{lat}{vector of latitudes in decimal degrees}
 
 \item{dataset}{name of spatial dataset to use -- defaults to 'SimpleCountries'}
 
@@ -19,14 +19,13 @@ getCountry(lon, lat, dataset = "SimpleCountries", countryCodes = NULL,
 \item{allData}{logical specifying whether a full dataframe should be returned}
 }
 \value{
-vector of English country names
+Vector of country names in English.
 }
 \description{
 Uses spatial comparison to determine which country polygons the
-    locations fall into and returns the country name and country code
-    strings for those polygons.
+    locations fall into and returns the country name for those polygons.
 
-    If \code{allData=TRUE} additional data is returned.
+    If \code{allData=TRUE}, additional data is returned.
 }
 \examples{
 lon <- seq(0,50)
@@ -41,5 +40,5 @@ SimpleCountries
 
 getSpatialData
 }
-\keyword{spatial}
+\keyword{locator}
 

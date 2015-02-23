@@ -1,14 +1,13 @@
-#' @keywords spatial, shapefile
+#' @keywords internal
 #' @import rgdal
 #' @import sp
 #' @export
 #' @title Convert Shapefile Layer to Spatial Polygon Dataframe
 #' @param dsn dsn argument to readOGR
 #' @param layerName layer argument to readOGR
-#' @description Raw shapfiles are read in using the \code{readOGR()} function from the \pkg{rgdal} package.
-#' Spatial data are reprojected on to a standard projection with \code{"+proj=longlat"} before being returned.
-#' @return SpatialPolygonsDataFrame
-
+#' @description Raw shapefiles are read in using the \code{readOGR()} function from the \pkg{rgdal} package.
+#' Spatial data are reprojected onto a standard projection with \code{"+proj=longlat"} before being returned.
+#' @return An object of class \code{SpatialPolygonsDataFrame}
 convertLayer <- function(dsn="", layerName="") {
   
   # Use package internal data directory

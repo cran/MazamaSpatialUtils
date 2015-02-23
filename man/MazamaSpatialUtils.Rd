@@ -10,6 +10,7 @@ This package contains code to convert various spatial datasets into .RData files
 with uniformly named identifiers including:
 \itemize{
 \item{ countryCode -- ISO 3166-1 alpha-2}
+\item{ countryName -- Country name}
 \item{ stateCode -- ISO 3166-2 alpha-2}
 \item{ timezone -- Olson timezone}
 }
