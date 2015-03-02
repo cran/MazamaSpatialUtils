@@ -1,6 +1,6 @@
 Type: Package
 Package: MazamaSpatialUtils
-Version: 0.2.1
+Version: 0.2.2
 Title: Mazama Science Spatial Data Download and Utility Functions
 Authors@R: c(
     person("Jonathan", "Callahan", email="jonathan.s.callahan@gmail.com", role=c("aut","cre")), 
@@ -22,6 +22,6 @@ License: GPL-3
 VignetteBuilder: knitr
 Repository: CRAN
 LazyData: true
-Packaged: 2015-02-22 22:16:02 UTC; jonathancallahan
+Packaged: 2015-03-01 21:38:31 UTC; jonathancallahan
 NeedsCompilation: no
-Date/Publication: 2015-02-23 00:15:34
+Date/Publication: 2015-03-02 00:07:27

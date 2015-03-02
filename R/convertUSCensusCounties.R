@@ -29,6 +29,19 @@ convertUSCensusCounties <- function(nameOnly=FALSE) {
   dsnPath <- paste(dataDir,'counties',sep='/')
   spDF <- convertLayer(dsn=dsnPath,layerName="cb_2013_us_county_20m")
   
+  # Rationalize naming:
+  # * human readable full nouns with descriptive prefixes
+  # * generally lowerCamelCase
+  # with internal standards:
+  # * countryCode (ISO 3166-1 alpha-2)
+  # * stateCode (ISO 3166-2 alpha-2)
+  # * longitude (decimal degrees E)
+  # * latitude (decimal degrees N)
+  # * area (m^2)
+  
+  #   > names(spDF)
+  #   [1] "STATEFP"  "COUNTYFP" "COUNTYNS" "AFFGEOID" "GEOID"    "NAME"     "LSAD"     "ALAND"    "AWATER"  
+  
   
   # Get STATEFP conversion table from wikipedia. We need this to find state names and codes
   # from STATEFP values.
@@ -57,9 +70,20 @@ convertUSCensusCounties <- function(nameOnly=FALSE) {
   spDF$stateName <- apply(spDF@data, 1, extractState, col="Name")
   spDF$countyName <- spDF$NAME
   
+  # TODO:  Need to include LSAD to differentiate, e.g. "St. Louis City" from "St. Louis County"
+  # TODO:  1) get LSAD levels and include LSAD as a factor
+  # TODO:  2) add stateCode_countyName_LSAD as another column
+  # TODO:  3) organizePolygons(spDF, uniqueID=stateCode_countyName_LSAD, sumColumns=c('areaLand','areaWater))
+  
+  # TODO:  replace column indices with column names
   spDF <- spDF[,c(6, 8, 9, 10, 11, 12, 13, 14, 2)]
   names(spDF) <- c('name', 'areaLand', 'areaWater', 'countryCode', 'countryName', 
                    'stateCode', 'stateName', 'countyName', 'countyFIPS')
+
+#   # Group polygons with the same identifier
+#   spDF <- organizePolygons(spDF, uniqueID='timezone')
+
+# TODO:  subset/reorganize column names
   
   # Assign a name and save the data
   assign(datasetName,spDF)

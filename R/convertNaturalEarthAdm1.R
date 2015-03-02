@@ -51,6 +51,7 @@ convertNaturalEarthAdm1 <- function(nameOnly=FALSE) {
   # * stateCode (ISO 3166-2 alpha-2)
   # * longitude (decimal degrees E)
   # * latitude (decimal degrees N)
+  # * area (m^2)
   
   #   > names(spDF@data)
   #   [1] "adm1_code"  "OBJECTID_1" "diss_me"    "adm1_cod_1" "iso_3166_2" "wikipedia"  "iso_a2"     "adm0_sr"    "name"      
@@ -62,7 +63,7 @@ convertNaturalEarthAdm1 <- function(nameOnly=FALSE) {
   #   [55] "sub_code"   "gns_level"  "gns_lang"   "gns_adm1"   "gns_region"
   
   
-  # NOTE:  Lots of useful potentially useful information here. We will just add the core identifiers
+  # NOTE:  Lots of useful potentially useful information here. At this point we will just add the core identifiers
   spDF$countryCode <- spDF$iso_a2
   ### countryCode <- str_split_fixed(spDF$code_hasc,'\\.',5)[,1] # alternative way to get countryCode
   spDF$stateCode <- str_split_fixed(spDF$code_hasc,'\\.',5)[,2]

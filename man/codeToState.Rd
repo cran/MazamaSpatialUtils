@@ -4,14 +4,14 @@
 \alias{codeToState}
 \title{Convert State Codes to State Names}
 \usage{
-codeToState(stateCodes, countryCodes = NULL, dataset = "StateTable")
+codeToState(stateCodes, countryCodes = NULL, dataset = "NaturalEarthAdm1")
 }
 \arguments{
 \item{stateCodes}{vector of state codes to be converted}
 
 \item{countryCodes}{ISO-3166-1 alpha-2 country codes the state might be found in}
 
-\item{dataset}{name of dataset containing state-level identifiers -- defaults to 'StateTable'}
+\item{dataset}{name of dataset containing state-level identifiers -- defaults to 'NaturalEarthAdm1'}
 }
 \value{
 A vector of English state names or NA.

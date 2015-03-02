@@ -8,12 +8,45 @@
 #' \item{ countryName -- Country name}
 #' \item{ stateCode -- ISO 3166-2 alpha-2}
 #' \item{ timezone -- Olson timezone}
+#' \item{ longitude -- degrees East}
+#' \item{ latitude -- degrees North}
+#' \item{ area -- m^2}
 #' }
+#' The parameters listed above will be found in the @@data slot of each spatial dataset whose source
+#' data has an equivalent field. The only field guaranteed to exist in every dataset is \code{countryCode}.
+#' 
+#' The following additional standards are applied during the data conversion process:
+#' \itemize{
+#' \item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat"}) }
+#' \item{ no duplicated rows in the dataframe (conversion to \strong{multi-}polygons) }
+#' \item{ lowerCamelCase, human readable names replace original parameter names }
+#' \item{ redundant, software-internal or otherwise unuseful data columns may be dropped }
+#' \item{ parameters may be added to the @@data dataframe }
+#' \item{ latitude and longitude of polygon centroids may be added }
+#' }
+#' 
 #' Utility functions allow users to determine the country, state, county and timezones
 #' associated with a set of locations, e.g. environmental monitoring sites.
 #' 
 #' The uniformity of identifiers in the spatial datasets also makes it easy to generate maps
 #' with data from any dataset that uses standard ISO codes for countries or states.
+#' 
+#' \strong{History}
+#' 
+#' version 0.2.2 -- minor tweaks to 0.2.1
+#' \itemize{
+#'   \item{User specification of \code{SpatialDataDir} is now required.}
+#'   \item{Minor documentation improvements.}
+#' }
+#' 
+#' version 0.2.1 -- addition of GADM and USGS HUC8
+#' \itemize{
+#'   \item{Converts for GADM administrative boundaries and and USGS watershed datasets.}
+#'   \item{Addition of code-name, name-code and code-code conversion utilities.}
+#'   \item{Addition of organizePolygons() function.}
+#' }
+#' 
+#' version 0.1 -- initial release
 NULL
 
 
@@ -59,7 +92,7 @@ NULL
 #' @seealso getSpatialDataDir
 #' @seealso setSpatialDataDir
 spatialEnv <- new.env(parent = emptyenv())
-spatialEnv$dataDir <- getwd()
+spatialEnv$dataDir <- NULL
 
 #' @keywords environment
 #' @export
@@ -69,7 +102,11 @@ spatialEnv$dataDir <- getwd()
 #' @seealso dataDir
 #' @seealso setSpatialDataDir
 getSpatialDataDir <- function() {
-  spatialEnv$dataDir
+  if (is.null(spatialEnv$dataDir)) {
+    stop('No data directory found  Please set a data directory with setSpatialDataDir("YOUR_DATA_DIR").',call.=FALSE)
+  } else {
+    return(spatialEnv$dataDir)    
+  }
 }
 
 #' @keywords environment
@@ -154,20 +191,21 @@ countryToCode <- function(countryNames) {
 #' @title Convert State Codes to State Names
 #' @param stateCodes vector of state codes to be converted
 #' @param countryCodes ISO-3166-1 alpha-2 country codes the state might be found in
-#' @param dataset name of dataset containing state-level identifiers -- defaults to 'StateTable'
+#' @param dataset name of dataset containing state-level identifiers -- defaults to 'NaturalEarthAdm1'
 #' @description Converts a vector of ISO 3166-2 alpha-2 state codes to the corresponding English names.
 #' @details For this function to work, you must first run \code{initializeSpatialData()} to
 #' download, convert and install the necessary spatial data.
 #' @return A vector of English state names or NA.
 #' @seealso convertNaturalEarthAdm1
-codeToState <- function(stateCodes, countryCodes=NULL, dataset='StateTable') {
+codeToState <- function(stateCodes, countryCodes=NULL, dataset='NaturalEarthAdm1') {
+  
   # Sanity check
   if (!exists(dataset)) {
     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)
   }
-  DF <- get(dataset)
+  spDF <- get(dataset)
   # Remove NA state codes
-  stateTable <- DF[!is.na(DF$stateCode),]
+  stateTable <- spDF@data[!is.na(spDF@data$stateCode),]
   # Filter by countryCodes to make searching faster
   if (!is.null(countryCodes)) stateTable <- stateTable[stateTable$countryCode %in% countryCodes,]
   # Create a vector of state names identified by state code
@@ -181,20 +219,20 @@ codeToState <- function(stateCodes, countryCodes=NULL, dataset='StateTable') {
 #' @title Convert State Names to State Codes
 #' @param stateNames state names to be converted
 #' @param countryCodes ISO 3166-2 alpha-2 country codes the state might be found in
-#' @param dataset name of dataset containing state-level identifiers -- defaults to 'StateTable'
+#' @param dataset name of dataset containing state-level identifiers -- defaults to 'NaturalEarthAdm1'
 #' @description Converts a vector of state names to an ISO 3166-2 two character state codes.
 #' @details For this function to work, you must first run \code{initializeSpatialData()} to
 #' download, convert and install the necessary spatial data.
 #' @return A vector of ISO 3166-2 codes or NA.
 #' @seealso convertNaturalEarthAdm1
-stateToCode <- function(stateNames, countryCodes=NULL, dataset='StateTable') {
+stateToCode <- function(stateNames, countryCodes=NULL, dataset='NaturalEarthAdm1') {
   # Sanity check
   if (!exists(dataset)) {
     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)
   }
-  DF <- get(dataset)
+  spDF <- get(dataset)
   # Remove NA state codes
-  stateTable <- DF[!is.na(DF$stateCode),]
+  stateTable <- spDF@data[!is.na(spDF@data$stateCode),]
   # Filter by countryCodes to make searching faster
   if (!is.null(countryCodes)) stateTable <- stateTable[stateTable$countryCode %in% countryCodes,]
   # Create a vector of state codes identified by name

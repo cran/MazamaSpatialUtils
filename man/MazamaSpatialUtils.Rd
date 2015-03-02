@@ -13,11 +13,44 @@ with uniformly named identifiers including:
 \item{ countryName -- Country name}
 \item{ stateCode -- ISO 3166-2 alpha-2}
 \item{ timezone -- Olson timezone}
+\item{ longitude -- degrees East}
+\item{ latitude -- degrees North}
+\item{ area -- m^2}
 }
+The parameters listed above will be found in the @data slot of each spatial dataset whose source
+data has an equivalent field. The only field guaranteed to exist in every dataset is \code{countryCode}.
+
+The following additional standards are applied during the data conversion process:
+\itemize{
+\item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat"}) }
+\item{ no duplicated rows in the dataframe (conversion to \strong{multi-}polygons) }
+\item{ lowerCamelCase, human readable names replace original parameter names }
+\item{ redundant, software-internal or otherwise unuseful data columns may be dropped }
+\item{ parameters may be added to the @data dataframe }
+\item{ latitude and longitude of polygon centroids may be added }
+}
+
 Utility functions allow users to determine the country, state, county and timezones
 associated with a set of locations, e.g. environmental monitoring sites.
 
 The uniformity of identifiers in the spatial datasets also makes it easy to generate maps
 with data from any dataset that uses standard ISO codes for countries or states.
+
+\strong{History}
+
+version 0.2.2 -- minor tweaks to 0.2.1
+\itemize{
+  \item{User specification of \code{SpatialDataDir} is now required.}
+  \item{Minor documentation improvements.}
+}
+
+version 0.2.1 -- addition of GADM and USGS HUC8
+\itemize{
+  \item{Converts for GADM administrative boundaries and and USGS watershed datasets.}
+  \item{Addition of code-name, name-code and code-code conversion utilities.}
+  \item{Addition of organizePolygons() function.}
+}
+
+version 0.1 -- initial release
 }
 

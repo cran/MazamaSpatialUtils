@@ -43,6 +43,7 @@ convertTMWorldBorders <- function(nameOnly=FALSE) {
   # * stateCode (ISO 3166-2 alpha-2)
   # * longitude (decimal degrees E)
   # * latitude (decimal degrees N)
+  # * area (m^2)
   names(spDF) <- c('FIPS','countryCode','ISO3','UN_country','countryName','area','population2005','UN_region','UN_subregion','longitude','latitude')
   
   # Rationalize units:

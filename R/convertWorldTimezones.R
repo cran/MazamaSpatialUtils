@@ -5,6 +5,17 @@
 #' @description A world timezone shapefile is downloaded from \url{http://efele.net/maps/tz/world/}
 #' and converted to a SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 #' in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
+#' @note
+#' The following list of timezones have polygons but the associated rows in the dataframe have no data.
+#' These timezones also have no \code{countryCode} assigned. We hope to rectify this in a future release.
+#' \preformatted{
+#' > WorldTimezones@@data$timezone[is.na(WorldTimezones$countryCode)]
+#' [1] "Europe/Zagreb"         "Europe/Vatican"        "America/Coral_Harbour" "Arctic/Longyearbyen"
+#' [5] "uninhabited"           "America/Kralendijk"    "Europe/Jersey"         "Europe/Bratislava"
+#' [9] "America/St_Barthelemy" "Europe/Ljubljana"      "Europe/Mariehamn"      "Europe/Podgorica" 
+#' [13] "Europe/Isle_of_Man"    "Europe/Guernsey"       "Europe/San_Marino"     "Europe/Skopje"   
+#' [17] "Europe/Sarajevo"       "America/Lower_Princes" "America/Marigot"       "Africa/Juba"
+#' }       
 #' @return Name of the dataset being created.
 #' @seealso setSpatialDataDir
 #' @seealso convertWikipediaTimezoneTable

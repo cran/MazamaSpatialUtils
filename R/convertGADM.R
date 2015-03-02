@@ -1,5 +1,6 @@
 #' @keywords datagen
 #' @export
+#' @import stringr
 #' @title Convert and Regularize Data from the GADM Database
 #' @param nameOnly logical specifying whether to only return the name without creating the file
 #' @param countryCode ISO-3166-1 alpha-2 country code
@@ -28,11 +29,13 @@ convertGADM <- function(countryCode=NULL, admLevel=0, nameOnly=FALSE) {
   
   if (nameOnly) return(datasetName)
 
-  # Convert the countryCode into an ISO-3166-1 alpha-3
-  countryTable <- MazamaSpatialUtils::SimpleCountries@data
-  index <- which(countryTable$countryCode==countryCode)
-  ISO3 <- countryTable$ISO3[index]
-      
+  # Convert 2-character codes into ISO3
+  if (str_length(countryCode) == 2) {
+    ISO3 <- codeToCode(countryCode)
+  } else {
+    stop('The countryCode parameter "',countryCode,'" is not an ISO-3166-1 alpha-2 country code.',call.=FALSE)
+  }
+    
   # Check if the dataset already exists
   filePath <- paste0(dataDir, '/', datasetName,'.RData')
   if(file.exists(filePath)) {
@@ -94,6 +97,10 @@ convertGADM <- function(countryCode=NULL, admLevel=0, nameOnly=FALSE) {
     }
     
   }
+
+  # TODO:
+  #   # Group polygons with the same identifier
+  #   spDF <- organizePolygons(spDF, uniqueID='timezone')
   
   # Assign a name and save the data
   assign(datasetName,spDF)
