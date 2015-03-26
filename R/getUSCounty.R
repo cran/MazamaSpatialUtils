@@ -3,8 +3,8 @@
 #' @title Return US County Name at Specified Locations
 #' @param lon vector of longitudes in decimal degrees
 #' @param lat vector of latitudes in decimal degrees
-#' @param dataset name of spatial dataset to use -- defaults to 'USCensusCounties'
-#' @param stateCodes vector of stateCodes used to limit the search -- defaults to \code{NULL}
+#' @param dataset name of spatial dataset to use
+#' @param stateCodes vector of stateCodes used to limit the search
 #' @param allData logical specifying whether a full dataframe should be returned
 #' @description Uses spatial comparison to determine which county polygons the 
 #'     locations fall into and returns the county name strings for those polygons.

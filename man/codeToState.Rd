@@ -11,7 +11,7 @@ codeToState(stateCodes, countryCodes = NULL, dataset = "NaturalEarthAdm1")
 
 \item{countryCodes}{ISO-3166-1 alpha-2 country codes the state might be found in}
 
-\item{dataset}{name of dataset containing state-level identifiers -- defaults to 'NaturalEarthAdm1'}
+\item{dataset}{name of dataset containing state-level identifiers}
 }
 \value{
 A vector of English state names or NA.

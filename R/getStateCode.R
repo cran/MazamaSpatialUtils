@@ -3,8 +3,8 @@
 #' @title Return State ISO Codes at Specified Locations
 #' @param lon vector of longitudes in decimal degrees
 #' @param lat vector of latitudes in decimal degrees
-#' @param dataset name of spatial dataset to use -- defaults to 'TMWorldBorders'
-#' @param countryCodes vector of country codes -- defaults to \code{NULL}
+#' @param dataset name of spatial dataset to use
+#' @param countryCodes vector of country codes
 #' @param allData logical specifying whether to return a full dataframe
 #' @description Uses spatial comparison to determine which 'state' polygons the 
 #'     locations fall into and returns the ISO 3166 2-character state code

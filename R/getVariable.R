@@ -5,7 +5,7 @@
 #' @param lat vector of latitudes in decimal degrees
 #' @param dataset name of spatial dataset to use
 #' @param variable name of dataframe column to be returned
-#' @param countryCodes vector of countryCodes -- defaults to \code{NULL}
+#' @param countryCodes vector of countryCodes
 #' @param allData logical specifying whether a full dataframe should be returned
 #' @description Uses spatial comparison to determine which polygons the 
 #'     locations fall into and returns the variable associated with those polygons.

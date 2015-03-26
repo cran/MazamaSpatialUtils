@@ -3,8 +3,8 @@
 #' @title Return Country Names at Specified Locations
 #' @param lon vector of longitudes in decimal degrees
 #' @param lat vector of latitudes in decimal degrees
-#' @param dataset name of spatial dataset to use -- defaults to 'SimpleCountries'
-#' @param countryCodes vector of countryCodes -- defaults to \code{NULL}
+#' @param dataset name of spatial dataset to use
+#' @param countryCodes vector of countryCodes
 #' @param allData logical specifying whether a full dataframe should be returned
 #' @description Uses spatial comparison to determine which country polygons the 
 #'     locations fall into and returns the country name for those polygons.

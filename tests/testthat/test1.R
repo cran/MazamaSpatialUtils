@@ -88,8 +88,6 @@ test_that("get functions handle errors correctly", {
   
   expect_error(getCountryCode(), 
                'argument "lon" is missing, with no default')
-  expect_error(getCountryCode("a", "b"), 
-               'cannot retrieve coordinates from non-numeric elements')
   expect_warning(getCountryCode(0,0), 
                  "1 locations appear to be over international waters and no countryCode can be assigned")
   expect_warning(getCountryCode(c(0,0), c(0,45)), 

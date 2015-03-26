@@ -12,9 +12,9 @@ getTimezone(lon, lat, dataset = "SimpleTimezones", countryCodes = NULL,
 
 \item{lat}{vector of latitudes in decimal degrees}
 
-\item{dataset}{name of spatial dataset to use -- defaults to 'SimpleTimezones'}
+\item{dataset}{name of spatial dataset to use}
 
-\item{countryCodes}{vector of countryCodes -- defaults to \code{NULL}}
+\item{countryCodes}{vector of countryCodes}
 
 \item{allData}{logical specifying whether to return a full dataframe}
 }

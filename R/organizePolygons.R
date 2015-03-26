@@ -4,7 +4,7 @@
 #' @title Organize Ungrouped Polygons
 #' @param dataset object of class SpatialPolygonsDataFrame
 #' @param uniqueID unique identifier to determine which values are duplicated
-#' @param sumColumns vector of column names to be summed -- defaults to NULL
+#' @param sumColumns vector of column names to be summed
 #' @description Determines if the SpatialPolygonsDataFrame is grouped. If ungrouped, 
 #' function will group duplicated values based on the provided unique identifier. 
 #' 

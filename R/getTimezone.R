@@ -3,8 +3,8 @@
 #' @title Return Olson Timezones at Specified Locations
 #' @param lon vector of longitudes in decimal degrees
 #' @param lat vector of latitudes in decimal degrees
-#' @param dataset name of spatial dataset to use -- defaults to 'SimpleTimezones'
-#' @param countryCodes vector of countryCodes -- defaults to \code{NULL}
+#' @param dataset name of spatial dataset to use
+#' @param countryCodes vector of countryCodes
 #' @param allData logical specifying whether to return a full dataframe
 #' @description Uses spatial comparison to determine which timezone polygons the 
 #'     locations fall into and returns the Olson timezone strings for those polygons.

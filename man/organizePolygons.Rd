@@ -11,7 +11,7 @@ organizePolygons(dataset, uniqueID, sumColumns = NULL)
 
 \item{uniqueID}{unique identifier to determine which values are duplicated}
 
-\item{sumColumns}{vector of column names to be summed -- defaults to NULL}
+\item{sumColumns}{vector of column names to be summed}
 }
 \value{
 SpatialPolygonsDataFrame composed of grouped polygons.

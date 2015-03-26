@@ -33,6 +33,11 @@
 #' 
 #' \strong{History}
 #' 
+#' version 0.2.3 -- patch
+#' \itemize{
+#'   \item{Removed unneeded test that fails with sp version 1.1-0.}
+#' }
+#' 
 #' version 0.2.2 -- minor tweaks to 0.2.1
 #' \itemize{
 #'   \item{User specification of \code{SpatialDataDir} is now required.}
@@ -191,13 +196,14 @@ countryToCode <- function(countryNames) {
 #' @title Convert State Codes to State Names
 #' @param stateCodes vector of state codes to be converted
 #' @param countryCodes ISO-3166-1 alpha-2 country codes the state might be found in
-#' @param dataset name of dataset containing state-level identifiers -- defaults to 'NaturalEarthAdm1'
+#' @param dataset name of dataset containing state-level identifiers
 #' @description Converts a vector of ISO 3166-2 alpha-2 state codes to the corresponding English names.
 #' @details For this function to work, you must first run \code{initializeSpatialData()} to
 #' download, convert and install the necessary spatial data.
 #' @return A vector of English state names or NA.
 #' @seealso convertNaturalEarthAdm1
-codeToState <- function(stateCodes, countryCodes=NULL, dataset='NaturalEarthAdm1') {
+codeToState <- function(stateCodes, countryCodes=NULL,
+                        dataset='NaturalEarthAdm1') {
   
   # Sanity check
   if (!exists(dataset)) {
@@ -219,13 +225,14 @@ codeToState <- function(stateCodes, countryCodes=NULL, dataset='NaturalEarthAdm1
 #' @title Convert State Names to State Codes
 #' @param stateNames state names to be converted
 #' @param countryCodes ISO 3166-2 alpha-2 country codes the state might be found in
-#' @param dataset name of dataset containing state-level identifiers -- defaults to 'NaturalEarthAdm1'
+#' @param dataset name of dataset containing state-level identifiers
 #' @description Converts a vector of state names to an ISO 3166-2 two character state codes.
 #' @details For this function to work, you must first run \code{initializeSpatialData()} to
 #' download, convert and install the necessary spatial data.
 #' @return A vector of ISO 3166-2 codes or NA.
 #' @seealso convertNaturalEarthAdm1
-stateToCode <- function(stateNames, countryCodes=NULL, dataset='NaturalEarthAdm1') {
+stateToCode <- function(stateNames, countryCodes=NULL,
+                        dataset='NaturalEarthAdm1') {
   # Sanity check
   if (!exists(dataset)) {
     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)

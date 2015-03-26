@@ -12,9 +12,9 @@ getStateCode(lon, lat, dataset = "NaturalEarthAdm1", countryCodes = NULL,
 
 \item{lat}{vector of latitudes in decimal degrees}
 
-\item{dataset}{name of spatial dataset to use -- defaults to 'TMWorldBorders'}
+\item{dataset}{name of spatial dataset to use}
 
-\item{countryCodes}{vector of country codes -- defaults to \code{NULL}}
+\item{countryCodes}{vector of country codes}
 
 \item{allData}{logical specifying whether to return a full dataframe}
 }

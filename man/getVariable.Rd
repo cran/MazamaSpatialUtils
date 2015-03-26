@@ -16,7 +16,7 @@ getVariable(lon, lat, dataset = NULL, variable = NULL,
 
 \item{variable}{name of dataframe column to be returned}
 
-\item{countryCodes}{vector of countryCodes -- defaults to \code{NULL}}
+\item{countryCodes}{vector of countryCodes}
 
 \item{allData}{logical specifying whether a full dataframe should be returned}
 }

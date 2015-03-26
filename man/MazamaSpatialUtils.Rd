@@ -38,6 +38,11 @@ with data from any dataset that uses standard ISO codes for countries or states.
 
 \strong{History}
 
+version 0.2.3 -- patch
+\itemize{
+  \item{Removed unneeded test that fails with sp version 1.1-0.}
+}
+
 version 0.2.2 -- minor tweaks to 0.2.1
 \itemize{
   \item{User specification of \code{SpatialDataDir} is now required.}

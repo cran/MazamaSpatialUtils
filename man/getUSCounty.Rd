@@ -12,9 +12,9 @@ getUSCounty(lon, lat, dataset = "USCensusCounties", stateCodes = NULL,
 
 \item{lat}{vector of latitudes in decimal degrees}
 
-\item{dataset}{name of spatial dataset to use -- defaults to 'USCensusCounties'}
+\item{dataset}{name of spatial dataset to use}
 
-\item{stateCodes}{vector of stateCodes used to limit the search -- defaults to \code{NULL}}
+\item{stateCodes}{vector of stateCodes used to limit the search}
 
 \item{allData}{logical specifying whether a full dataframe should be returned}
 }
