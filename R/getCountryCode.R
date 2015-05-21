@@ -10,12 +10,12 @@
 #'     locations fall into and returns the country code strings for those polygons.
 #'     
 #'     If \code{allData=TRUE}, additional data is returned.
-#' @details Countries polygons are from \url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}.
 #' @return Vector of ISO-3166-1 alpha-2 country codes.
 #' @examples
 #' lon <- seq(0,50)
 #' lat <- seq(0,50)
 #' getCountryCode(lon,lat)
+#' @references \url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}
 #' @seealso SimpleCountries
 #' @seealso getSpatialData
 getCountryCode <- function(lon, lat, dataset='SimpleCountries', countryCodes=NULL, allData=FALSE) {

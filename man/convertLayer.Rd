@@ -16,7 +16,7 @@ An object of class \code{SpatialPolygonsDataFrame}
 }
 \description{
 Raw shapefiles are read in using the \code{readOGR()} function from the \pkg{rgdal} package.
-Spatial data are reprojected onto a standard projection with \code{"+proj=longlat"} before being returned.
+Spatial data are reprojected onto a standard projection with \code{"+proj=longlat +ellps=GRS80"} before being returned.
 }
 \keyword{internal}
 

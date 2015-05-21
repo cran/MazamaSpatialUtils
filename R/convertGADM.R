@@ -1,6 +1,5 @@
 #' @keywords datagen
 #' @export
-#' @import stringr
 #' @title Convert and Regularize Data from the GADM Database
 #' @param nameOnly logical specifying whether to only return the name without creating the file
 #' @param countryCode ISO-3166-1 alpha-2 country code
@@ -30,7 +29,7 @@ convertGADM <- function(countryCode=NULL, admLevel=0, nameOnly=FALSE) {
   if (nameOnly) return(datasetName)
 
   # Convert 2-character codes into ISO3
-  if (str_length(countryCode) == 2) {
+  if (stringr::str_length(countryCode) == 2) {
     ISO3 <- codeToCode(countryCode)
   } else {
     stop('The countryCode parameter "',countryCode,'" is not an ISO-3166-1 alpha-2 country code.',call.=FALSE)

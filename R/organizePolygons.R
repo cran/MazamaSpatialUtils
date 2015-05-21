@@ -1,6 +1,5 @@
 #' @keywords internal
 #' @export
-#' @import sp
 #' @title Organize Ungrouped Polygons
 #' @param dataset object of class SpatialPolygonsDataFrame
 #' @param uniqueID unique identifier to determine which values are duplicated

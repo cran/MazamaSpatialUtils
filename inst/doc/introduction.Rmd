@@ -12,7 +12,7 @@ vignette: >
 ## Background
 
 The MazamaSpatialUtils package was created by [MazamaScience](http://mazamascience.com) to 
-regularize our work with spatial data. The **sp**, **rgdal** and **maptools packages have 
+regularize our work with spatial data. The **sp**, **rgdal** and **maptools** packages have 
 made it much easier to work with spatial data found in shapefiles. Many sources of shapefile 
 data are available and can be used to make beautfiul maps in R. Unfortunately, the data attached 
 to these datasets, even when fairly complete, often lacks standardized identifiers such as the 
@@ -238,7 +238,6 @@ Review that has been ISO-encoded.
 
 ```{r, eval=FALSE}
 library(sp)         # For spatial plotting
-library(stringr)    # For string processing
 
 # Read in ISO-encoded oil production and consumption data
 prod <- read.csv(url('http://mazamascience.com/OilExport/BP_2014_oil_production_bbl.csv'),
@@ -247,8 +246,8 @@ cons <- read.csv(url('http://mazamascience.com/OilExport/BP_2014_oil_consumption
                  skip=6, stringsAsFactors=FALSE, na.strings='na')
 
 # Only work with ISO-encoded columns of data
-prodCountryCodes <- names(prod)[ str_length(names(prod)) == 2 ]
-consCountryCodes <- names(cons)[ str_length(names(cons)) == 2 ]
+prodCountryCodes <- names(prod)[ stringr::str_length(names(prod)) == 2 ]
+consCountryCodes <- names(cons)[ stringr::str_length(names(cons)) == 2 ]
 
 # Use the last row (most recent data)
 lastRow <- nrow(prod)

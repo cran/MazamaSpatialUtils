@@ -1,7 +1,5 @@
 #' @keywords datagen
 #' @export
-#' @import stringr
-#' @import rvest
 #' @title Convert Wikipedia Timezone Table to Dataframe
 #' @description Returns a dataframe version of the Wikipedia timezone table with the following columns:
 #' \itemize{
@@ -53,38 +51,38 @@ convertWikipediaTimezoneTable <- function() {
   tzTable$countryCode[tzTable$timezone == 'Africa/Windhoek'] <- "NA"
   
   # Remove all rows where the Notes say "Link to ..."
-  tzTable <- tzTable[!str_detect(tzTable$notes,'^Link to'),]
+  tzTable <- tzTable[!stringr::str_detect(tzTable$notes,'^Link to'),]
   
   # Convert UTC_offset "+HH:MM" to hours
-  sign <- ifelse(str_sub(tzTable$UTC_offset,1,1) == '+',1,-1)
-  hour <- as.numeric(str_sub(tzTable$UTC_offset,2,3))
-  min <- as.numeric(str_sub(tzTable$UTC_offset,5,6))
+  sign <- ifelse(stringr::str_sub(tzTable$UTC_offset,1,1) == '+',1,-1)
+  hour <- as.numeric(stringr::str_sub(tzTable$UTC_offset,2,3))
+  min <- as.numeric(stringr::str_sub(tzTable$UTC_offset,5,6))
   tzTable$UTC_offset <- sign * (hour + min/60)
   
   # Convert UTC_DST_offset "+HH:MM" to hours
-  sign <- ifelse(str_sub(tzTable$UTC_DST_offset,1,1) == '+',1,-1)
-  hour <- as.numeric(str_sub(tzTable$UTC_DST_offset,2,3))
-  min <- as.numeric(str_sub(tzTable$UTC_DST_offset,5,6))
+  sign <- ifelse(stringr::str_sub(tzTable$UTC_DST_offset,1,1) == '+',1,-1)
+  hour <- as.numeric(stringr::str_sub(tzTable$UTC_DST_offset,2,3))
+  min <- as.numeric(stringr::str_sub(tzTable$UTC_DST_offset,5,6))
   tzTable$UTC_DST_offset <- sign * (hour + min/60)
   
   # Create longitude and latitude
-  matchMatrix <- str_match(tzTable$coordinates,'([+-][0-9]+)([+-][0-9]+)')
+  matchMatrix <- stringr::str_match(tzTable$coordinates,'([+-][0-9]+)([+-][0-9]+)')
   
   # Latitudes -- 5 or 7 characters
   latString <- matchMatrix[,2]
-  sign <- ifelse(str_sub(latString,1,1) == '+',1,-1)
-  deg <- as.numeric(str_sub(latString,2,3))
-  min <- as.numeric(str_sub(latString,4,5))
-  sec <- as.numeric(str_sub(latString,4,5))
+  sign <- ifelse(stringr::str_sub(latString,1,1) == '+',1,-1)
+  deg <- as.numeric(stringr::str_sub(latString,2,3))
+  min <- as.numeric(stringr::str_sub(latString,4,5))
+  sec <- as.numeric(stringr::str_sub(latString,4,5))
   sec <- ifelse(is.na(sec),0,sec)
   tzTable$latitude <- sign * (deg + min/60 + sec/3600) 
   
   # Longitudes -- 6 or 8 characters
   lonString <- matchMatrix[,3]
-  sign <- ifelse(str_sub(lonString,1,1) == '+',1,-1)
-  deg <- as.numeric(str_sub(lonString,2,4))
-  min <- as.numeric(str_sub(lonString,5,6))
-  sec <- as.numeric(str_sub(lonString,7,8))
+  sign <- ifelse(stringr::str_sub(lonString,1,1) == '+',1,-1)
+  deg <- as.numeric(stringr::str_sub(lonString,2,4))
+  min <- as.numeric(stringr::str_sub(lonString,5,6))
+  sec <- as.numeric(stringr::str_sub(lonString,7,8))
   sec <- ifelse(is.na(sec),0,sec)
   tzTable$longitude <- sign * (deg + min/60 + sec/3600) 
   

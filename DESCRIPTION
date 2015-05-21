@@ -1,6 +1,6 @@
 Type: Package
 Package: MazamaSpatialUtils
-Version: 0.2.3
+Version: 0.2.4
 Title: Mazama Science Spatial Data Download and Utility Functions
 Authors@R: c(
     person("Jonathan", "Callahan", email="jonathan.s.callahan@gmail.com", role=c("aut","cre")), 
@@ -13,7 +13,7 @@ Author: Jonathan Callahan [aut, cre],
 Maintainer: Jonathan Callahan <jonathan.s.callahan@gmail.com>
 Depends: R (>= 3.1.0)
 Imports: dplyr, rgdal, rgeos, rvest, sp, stringr
-Suggests: ISOcodes, knitr, lubridate, maps, testthat
+Suggests: knitr, maps, testthat
 Description: A suite of conversion scripts to create internally standardized
     spatial polygons dataframes. Utility scripts use these datasets to return
     values such as country, state, timezone, watershed, etc. associated with a
@@ -22,6 +22,6 @@ License: GPL-3
 VignetteBuilder: knitr
 Repository: CRAN
 LazyData: true
-Packaged: 2015-03-26 16:23:20 UTC; jonathancallahan
+Packaged: 2015-05-19 23:35:43 UTC; jonathan
 NeedsCompilation: no
-Date/Publication: 2015-03-26 18:06:05
+Date/Publication: 2015-05-21 16:18:48

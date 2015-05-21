@@ -2,7 +2,6 @@
 
 library(MazamaSpatialUtils)
 library(sp)
-library(maps)
 
 # Vector of lons and lats
 lons <- seq(5,25,2)
@@ -22,7 +21,7 @@ countryMask <- SimpleCountries@data$countryName %in% countryNames
 # Plot the country polygons
 plot(SimpleCountries[countryMask,],col='gray90',border='gray70')
 # Add countries from the 'maps' package
-map('world',col='gray80',add=TRUE)
+maps::map('world',col='gray80',add=TRUE)
 # Add our points in red
 points(lons,lats,pch=16,col='red')
 # Add text to the right

@@ -65,8 +65,8 @@ convertNaturalEarthAdm1 <- function(nameOnly=FALSE) {
   
   # NOTE:  Lots of useful potentially useful information here. At this point we will just add the core identifiers
   spDF$countryCode <- spDF$iso_a2
-  ### countryCode <- str_split_fixed(spDF$code_hasc,'\\.',5)[,1] # alternative way to get countryCode
-  spDF$stateCode <- str_split_fixed(spDF$code_hasc,'\\.',5)[,2]
+  ### countryCode <- stringr::str_split_fixed(spDF$code_hasc,'\\.',5)[,1] # alternative way to get countryCode
+  spDF$stateCode <- stringr::str_split_fixed(spDF$code_hasc,'\\.',5)[,2]
   spDF$countryName <- MazamaSpatialUtils::codeToCountry(spDF$countryCode)
   spDF$stateName <- spDF$name
   

@@ -27,13 +27,13 @@ Uses spatial comparison to determine which country polygons the
 
     If \code{allData=TRUE}, additional data is returned.
 }
-\details{
-Countries polygons are from \url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}.
-}
 \examples{
 lon <- seq(0,50)
 lat <- seq(0,50)
 getCountryCode(lon,lat)
+}
+\references{
+\url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}
 }
 \seealso{
 SimpleCountries

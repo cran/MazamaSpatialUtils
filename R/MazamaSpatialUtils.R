@@ -17,7 +17,7 @@
 #' 
 #' The following additional standards are applied during the data conversion process:
 #' \itemize{
-#' \item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat"}) }
+#' \item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat +ellps=GRS80"}) }
 #' \item{ no duplicated rows in the dataframe (conversion to \strong{multi-}polygons) }
 #' \item{ lowerCamelCase, human readable names replace original parameter names }
 #' \item{ redundant, software-internal or otherwise unuseful data columns may be dropped }
@@ -32,6 +32,12 @@
 #' with data from any dataset that uses standard ISO codes for countries or states.
 #' 
 #' \strong{History}
+#' 
+#' version 0.2.4 -- patch
+#' \itemize{
+#'   \item{Updated default projection from \code{"+proj=longlat"} to \code{"+proj=longlat +ellps=GRS80"}
+#'   to support libproj >= 4.9.1}
+#' }
 #' 
 #' version 0.2.3 -- patch
 #' \itemize{
@@ -76,7 +82,7 @@ NULL
 #' @description SimpleTimezones is a simplified world timezones dataset suitable for global maps
 #' and quick spatial searches. This dataset is distributed with the package and is used by
 #' default whenever a dataset with timezone polygons is required.
-#' @details This dataset is a simplified version of WorldTimezones.  It was simplified with
+#' @details This dataset is a simplified version of WorldTimezones. It was simplified with
 #' \url{http://mapshaper.org}.
 #' @seealso convertWorldTimezones
 NULL
@@ -90,7 +96,7 @@ NULL
 #' @title Directory for Spatial Data
 #' @format Absolute path string.
 #' @description This package maintains an internal directory location which users can set
-#' using \code{setSpatialDataDir()}.  All package functions use this directory whenever datasets
+#' using \code{setSpatialDataDir()}. All package functions use this directory whenever datasets
 #' are created or loaded.
 #' 
 #' The default setting when the package is loaded is \code{getwd()}.
@@ -108,7 +114,7 @@ spatialEnv$dataDir <- NULL
 #' @seealso setSpatialDataDir
 getSpatialDataDir <- function() {
   if (is.null(spatialEnv$dataDir)) {
-    stop('No data directory found  Please set a data directory with setSpatialDataDir("YOUR_DATA_DIR").',call.=FALSE)
+    stop('No data directory found. Please set a data directory with setSpatialDataDir("YOUR_DATA_DIR").',call.=FALSE)
   } else {
     return(spatialEnv$dataDir)    
   }
@@ -148,12 +154,12 @@ setSpatialDataDir <- function(dataDir) {
 #' @return A vector of ISO country codes
 codeToCode <- function(countryCodes) {
   countryTable <- MazamaSpatialUtils::SimpleCountries@data  
-  if ( all(str_length(countryCodes) == 2) ) {
+  if ( all(stringr::str_length(countryCodes) == 2) ) {
     # Create a vector of ISO3 identified by countryCode
     allISO3 <- countryTable$ISO3
     names(allISO3) <- countryTable$countryCode
     return(as.character(allISO3[countryCodes]))
-  } else if ( all(str_length(countryCodes) == 3) ) {
+  } else if ( all(stringr::str_length(countryCodes) == 3) ) {
     # Create a vector of ISO2 identified by ISO3
     allISO2 <- countryTable$countryCode
     names(allISO2) <- countryTable$ISO3

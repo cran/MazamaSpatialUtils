@@ -1,7 +1,4 @@
-library(testthat)
 library(MazamaSpatialUtils)
 
-# setSpatialDataDir('./SpatialData')
-# initializeSpatialData()
+testthat::test_check("MazamaSpatialUtils")
 
-test_check("MazamaSpatialUtils")

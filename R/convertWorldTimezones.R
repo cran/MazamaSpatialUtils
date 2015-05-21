@@ -10,12 +10,14 @@
 #' These timezones also have no \code{countryCode} assigned. We hope to rectify this in a future release.
 #' \preformatted{
 #' > WorldTimezones@@data$timezone[is.na(WorldTimezones$countryCode)]
-#' [1] "Europe/Zagreb"         "Europe/Vatican"        "America/Coral_Harbour" "Arctic/Longyearbyen"
-#' [5] "uninhabited"           "America/Kralendijk"    "Europe/Jersey"         "Europe/Bratislava"
-#' [9] "America/St_Barthelemy" "Europe/Ljubljana"      "Europe/Mariehamn"      "Europe/Podgorica" 
-#' [13] "Europe/Isle_of_Man"    "Europe/Guernsey"       "Europe/San_Marino"     "Europe/Skopje"   
-#' [17] "Europe/Sarajevo"       "America/Lower_Princes" "America/Marigot"       "Africa/Juba"
-#' }       
+#' [1] "Europe/Zagreb"         "Europe/Vatican"        "America/Coral_Harbour"
+#' [4] "Arctic/Longyearbyen"   "uninhabited"           "America/Kralendijk"   
+#' [7] "Europe/Jersey"         "Europe/Bratislava"     "America/St_Barthelemy"
+#' [10] "Europe/Ljubljana"      "Europe/Mariehamn"      "Europe/Podgorica"     
+#' [13] "Europe/Isle_of_Man"    "Europe/Guernsey"       "Europe/San_Marino"    
+#' [16] "Europe/Skopje"         "Europe/Sarajevo"       "America/Lower_Princes"
+#' [19] "America/Marigot"       "Africa/Juba"          
+#' }
 #' @return Name of the dataset being created.
 #' @seealso setSpatialDataDir
 #' @seealso convertWikipediaTimezoneTable

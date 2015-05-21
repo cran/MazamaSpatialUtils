@@ -10,7 +10,7 @@
 
 <meta name="author" content="Mazama Science" />
 
-<meta name="date" content="2015-03-26" />
+<meta name="date" content="2015-05-19" />
 
 <title>Introduction to MazamaSpatialUtils</title>
 
@@ -54,13 +54,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="header">
 <h1 class="title">Introduction to MazamaSpatialUtils</h1>
 <h4 class="author"><em>Mazama Science</em></h4>
-<h4 class="date"><em>2015-03-26</em></h4>
+<h4 class="date"><em>2015-05-19</em></h4>
 </div>
 
 
 <div id="background" class="section level2">
 <h2>Background</h2>
-<p>The MazamaSpatialUtils package was created by <a href="http://mazamascience.com">MazamaScience</a> to regularize our work with spatial data. The <strong>sp</strong>, <strong>rgdal</strong> and **maptools packages have made it much easier to work with spatial data found in shapefiles. Many sources of shapefile data are available and can be used to make beautfiul maps in R. Unfortunately, the data attached to these datasets, even when fairly complete, often lacks standardized identifiers such as the ISO 3166-1 alpha-2 encodings for countries. Maddeningly, even when these ISO codes are used, the dataframe column in which they are stored does not have a standardized name. It may be called <code>ISO</code> or <code>ISO2</code> or <code>alpha</code> or <code>COUNTRY</code> or any of a dozen other names we have seen.</p>
+<p>The MazamaSpatialUtils package was created by <a href="http://mazamascience.com">MazamaScience</a> to regularize our work with spatial data. The <strong>sp</strong>, <strong>rgdal</strong> and <strong>maptools</strong> packages have made it much easier to work with spatial data found in shapefiles. Many sources of shapefile data are available and can be used to make beautfiul maps in R. Unfortunately, the data attached to these datasets, even when fairly complete, often lacks standardized identifiers such as the ISO 3166-1 alpha-2 encodings for countries. Maddeningly, even when these ISO codes are used, the dataframe column in which they are stored does not have a standardized name. It may be called <code>ISO</code> or <code>ISO2</code> or <code>alpha</code> or <code>COUNTRY</code> or any of a dozen other names we have seen.</p>
 <p>While many mapping packages provide ‘natural’ naming of countries, those who wish to develop operational, GIS-like systems need something that is both standardized and language-independent. The ISO 3166-1 alpha-2 encodings have emerged as the <em>defacto</em> standard for this sort of work. In similar fashion, ISO 3166-2 alpha-2 encodings are aviailable for the next administrative level down – state/province/oblast, <em>etc.</em>. For timezones, the <em>defacto</em> standard is the set of Olson timezones used in all UNIX systems.</p>
 <p>The main goal of this package is to create an internally standardized set of spatial data that we can use in various projects. Along with two built-in datasets, this package provides ‘convert~’ functions for other spatial datasets that we currently use. These convert functions all follow the same recipe:</p>
 <ul>
@@ -229,7 +229,6 @@ colorIndices &lt;-<span class="st"> </span><span class="kw">.bincode</span>(Simp
 <h2>Working with ISO 3166-1 Encoded Data</h2>
 <p>On of the main reasons for ensuring that our spatial datasets use ISO encoding is that it makes it easy to generate plots with any datasets that use that encoding. Here is a slightly more involved example using Energy data from the British Petroleum Statistical Review that has been ISO-encoded.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)         <span class="co"># For spatial plotting</span>
-<span class="kw">library</span>(stringr)    <span class="co"># For string processing</span>
 
 <span class="co"># Read in ISO-encoded oil production and consumption data</span>
 prod &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">url</span>(<span class="st">'http://mazamascience.com/OilExport/BP_2014_oil_production_bbl.csv'</span>),
@@ -238,8 +237,8 @@ cons &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class=
                  <span class="dt">skip=</span><span class="dv">6</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>, <span class="dt">na.strings=</span><span class="st">'na'</span>)
 
 <span class="co"># Only work with ISO-encoded columns of data</span>
-prodCountryCodes &lt;-<span class="st"> </span><span class="kw">names</span>(prod)[ <span class="kw">str_length</span>(<span class="kw">names</span>(prod)) ==<span class="st"> </span><span class="dv">2</span> ]
-consCountryCodes &lt;-<span class="st"> </span><span class="kw">names</span>(cons)[ <span class="kw">str_length</span>(<span class="kw">names</span>(cons)) ==<span class="st"> </span><span class="dv">2</span> ]
+prodCountryCodes &lt;-<span class="st"> </span><span class="kw">names</span>(prod)[ stringr::<span class="kw">str_length</span>(<span class="kw">names</span>(prod)) ==<span class="st"> </span><span class="dv">2</span> ]
+consCountryCodes &lt;-<span class="st"> </span><span class="kw">names</span>(cons)[ stringr::<span class="kw">str_length</span>(<span class="kw">names</span>(cons)) ==<span class="st"> </span><span class="dv">2</span> ]
 
 <span class="co"># Use the last row (most recent data)</span>
 lastRow &lt;-<span class="st"> </span><span class="kw">nrow</span>(prod)

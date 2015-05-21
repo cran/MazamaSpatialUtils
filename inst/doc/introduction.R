@@ -83,7 +83,6 @@ getTimezone(lon, lat, allData=TRUE, countryCodes = countryCodes)
 
 ## ----, eval=FALSE--------------------------------------------------------
 #  library(sp)         # For spatial plotting
-#  library(stringr)    # For string processing
 #  
 #  # Read in ISO-encoded oil production and consumption data
 #  prod <- read.csv(url('http://mazamascience.com/OilExport/BP_2014_oil_production_bbl.csv'),
@@ -92,8 +91,8 @@ getTimezone(lon, lat, allData=TRUE, countryCodes = countryCodes)
 #                   skip=6, stringsAsFactors=FALSE, na.strings='na')
 #  
 #  # Only work with ISO-encoded columns of data
-#  prodCountryCodes <- names(prod)[ str_length(names(prod)) == 2 ]
-#  consCountryCodes <- names(cons)[ str_length(names(cons)) == 2 ]
+#  prodCountryCodes <- names(prod)[ stringr::str_length(names(prod)) == 2 ]
+#  consCountryCodes <- names(cons)[ stringr::str_length(names(cons)) == 2 ]
 #  
 #  # Use the last row (most recent data)
 #  lastRow <- nrow(prod)

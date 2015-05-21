@@ -1,6 +1,5 @@
 #' @keywords datagen
 #' @export
-#' @import rvest
 #' @title Convert US County Borders Shapefile
 #' @param nameOnly logical specifying whether to only return the name without creating the file
 #' @description A US county borders shapefile is downloaded and converted to a 

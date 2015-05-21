@@ -1,6 +1,5 @@
 #' @keywords datagen
 #' @export
-#' @import rgeos
 #' @title Convert USGS Hydrologic Unit Shapefile
 #' @param nameOnly logical specifying whether to only return the name without creating the file
 #' @description A hydrologic unit shapefile is downloaded and converted to a 
@@ -58,8 +57,8 @@ convertUSGSHUC8 <- function(nameOnly=FALSE) {
   
   # Calculate centroids to help add more metadata
   centroids <- rgeos::gCentroid(spDF, byid=TRUE)
-  lon <- coordinates(centroids)[,1]
-  lat <- coordinates(centroids)[,2]
+  lon <- sp::coordinates(centroids)[,1]
+  lat <- sp::coordinates(centroids)[,2]
   
   # Add more standard columns
   spDF$longitude <- lon

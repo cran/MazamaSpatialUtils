@@ -1,6 +1,5 @@
 #' @keywords locator
 #' @export
-#' @import sp
 #' @title Return Spatial Data Associated with a Set of Locations
 #' @param spDF object of class SpatialPolygonsDataFrame
 #' @param lon vector of longitudes in decimal degrees
