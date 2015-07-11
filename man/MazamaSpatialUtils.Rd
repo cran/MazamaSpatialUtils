@@ -22,7 +22,7 @@ data has an equivalent field. The only field guaranteed to exist in every datase
 
 The following additional standards are applied during the data conversion process:
 \itemize{
-\item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat +ellps=GRS80"}) }
+\item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"}) }
 \item{ no duplicated rows in the dataframe (conversion to \strong{multi-}polygons) }
 \item{ lowerCamelCase, human readable names replace original parameter names }
 \item{ redundant, software-internal or otherwise unuseful data columns may be dropped }
@@ -38,9 +38,16 @@ with data from any dataset that uses standard ISO codes for countries or states.
 
 \strong{History}
 
+version 0.3.1 -- addition of buffered search and WorldEEZ polygons
+\itemize{
+  \item{Updated included datasets to use \code{"+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"}.}
+  \item{Addition of buffered search so that locations can find nearby polygons.}
+  \item{Addition of convertWorldEEZ() function.}
+}
+
 version 0.2.4 -- patch
 \itemize{
-  \item{Updated default projection from \code{"+proj=longlat"} to \code{"+proj=longlat +ellps=GRS80"}
+  \item{Updated default projection from \code{"+proj=longlat"} to \code{"+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"}
   to support libproj >= 4.9.1}
 }
 

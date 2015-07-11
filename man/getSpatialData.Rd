@@ -4,23 +4,37 @@
 \alias{getSpatialData}
 \title{Return Spatial Data Associated with a Set of Locations}
 \usage{
-getSpatialData(spDF, lon, lat)
+getSpatialData(lon, lat, SPDF, verbose = FALSE)
 }
 \arguments{
-\item{spDF}{object of class SpatialPolygonsDataFrame}
-
 \item{lon}{vector of longitudes in decimal degrees}
 
 \item{lat}{vector of latitudes in decimal degrees}
+
+\item{SPDF}{object of class SpatialPolygonsDataFrame}
+
+\item{verbose}{logical flag controlling detailed progress statements}
 }
 \value{
 Vector or dataframe of data.
 }
 \description{
-Returns a dataframe or vector of data.
+All locations are first converted to \code{SpatialPoints} objects.
+The \pkg{sp::over()} function is then used to determine which polygon from \code{SPDF}
+each location falls in. The dataframe row associated with each polygon is then
+associated with each ocation.
 }
 \details{
-Any spatial polygon may be passed in.
+For coastal locations it can often happen that the precise coordinates
+of the location lie outside the boundaries of low resolution SpatialPolygonsDataFrame.
+To account for this, locations that remain unassociated after the first pass are then
+buffered to create small circles. All polygons are then checked to see if there is any
+intersection with the now buffered location. A buffering loop increases buffer size
+though the following radii until an intersecting polygon is found:  1km, 2km, 5km,
+10km, 20km, 50km, 100km, 200km.
+
+If the buffered location is more than 200km away from any polygon, a value of \code{NA}
+is returned.
 }
 \keyword{locator}
 

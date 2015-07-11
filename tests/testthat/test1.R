@@ -1,5 +1,6 @@
+# Environment dataDir ----------------------------------------------------------
 
-testthat::context("environment dataDir")
+testthat::context("Environment dataDir")
 
 testthat::test_that("setSpatialDataDir and getSpatialDataDir work correctly", {
   setSpatialDataDir("~")
@@ -8,7 +9,7 @@ testthat::test_that("setSpatialDataDir and getSpatialDataDir work correctly", {
   testthat::expect_equal(getwd(), getSpatialDataDir())
 })
 
-# ------------------------------------------------------------------------------
+# 'get' function test ----------------------------------------------------------
 
 testthat::context("'get' function test")
 
@@ -20,8 +21,7 @@ testthat::test_that("get functions handle errors correctly", {
                  "1 locations appear to be over international waters and no countryCode can be assigned")
   testthat::expect_warning(getCountryCode(c(0,0), c(0,45)), 
                  "1 locations appear to be over international waters and no countryCode can be assigned")
-  testthat::expect_warning(getCountryCode(c(0,0), c(0,100)), 
-                 "2 locations appear to be over international waters and no countryCode can be assigned")
+  testthat::expect_error(getCountryCode(0,100))
   
 })
 

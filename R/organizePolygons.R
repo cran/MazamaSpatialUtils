@@ -10,8 +10,8 @@
 #' If sumColumns is NULL and there are multiple rows that aren't duplicated but have
 #' the same 'uniqueID', the original SpatialPolygonsDataFrame will be returned.
 #' @return SpatialPolygonsDataFrame composed of grouped polygons.
-#' @examples spDF <- organizePolygons(SimpleTimezones, 'timezone', NULL)
-#' @examples spDF <- organizePolygons(USGS_HUC_8, 'huc', 'area')
+#' @examples SPDF <- organizePolygons(SimpleTimezones, 'timezone', NULL)
+#' @examples SPDF <- organizePolygons(USGS_HUC_8, 'huc', 'area')
 organizePolygons <- function(dataset, uniqueID, sumColumns=NULL) {
   
   # Test if the unique identifier is a character string
@@ -72,12 +72,12 @@ organizePolygons <- function(dataset, uniqueID, sumColumns=NULL) {
   
   # Create an object SpatialPolygons
   proj4 <- dataset@proj4string
-  sp <- sp::SpatialPolygons(srl, proj4string=proj4)
+  SP <- sp::SpatialPolygons(srl, proj4string=proj4)
   
   # Build a SpatialPolygonsDataFrame from the dataframe and SpatialPolygons
   rownames(nonDups@data) <- nonDups@data[,uniqueID]
-  spDF <- sp::SpatialPolygonsDataFrame(sp, nonDups@data)
+  SPDF <- sp::SpatialPolygonsDataFrame(SP, nonDups@data)
   
-  return(spDF)
+  return(SPDF)
 }
 

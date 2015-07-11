@@ -28,20 +28,20 @@ getTimezone <- function(lon, lat, dataset="SimpleTimezones", countryCodes=NULL, 
     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)
   }
  
-  spDF <- get(dataset)
+  SPDF <- get(dataset)
   
   # Subset by country before searching
-  if (!is.null(countryCodes)) spDF <- spDF[spDF$countryCode %in% countryCodes,]
+  if (!is.null(countryCodes)) SPDF <- SPDF[SPDF$countryCode %in% countryCodes,]
   
-  spDF <- getSpatialData(spDF,lon,lat)
+  SPDF <- getSpatialData(lon,lat,SPDF)
   
   if (allData) {
 
-    return(spDF)
+    return(SPDF)
     
   } else {
     
-    timezone <- spDF$timezone
+    timezone <- SPDF$timezone
     
     # Sanity check -- missing timezone implies location over water  
     badMask <- is.na(timezone)

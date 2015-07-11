@@ -4,7 +4,7 @@
 #' @param dsn dsn argument to readOGR
 #' @param layerName layer argument to readOGR
 #' @description Raw shapefiles are read in using the \code{readOGR()} function from the \pkg{rgdal} package.
-#' Spatial data are reprojected onto a standard projection with \code{"+proj=longlat +ellps=GRS80"} before being returned.
+#' Spatial data are reprojected onto a standard projection with \code{"+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"} before being returned.
 #' @return An object of class \code{SpatialPolygonsDataFrame}
 convertLayer <- function(dsn="", layerName="") {
   
@@ -27,8 +27,8 @@ convertLayer <- function(dsn="", layerName="") {
   setwd(oldDir)
   
   # Reproject to standard projection
-  spDF <- sp::spTransform(data_projected, sp::CRS("+proj=longlat +ellps=GRS80"))
+  SPDF <- sp::spTransform(data_projected, sp::CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"))
   
-  return(spDF)  
+  return(SPDF)  
 }
 

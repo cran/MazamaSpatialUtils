@@ -4,10 +4,12 @@
 \alias{installSpatialData}
 \title{Install a Named Spatial Dataset}
 \usage{
-installSpatialData(dataset = NULL, ...)
+installSpatialData(dataset = NULL, verbose = FALSE, ...)
 }
 \arguments{
 \item{dataset}{name of dataset}
+
+\item{verbose}{logical flag controlling detailed progress statements}
 
 \item{...}{additional arguments needed by some \code{convert~} functions}
 }

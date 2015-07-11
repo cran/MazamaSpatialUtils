@@ -1,10 +1,10 @@
 ---
 title: "Introduction to MazamaSpatialUtils"
-author: "Mazama Science"
+author: "Jonathan Callahan"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Introduction to MazamaSpatialUtils}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -195,7 +195,7 @@ getTimezone(lon, lat, allData=TRUE, countryCodes = countryCodes)
 
 ## `getUSCounty()`
 
-Returns the US Country which name pairs of coordinates fall in. The arguments are similar 
+Returns the US County which name pairs of coordinates fall in. The arguments are similar 
 as above except that `stateCodes=c()` is used instead of `countryCodes=c()` since this 
 dataset is US specific. 
 

@@ -2,7 +2,8 @@
 #' @export
 #' @title Convert World Borders Shapefile
 #' @param nameOnly logical specifying whether to only return the name without creating the file
-#' @description A world borders shapefile is downloaded and converted to a 
+#' @description Returns a SpatialPolygonsDataFrame for world divisions
+#' @details A world borders shapefile is downloaded and converted to a 
 #' SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 #' in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
 #' @return Name of the dataset being created.
@@ -19,22 +20,20 @@ convertTMWorldBorders <- function(nameOnly=FALSE) {
   
   if (nameOnly) return(datasetName)
   
-  # Build appropriate request URL for TM world borders
-  url <- "http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip"
+  # Build appropriate request URL for TM World Borders data
+  url <- 'http://thematicmapping.org/downloads/TM_WORLD_BORDERS-0.3.zip'
   
   filePath <- paste(dataDir,basename(url),sep='/')
-  download.file(url,filePath)
+  utils::download.file(url,filePath)
   # NOTE:  This zip file has no directory so extra subdirectory needs to be created
-  unzip(filePath,exdir=paste0(dataDir,'/world'))
+  utils::unzip(filePath,exdir=paste0(dataDir,'/world'))
   
   # Convert shapefile into SpatialPolygonsDataFrame
   # NOTE:  The 'world' directory has been created
   dsnPath <- paste(dataDir,'world',sep='/')
-  spDF <- convertLayer(dsn=dsnPath,layerName='TM_WORLD_BORDERS-0.3')
+  shpName <- 'TM_WORLD_BORDERS-0.3'
+  SPDF <- convertLayer(dsn=dsnPath,layerName=shpName)
 
-  #   > names(spDF)
-  #   [1] "FIPS"      "ISO2"      "ISO3"      "UN"        "NAME"      "AREA"      "POP2005"   "REGION"    "SUBREGION" "LON"       "LAT"
-  
   # Rationalize naming:
   # * human readable full nouns with descriptive prefixes
   # * generally lowerCamelCase
@@ -44,25 +43,27 @@ convertTMWorldBorders <- function(nameOnly=FALSE) {
   # * longitude (decimal degrees E)
   # * latitude (decimal degrees N)
   # * area (m^2)
-  names(spDF) <- c('FIPS','countryCode','ISO3','UN_country','countryName','area','population2005','UN_region','UN_subregion','longitude','latitude')
+  
+  # Relabel and standardize the naming in the SpatialPolygonsDataFrame
+  names(SPDF) <- c('FIPS','countryCode','ISO3','UN_country','countryName','area','population2005','UN_region','UN_subregion','longitude','latitude')
   
   # Rationalize units:
   # * SI  
-  # NOTE:  Bizzarely, area seems to be in units of (10 km^2). Convert these to m^2
-  spDF$area <- spDF$area * 1e7
+  # NOTE:  Area seems to be in units of (10 km^2). Convert these to m^2
+  SPDF$area <- SPDF$area * 1e7
   
-  # Group polygons with the same identifier
-  ###spDF <- organizePolygons(spDF, uniqueID='countryCode', sumColumns=c('area','population2005'))
+  # Group polygons with the same identifier (countryCode)
+  SPDF <- organizePolygons(SPDF, uniqueID='countryCode', sumColumns=c('area','population2005'))
   # NOTE:  This dataset already has grouped polygons
   
   # Assign a name and save the data
-  assign(datasetName,spDF)
+  assign(datasetName,SPDF)
   save(list=c(datasetName),file=paste0(dataDir,'/',datasetName,'.RData'))
   
   # Clean up
   unlink(filePath, force=TRUE)
   unlink(dsnPath, recursive=TRUE, force=TRUE)
   
-  invisible(datasetName)
+  return(invisible(datasetName))
 }
 

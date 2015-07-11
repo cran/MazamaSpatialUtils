@@ -24,7 +24,7 @@ If sumColumns is NULL and there are multiple rows that aren't duplicated but hav
 the same 'uniqueID', the original SpatialPolygonsDataFrame will be returned.
 }
 \examples{
-spDF <- organizePolygons(SimpleTimezones, 'timezone', NULL)
+SPDF <- organizePolygons(SimpleTimezones, 'timezone', NULL)
 }
 \keyword{internal}
 

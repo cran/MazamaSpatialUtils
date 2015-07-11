@@ -2,10 +2,11 @@
 #' @export
 #' @title Install a Named Spatial Dataset
 #' @param dataset name of dataset
+#' @param verbose logical flag controlling detailed progress statements
 #' @param ... additional arguments needed by some \code{convert~} functions
 #' @description Install a named spatial dataset.
 #' @return Character name of the installed dataset.
-installSpatialData <- function(dataset=NULL, ...) {
+installSpatialData <- function(dataset=NULL, verbose=FALSE, ...) {
   
   # Use package internal data directory
   dataDir <- getSpatialDataDir()
@@ -18,7 +19,7 @@ installSpatialData <- function(dataset=NULL, ...) {
   filePath <- paste0(dataDir,'/',datasetName,'.RData')
   
   if (file.exists(filePath)) {
-    message(paste0(filePath,' already exists.'))
+    if (verbose) message(paste0(filePath,' already exists.'))
   } else {
     # Download/Convert/Install the dataset
     FUN(..., nameOnly=FALSE)    

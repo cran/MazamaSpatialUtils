@@ -27,21 +27,23 @@ convertNaturalEarthAdm1 <- function(nameOnly=FALSE) {
   
   # Specify administrative levels for URL
   adm <- 1
-  level <- "states_provinces"
+  level <- 'states_provinces'
 
   # Build appropriate request URL for Natural Earth data
-  url <- paste0("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_",
-                adm, "_",
-                level, ".zip")
+  url <- paste0('http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_',
+                adm, '_',
+                level, '.zip')
   
   filePath <- paste(dataDir,basename(url),sep='/')
-  download.file(url,filePath)
-  unzip(filePath,exdir=paste0(dataDir, "/adm"))
+  utils::download.file(url,filePath)
+  # NOTE:  This zip file has no directory so extra subdirectory needs to be created
+  utils::unzip(filePath,exdir=paste0(dataDir, '/adm'))
     
   # Convert shapefile into SpatialPolygonsDataFrame
+  # NOTE:  The 'adm' directory has been created
   dsnPath <- paste(dataDir,'adm',sep='/')
-  shpName <- paste("ne", "10m_admin", adm, level, sep="_")
-  spDF <- convertLayer(dsn=dsnPath,layerName=shpName)
+  shpName <- paste('ne', '10m_admin', adm, level, sep='_')
+  SPDF <- convertLayer(dsn=dsnPath,layerName=shpName)
 
   # Rationalize naming:
   # * human readable full nouns with descriptive prefixes
@@ -53,45 +55,37 @@ convertNaturalEarthAdm1 <- function(nameOnly=FALSE) {
   # * latitude (decimal degrees N)
   # * area (m^2)
   
-  #   > names(spDF@data)
-  #   [1] "adm1_code"  "OBJECTID_1" "diss_me"    "adm1_cod_1" "iso_3166_2" "wikipedia"  "iso_a2"     "adm0_sr"    "name"      
-  #   [10] "name_alt"   "name_local" "type"       "type_en"    "code_local" "code_hasc"  "note"       "hasc_maybe" "region"    
-  #   [19] "region_cod" "provnum_ne" "gadm_level" "check_me"   "scalerank"  "datarank"   "abbrev"     "postal"     "area_sqkm" 
-  #   [28] "sameascity" "labelrank"  "featurecla" "name_len"   "mapcolor9"  "mapcolor13" "fips"       "fips_alt"   "woe_id"    
-  #   [37] "woe_label"  "woe_name"   "latitude"   "longitude"  "sov_a3"     "adm0_a3"    "adm0_label" "admin"      "geonunit"  
-  #   [46] "gu_a3"      "gn_id"      "gn_name"    "gns_id"     "gns_name"   "gn_level"   "gn_region"  "gn_a1_code" "region_sub"
-  #   [55] "sub_code"   "gns_level"  "gns_lang"   "gns_adm1"   "gns_region"
-  
-  
-  # NOTE:  Lots of useful potentially useful information here. At this point we will just add the core identifiers
-  spDF$countryCode <- spDF$iso_a2
-  ### countryCode <- stringr::str_split_fixed(spDF$code_hasc,'\\.',5)[,1] # alternative way to get countryCode
-  spDF$stateCode <- stringr::str_split_fixed(spDF$code_hasc,'\\.',5)[,2]
-  spDF$countryName <- MazamaSpatialUtils::codeToCountry(spDF$countryCode)
-  spDF$stateName <- spDF$name
-  
-  # Rationalize units:
-  # * SI  
-  spDF$area <- spDF$area_sqkm * 1e6  
-
-  # Use NA instead of -99 and -90 for missing values
-  spDF@data[spDF@data == -99] <- NA
-  spDF@data[spDF@data == -90] <- NA
+  # Add the core identifiers to the SpatialPolygonsDataFrame
+  SPDF$countryCode <- SPDF$iso_a2
+  SPDF$stateCode <- stringr::str_split_fixed(SPDF$code_hasc,'\\.',5)[,2]
+  SPDF$countryName <- MazamaSpatialUtils::codeToCountry(SPDF$countryCode)
+  SPDF$stateName <- SPDF$name
   
   # Subset this dataframe to include only obviously useful columns
   usefulColumns <- c('countryCode','countryName','stateCode','stateName','latitude','longitude','area',
                      'postal','code_hasc','fips','gns_lang','gns_adm1')
-  # Remove columns that are more than 80% NA
-  spDF <- spDF[,usefulColumns]
+  SPDF <- SPDF[,usefulColumns]
+  
+  # Rationalize units:
+  # * SI  
+  # NOTE:  Area seems to be in units of km^2. Convert these to m^2
+  SPDF$area <- SPDF$area_sqkm * 1e6  
+
+  # Use NA instead of -99 and -90 for missing values
+  SPDF@data[SPDF@data == -99] <- NA
+  SPDF@data[SPDF@data == -90] <- NA
+  
+  # Group polygons with the same identifier (gns_adm1)
+  SPDF <- organizePolygons(SPDF, uniqueID='gns_adm1')  
   
   # Assign a name and save the data
-  assign(datasetName,spDF)
+  assign(datasetName,SPDF)
   save(list=c(datasetName),file=paste0(dataDir,"/",datasetName,'.RData'))
   
   # Clean up
   unlink(filePath, force=TRUE)
   unlink(dsnPath, recursive=TRUE, force=TRUE)
   
-  invisible(datasetName)
+  return(invisible(datasetName))
 }
 

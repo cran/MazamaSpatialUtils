@@ -25,12 +25,12 @@ getCountry <- function(lon, lat, dataset='SimpleCountries', countryCodes=NULL, a
     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)
   }
   
-  spDF <- get(dataset)
+  SPDF <- get(dataset)
   
   # Subset by country before searching
-  if (!is.null(countryCodes)) spDF <- spDF[spDF$countryCode %in% countryCodes,]
+  if (!is.null(countryCodes)) SPDF <- SPDF[SPDF$countryCode %in% countryCodes,]
   
-  locationsDF <- getSpatialData(spDF,lon,lat)
+  locationsDF <- getSpatialData(lon,lat,SPDF)
   
   if (allData) {
     

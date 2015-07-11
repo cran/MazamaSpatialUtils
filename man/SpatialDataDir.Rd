@@ -3,12 +3,8 @@
 \docType{data}
 \name{SpatialDataDir}
 \alias{SpatialDataDir}
-\alias{spatialEnv}
 \title{Directory for Spatial Data}
 \format{Absolute path string.}
-\usage{
-spatialEnv
-}
 \description{
 This package maintains an internal directory location which users can set
 using \code{setSpatialDataDir()}. All package functions use this directory whenever datasets

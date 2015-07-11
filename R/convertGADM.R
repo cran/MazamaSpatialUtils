@@ -37,9 +37,8 @@ convertGADM <- function(countryCode=NULL, admLevel=0, nameOnly=FALSE) {
     
   # Check if the dataset already exists
   filePath <- paste0(dataDir, '/', datasetName,'.RData')
-  if(file.exists(filePath)) {
-    datasetName <- get(load(filePath))
-    invisible(datasetName)
+  if (file.exists(filePath)) {
+    return(invisible(datasetName))
   }
   
   # Build appropriate request URL for the GADM Database
@@ -49,7 +48,7 @@ convertGADM <- function(countryCode=NULL, admLevel=0, nameOnly=FALSE) {
 
   # Get the data
   # NOTE:  The url() function converts the url string into a 'connection' that can be loaded.
-  spDF <- get(load(url(url)))
+  SPDF <- get(load(url(url)))
   
   # Rationalize naming:
   # * human readable full nouns with descriptive prefixes
@@ -62,49 +61,49 @@ convertGADM <- function(countryCode=NULL, admLevel=0, nameOnly=FALSE) {
   
   if (admLevel == 0) {
     
-    #     > names(spDF)
+    #     > names(SPDF)
     #     [1] "PID"           "ID_0"          "ISO"           "NAME_ENGLISH"  "NAME_ISO"      "NAME_FAO"      "NAME_LOCAL"   
     #     [8] "NAME_OBSOLETE" "NAME_VARIANTS" "NAME_NONLATIN" "NAME_FRENCH"   "NAME_SPANISH"  "NAME_RUSSIAN"  "NAME_ARABIC"  
     #     [15] "NAME_CHINESE"  "WASPARTOF"     "CONTAINS"      "SOVEREIGN"     "ISO2"          "WWW"           "FIPS"         
     #     [22] "ISON"          "VALIDFR"       "VALIDTO"       "EUmember"     
     
     # NOTE:  Lots of useful potentially useful information here. We will just add the core identifiers
-    spDF$ISO3 <- spDF$ISO
-    spDF$countryCode <- spDF$ISO2
-    spDF$countryName <- spDF$NAME_ENGLISH
+    SPDF$ISO3 <- SPDF$ISO
+    SPDF$countryCode <- SPDF$ISO2
+    SPDF$countryName <- SPDF$NAME_ENGLISH
     
   } else {
     
-    #     > names(spDF)
+    #     > names(SPDF)
     #     [1] "PID"       "ID_0"      "ISO"       "NAME_0"    "ID_1"      "NAME_1"    "NL_NAME_1" "VARNAME_1" "TYPE_1"   
     #     [10] "ENGTYPE_1"
     
     # NOTE:  Lots of useful potentially useful information here. We will just add the core identifiers
-    spDF$ISO3 <- spDF$ISO
-    spDF$countryCode <- codeToCode(spDF$ISO)
-    spDF$countryName <- spDF$NAME_0
-    ### spDF$stateCode <- 
-    spDF$stateName <- spDF$NAME_1
+    SPDF$ISO3 <- SPDF$ISO
+    SPDF$countryCode <- codeToCode(SPDF$ISO)
+    SPDF$countryName <- SPDF$NAME_0
+    ### SPDF$stateCode <- 
+    SPDF$stateName <- SPDF$NAME_1
     
     # NOTE:  A regular patterm emerges beyond level 1
-    #     > names(spDF@data)
+    #     > names(SPDF@data)
     #     [1] "PID"       "ID_0"      "ISO"       "NAME_0"    "ID_1"      "NAME_1"    "ID_2"      "NAME_2"    "ID_3"      "NAME_3"    "NL_NAME_3"
     #     [12] "VARNAME_3" "TYPE_3"    "ENGTYPE_3"
     
     if (admLevel >= 2) {
-      spDF$countyName <- spDF$NAME_2
+      SPDF$countyName <- SPDF$NAME_2
     }
     
   }
 
   # TODO:
   #   # Group polygons with the same identifier
-  #   spDF <- organizePolygons(spDF, uniqueID='timezone')
+  SPDF <- organizePolygons(SPDF, uniqueID='timezone')
   
   # Assign a name and save the data
-  assign(datasetName,spDF)
+  assign(datasetName,SPDF)
   save(list=c(datasetName),file=paste0(dataDir,"/",datasetName,'.RData'))
     
-  invisible(datasetName)
+  return(invisible(datasetName))
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/convertTMWorldBordersSimple.R
 \name{convertTMWorldBordersSimple}
 \alias{convertTMWorldBordersSimple}
-\title{Convert World Borders Shapefile}
+\title{Convert (Simple) World Borders Shapefile}
 \usage{
 convertTMWorldBordersSimple(nameOnly = FALSE)
 }
@@ -13,11 +13,13 @@ convertTMWorldBordersSimple(nameOnly = FALSE)
 Name of the dataset being created.
 }
 \description{
-A world borders shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting file wil be created
-in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
+Returns a SpatialPolygonsDataFrame for a simple world divisions
 }
 \details{
+A world borders shapefile is downloaded and converted to a
+SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
+in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
+
 This shapefile is a greatly simplified version of the TMWorldBorders shapefile and is especially suited
 for spatial searches. This is the default dataset used in \code{getCountry()} and \code{getCountryCode()}.
 Users may wish to use a higher resolution dataset when plotting.

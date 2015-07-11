@@ -2,11 +2,14 @@
 #' @export
 #' @title Convert US County Borders Shapefile
 #' @param nameOnly logical specifying whether to only return the name without creating the file
-#' @description A US county borders shapefile is downloaded and converted to a 
+#' @description Returns a SpatialPolygonsDataFrame for a US county divisions
+#' @details A US county borders shapefile is downloaded and converted to a 
 #' SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 #' in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
-#' @return Large SpatialPolygonsDataFrame.
+#' @return Name of the dataset being created.
 #' @references \url{http://www2.census.gov/geo/tiger/GENZ2013}
+#' @seealso setSpatialDataDir
+#' @seealso getUSCounty
 convertUSCensusCounties <- function(nameOnly=FALSE) {
   
   # Use package internal data directory
@@ -17,16 +20,19 @@ convertUSCensusCounties <- function(nameOnly=FALSE) {
     
   if (nameOnly) return(datasetName)
 
-  # Build appropriate request URL for US County Borders
-  url = "http://www2.census.gov/geo/tiger/GENZ2013/cb_2013_us_county_20m.zip"
+  # Build appropriate request URL for US County Borders data
+  url <- 'http://www2.census.gov/geo/tiger/GENZ2013/cb_2013_us_county_20m.zip'
   
   filePath <- paste(dataDir,basename(url),sep='/')
-  download.file(url,filePath)
-  unzip(filePath,exdir=paste0(dataDir, "/counties"))
+  utils::download.file(url,filePath)
+  # NOTE:  This zip file has no directory so extra subdirectory needs to be created
+  utils::unzip(filePath,exdir=paste0(dataDir, '/counties'))
   
   # Convert shapefile into SpatialPolygonsDataFrame
+  # NOTE:  The 'counties' directory has been created
   dsnPath <- paste(dataDir,'counties',sep='/')
-  spDF <- convertLayer(dsn=dsnPath,layerName="cb_2013_us_county_20m")
+  shpName <- 'cb_2013_us_county_20m'
+  SPDF <- convertLayer(dsn=dsnPath,layerName=shpName)
   
   # Rationalize naming:
   # * human readable full nouns with descriptive prefixes
@@ -38,20 +44,16 @@ convertUSCensusCounties <- function(nameOnly=FALSE) {
   # * latitude (decimal degrees N)
   # * area (m^2)
   
-  #   > names(spDF)
-  #   [1] "STATEFP"  "COUNTYFP" "COUNTYNS" "AFFGEOID" "GEOID"    "NAME"     "LSAD"     "ALAND"    "AWATER"  
-  
-  
   # Get STATEFP conversion table from wikipedia. We need this to find state names and codes
   # from STATEFP values.
   # URL of STATEFP conversions
-  url <- "http://en.wikipedia.org/wiki/Federal_Information_Processing_Standard_state_code"
+  url <- 'http://en.wikipedia.org/wiki/Federal_Information_Processing_Standard_state_code'
 
   # Get the raw html from the url
   wikiDoc <- rvest::html(url)
   
   # Get a list of tables in the document
-  tables <- rvest::html_nodes(wikiDoc, "table")
+  tables <- rvest::html_nodes(wikiDoc, 'table')
   
   # Assume the relevant list is the first table and parse that into a dataframe
   StateTable <- rvest::html_table(tables[[1]])
@@ -62,35 +64,31 @@ convertUSCensusCounties <- function(nameOnly=FALSE) {
     return(toString(state[col]))
   }
   
-  # Uniform naming
-  spDF$countryCode <- 'US'
-  spDF$countryName <- 'United States'
-  spDF$stateCode <- apply(spDF@data, 1, extractState, col='Alpha code')
-  spDF$stateName <- apply(spDF@data, 1, extractState, col="Name")
-  spDF$countyName <- spDF$NAME
+  # Standardize naming in the SpatialPolygonsDataFrame
+  SPDF$countryCode <- 'US'
+  SPDF$countryName <- 'United States'
+  SPDF$stateCode <- apply(SPDF@data, 1, extractState, col='Alpha code')
+  SPDF$stateName <- apply(SPDF@data, 1, extractState, col='Name')
+  SPDF$countyName <- SPDF$NAME
   
-  # TODO:  Need to include LSAD to differentiate, e.g. "St. Louis City" from "St. Louis County"
-  # TODO:  1) get LSAD levels and include LSAD as a factor
-  # TODO:  2) add stateCode_countyName_LSAD as another column
-  # TODO:  3) organizePolygons(spDF, uniqueID=stateCode_countyName_LSAD, sumColumns=c('areaLand','areaWater))
-  
-  # TODO:  replace column indices with column names
-  spDF <- spDF[,c(6, 8, 9, 10, 11, 12, 13, 14, 2)]
-  names(spDF) <- c('name', 'areaLand', 'areaWater', 'countryCode', 'countryName', 
+  # Subset this dataframe to include only obviously useful columns
+  usefulColumns <- c('NAME','ALAND','AWATER','countryCode','countryName','stateCode','stateName',
+                     'countyName','COUNTYFP')
+  SPDF <- SPDF[,usefulColumns]
+  names(SPDF) <- c('name', 'areaLand', 'areaWater', 'countryCode', 'countryName', 
                    'stateCode', 'stateName', 'countyName', 'countyFIPS')
-
-#   # Group polygons with the same identifier
-#   spDF <- organizePolygons(spDF, uniqueID='timezone')
-
-# TODO:  subset/reorganize column names
+  
+  # Group polygons with the same identifier (countyName)
+  SPDF <- organizePolygons(SPDF, uniqueID='countyName', sumColumns=c('areaLand','areaWater'))
   
   # Assign a name and save the data
-  assign(datasetName,spDF)
-  save(list=c(datasetName),file=paste0(dataDir,"/",datasetName,".RData"))
+  assign(datasetName,SPDF)
+  save(list=c(datasetName),file=paste0(dataDir,'/',datasetName,'.RData'))
   
   # Clean up
   unlink(filePath, force=TRUE)
   unlink(dsnPath, recursive=TRUE, force=TRUE)
   
-  invisible(datasetName)
+  return(invisible(datasetName))
 }
+

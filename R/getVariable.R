@@ -27,17 +27,17 @@ getVariable <- function(lon, lat, dataset=NULL, variable=NULL, countryCodes=NULL
     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)
   }
   
-  spDF <- get(dataset)
+  SPDF <- get(dataset)
   
   # Sanity check
-  if ( !(variable %in% names(spDF)) ) {
+  if ( !(variable %in% names(SPDF)) ) {
     stop(paste0('Dataset ',dataset,' does not contain the variable ',variable), call.=FALSE)
   }
   
   # Subset by country before searching
-  if (!is.null(countryCodes)) spDF <- spDF[spDF$countryCode %in% countryCodes,]
+  if (!is.null(countryCodes)) SPDF <- SPDF[SPDF$countryCode %in% countryCodes,]
   
-  locationsDF <- getSpatialData(spDF,lon,lat)
+  locationsDF <- getSpatialData(lon,lat,SPDF)
   
   if (allData) {
     return(locationsDF)

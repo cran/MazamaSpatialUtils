@@ -13,6 +13,9 @@ convertTMWorldBorders(nameOnly = FALSE)
 Name of the dataset being created.
 }
 \description{
+Returns a SpatialPolygonsDataFrame for world divisions
+}
+\details{
 A world borders shapefile is downloaded and converted to a
 SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.

@@ -17,7 +17,7 @@
 #' 
 #' The following additional standards are applied during the data conversion process:
 #' \itemize{
-#' \item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat +ellps=GRS80"}) }
+#' \item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"}) }
 #' \item{ no duplicated rows in the dataframe (conversion to \strong{multi-}polygons) }
 #' \item{ lowerCamelCase, human readable names replace original parameter names }
 #' \item{ redundant, software-internal or otherwise unuseful data columns may be dropped }
@@ -33,9 +33,16 @@
 #' 
 #' \strong{History}
 #' 
+#' version 0.3.1 -- addition of buffered search and WorldEEZ polygons
+#' \itemize{
+#'   \item{Updated included datasets to use \code{"+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"}.}
+#'   \item{Addition of buffered search so that locations can find nearby polygons.}
+#'   \item{Addition of convertWorldEEZ() function.}
+#' }
+#' 
 #' version 0.2.4 -- patch
 #' \itemize{
-#'   \item{Updated default projection from \code{"+proj=longlat"} to \code{"+proj=longlat +ellps=GRS80"}
+#'   \item{Updated default projection from \code{"+proj=longlat"} to \code{"+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"}
 #'   to support libproj >= 4.9.1}
 #' }
 #' 
@@ -90,6 +97,9 @@ NULL
 
 # ----- Internal Package State -------------------------------------------------
 
+spatialEnv <- new.env(parent = emptyenv())
+spatialEnv$dataDir <- NULL
+
 #' @docType data
 #' @keywords environment
 #' @name SpatialDataDir
@@ -102,8 +112,7 @@ NULL
 #' The default setting when the package is loaded is \code{getwd()}.
 #' @seealso getSpatialDataDir
 #' @seealso setSpatialDataDir
-spatialEnv <- new.env(parent = emptyenv())
-spatialEnv$dataDir <- NULL
+NULL
 
 #' @keywords environment
 #' @export
@@ -140,7 +149,7 @@ setSpatialDataDir <- function(dataDir) {
   }, error   = function(err) {
     stop(paste0("Error in setSpatialDataDir(",dataDir,")."))
   })     
-  invisible(old)
+  return(invisible(old))
 }
 
 
@@ -153,13 +162,14 @@ setSpatialDataDir <- function(dataDir) {
 #' @description Converts a vector of ISO 3166-1 alpha-2 codes to the corresponding ISO 3166-1 alpha-3 codes or vice versa.
 #' @return A vector of ISO country codes
 codeToCode <- function(countryCodes) {
-  countryTable <- MazamaSpatialUtils::SimpleCountries@data  
-  if ( all(stringr::str_length(countryCodes) == 2) ) {
+  countryTable <- MazamaSpatialUtils::SimpleCountries@data
+  nonMissingCountryCodes <- countryCodes[!is.na(countryCodes)]
+  if ( all(stringr::str_length(nonMissingCountryCodes) == 2) ) {
     # Create a vector of ISO3 identified by countryCode
     allISO3 <- countryTable$ISO3
     names(allISO3) <- countryTable$countryCode
     return(as.character(allISO3[countryCodes]))
-  } else if ( all(stringr::str_length(countryCodes) == 3) ) {
+  } else if ( all(stringr::str_length(nonMissingCountryCodes) == 3) ) {
     # Create a vector of ISO2 identified by ISO3
     allISO2 <- countryTable$countryCode
     names(allISO2) <- countryTable$ISO3
@@ -215,9 +225,9 @@ codeToState <- function(stateCodes, countryCodes=NULL,
   if (!exists(dataset)) {
     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)
   }
-  spDF <- get(dataset)
+  SPDF <- get(dataset)
   # Remove NA state codes
-  stateTable <- spDF@data[!is.na(spDF@data$stateCode),]
+  stateTable <- SPDF@data[!is.na(SPDF@data$stateCode),]
   # Filter by countryCodes to make searching faster
   if (!is.null(countryCodes)) stateTable <- stateTable[stateTable$countryCode %in% countryCodes,]
   # Create a vector of state names identified by state code
@@ -243,9 +253,9 @@ stateToCode <- function(stateNames, countryCodes=NULL,
   if (!exists(dataset)) {
     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)
   }
-  spDF <- get(dataset)
+  SPDF <- get(dataset)
   # Remove NA state codes
-  stateTable <- spDF@data[!is.na(spDF@data$stateCode),]
+  stateTable <- SPDF@data[!is.na(SPDF@data$stateCode),]
   # Filter by countryCodes to make searching faster
   if (!is.null(countryCodes)) stateTable <- stateTable[stateTable$countryCode %in% countryCodes,]
   # Create a vector of state codes identified by name
