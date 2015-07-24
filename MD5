@@ -1,6 +1,6 @@
-cc96f60269ca3c3f9d0836c8e8f5a733 *DESCRIPTION
+b7c2bcf7625557f5a3ec739043403d41 *DESCRIPTION
 d7ab34e5376f547bdc62a3c6407013d0 *NAMESPACE
-5039644318a1f2dfda3457aaba0abc7e *R/MazamaSpatialUtils.R
+89447631481d57c8d76289a90d81d436 *R/MazamaSpatialUtils.R
 b5e5b1ffdc9b6c1370f019bf769cbed4 *R/convertGADM.R
 53ce6056de964c22b42e08f160140a0f *R/convertLayer.R
 e0548e68473d766c5d9abe07470138cc *R/convertNaturalEarthAdm1.R
@@ -15,7 +15,7 @@ e0548e68473d766c5d9abe07470138cc *R/convertNaturalEarthAdm1.R
 62d06cac7207600041b58495760ba50f *R/getCountry.R
 958be10962ee1e4b8adfea98c08cf108 *R/getCountryCode.R
 f9dd39f3232a2a20f37e2b42cd513dd5 *R/getCountryName.R
-e69154f00aef2df04a561c687794dc16 *R/getSpatialData.R
+eedbf9cf9263e7305339f48fcea0822f *R/getSpatialData.R
 9bef11a66ee82efcc249ebef9320722b *R/getState.R
 4c73e34e830354826039349ba62c3290 *R/getStateCode.R
 ff7622f080d0e4cde1c784455be33264 *R/getStateName.R
@@ -35,7 +35,7 @@ c3006953c294f3a21f7ee0cb539734cb *demo/findTimezones.R
 c0e84778a82ac5054c9481783aa4c8a9 *inst/doc/introduction.R
 f55b0d6d5e9e0c86e44089ca0eedf634 *inst/doc/introduction.Rmd
 2968566a4026cfa7167ff350f3eca8af *inst/doc/introduction.html
-246a85e72981335f76f52fd4551e049b *man/MazamaSpatialUtils.Rd
+caf75b70ebf13744d69672b7d28a1c63 *man/MazamaSpatialUtils.Rd
 fd2f090331f6fd00713e30d498cd9bd6 *man/SimpleCountries.Rd
 49957342efe1c400c959a693a2f741b3 *man/SimpleTimezones.Rd
 8556b93ea7e823c6097ac5450caa639e *man/SpatialDataDir.Rd
@@ -57,7 +57,7 @@ c3aa6230ac1d726a263960c24924734d *man/countryToCode.Rd
 091c33cf392d332cfe11a4d8e99f8645 *man/getCountry.Rd
 d37c30579488c86e6d6e976de8f1acf8 *man/getCountryCode.Rd
 0fcc854f8b2f05590b7e52438fee1d77 *man/getCountryName.Rd
-3fcb32ebfe6e247ace3b5a9e1b73fa71 *man/getSpatialData.Rd
+8919534b33257e1e98f9f16c43c9527e *man/getSpatialData.Rd
 020b7127013a4ac8018969d57753680f *man/getSpatialDataDir.Rd
 6005cf1354faff9424d8593879e8b896 *man/getState.Rd
 e3101a30dcfeb35a2669e024566c9146 *man/getStateCode.Rd

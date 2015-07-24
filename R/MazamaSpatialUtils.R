@@ -33,7 +33,12 @@
 #' 
 #' \strong{History}
 #' 
-#' version 0.3.1 -- addition of buffered search and WorldEEZ polygons
+#' version 0.3.2 -- patch
+#' \itemize{
+#'   \item{getSpatialData() no longer fails on invliad/missing locations, now returns dataframe rows with all NA.}
+#' }
+#'
+#'#' version 0.3.1 -- addition of buffered search and WorldEEZ polygons
 #' \itemize{
 #'   \item{Updated included datasets to use \code{"+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"}.}
 #'   \item{Addition of buffered search so that locations can find nearby polygons.}

@@ -14,12 +14,15 @@
 #' of the location lie outside the boundaries of low resolution SpatialPolygonsDataFrame.
 #' To account for this, locations that remain unassociated after the first pass are then
 #' buffered to create small circles. All polygons are then checked to see if there is any
-#' intersection with the now buffered location. A buffering loop increases buffer size
+#' intersection with the now buffered locations. A buffering loop increases buffer size
 #' though the following radii until an intersecting polygon is found:  1km, 2km, 5km,
 #' 10km, 20km, 50km, 100km, 200km.
 #' 
-#' If the buffered location is more than 200km away from any polygon, a value of \code{NA}
-#' is returned.
+#' If a buffered location is more than 200km away from any polygon, a value of \code{NA}
+#' (or data frame row with all \code{NA}s) is returned for that location.
+#' 
+#' Missing or invalid values in the incoming \code{lon} or \code{lat} vectors result in \code{NA}s at
+#' those positions in the returned vector or data frame.
 #' @return Vector or dataframe of data.
 getSpatialData <- function(lon,lat,SPDF,verbose=FALSE) {
   
@@ -27,16 +30,23 @@ getSpatialData <- function(lon,lat,SPDF,verbose=FALSE) {
   if ( length(lon) != length(lat) ) {
     stop(paste("ERROR in getSpatialData:  arguments 'lon' and 'lat' must have the same length."))
   }
+  
+  # Convert any lon into the range -180:180
+  lon <- ( (((lon + 360) %% 360) + 180) %% 360 ) - 180
+  
+  # Determine which lon/lat pairs are valid and non-missing
+  validIndices <- intersect(which(lon <=180 & lon >=-180), which(lat <=90 & lat >=-90))
+  validPairs <- list(lon[validIndices],lat[validIndices])
 
   # Create the array of locations and use the same projection as SPDF
-  location <- sp::SpatialPoints(list(lon, lat), proj4string=SPDF@proj4string)
+  location <- sp::SpatialPoints(validPairs, proj4string=SPDF@proj4string)
   
-  # Use the 'over' function to find which polygon a location is in and extract data
-  locationsDF <- sp::over(location, SPDF)
+  # Use the 'over' function to find which polygon a valid location is in and extract data
+  validDF <- sp::over(location,SPDF)
 
   # Finds the index of the points where the 'over' function failed to place a coordinate 
   # location in a polygon
-  badPointsIndex <- which(is.na(locationsDF$countryCode))
+  badPointsIndex <- which(is.na(validDF$countryCode))
   
   # If NA points are found, increment radius until limit is reached or a country is found
   # If there are no NA points, this block is skipped
@@ -75,7 +85,7 @@ getSpatialData <- function(lon,lat,SPDF,verbose=FALSE) {
         # Use gIntersects to determine whether each buffered point is contained within each polygon
         for (k in 1:length(SpatialPolygonsList)) {
           if ( rgeos::gIntersects(buffer, SpatialPolygonsList[[k]]) ) {
-            locationsDF[pointIndex,] <- SPDF@data[k,]
+            validDF[pointIndex,] <- SPDF@data[k,]
             radiusIntersectsPolygon <- TRUE
             break
           }
@@ -85,6 +95,14 @@ getSpatialData <- function(lon,lat,SPDF,verbose=FALSE) {
       }
     }
     
+  }
+  
+  # Create a data frame for all locations, valid and not valid
+  locationsDF <- data.frame(matrix(NA, ncol=ncol(validDF), nrow=length(lon)))
+  colnames(locationsDF) <- colnames(validDF)
+  # Place the valid points in their correct position in the locations data frame
+  for (i in 1:length(validIndices)) {
+    locationsDF[validIndices[i],] <- validDF[i,]
   }
   
   return(locationsDF)
