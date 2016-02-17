@@ -1,282 +1,103 @@
 <!DOCTYPE html>
-<html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Background</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
 
-<script type="text/javascript">
-window.onload = function() {
-  var imgs = document.getElementsByTagName('img'), i, img;
-  for (i = 0; i < imgs.length; i++) {
-    img = imgs[i];
-    // center an image if it is the only element of its parent
-    if (img.parentElement.childElementCount === 1)
-      img.parentElement.style.textAlign = 'center';
+<meta name="author" content="Jonathan Callahan" />
+
+<meta name="date" content="2016-02-16" />
+
+<title>Introduction to MazamaSpatialUtils</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
   }
-};
-</script>
-
-<!-- Styles for R syntax highlighter -->
-<style type="text/css">
-   pre .operator,
-   pre .paren {
-     color: rgb(104, 118, 135)
-   }
-
-   pre .literal {
-     color: #990073
-   }
-
-   pre .number {
-     color: #099;
-   }
-
-   pre .comment {
-     color: #998;
-     font-style: italic
-   }
-
-   pre .keyword {
-     color: #900;
-     font-weight: bold
-   }
-
-   pre .identifier {
-     color: rgb(0, 0, 0);
-   }
-
-   pre .string {
-     color: #d14;
-   }
-</style>
-
-<!-- R syntax highlighter -->
-<script type="text/javascript">
-var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
-hljs.initHighlightingOnLoad();
-</script>
-
-
-
-<style type="text/css">
-body, td {
-   font-family: sans-serif;
-   background-color: white;
-   font-size: 13px;
-}
-
-body {
-  max-width: 800px;
-  margin: auto;
-  padding: 1em;
-  line-height: 20px;
-}
-
-tt, code, pre {
-   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
-}
-
-h1 {
-   font-size:2.2em;
-}
-
-h2 {
-   font-size:1.8em;
-}
-
-h3 {
-   font-size:1.4em;
-}
-
-h4 {
-   font-size:1.0em;
-}
-
-h5 {
-   font-size:0.9em;
-}
-
-h6 {
-   font-size:0.8em;
-}
-
-a:visited {
-   color: rgb(50%, 0%, 50%);
-}
-
-pre, img {
-  max-width: 100%;
-}
-pre {
-  overflow-x: auto;
-}
-pre code {
-   display: block; padding: 0.5em;
-}
-
-code {
-  font-size: 92%;
-  border: 1px solid #ccc;
-}
-
-code[class] {
-  background-color: #F8F8F8;
-}
-
-table, td, th {
-  border: none;
-}
-
-blockquote {
-   color:#666666;
-   margin:0;
-   padding-left: 1em;
-   border-left: 0.5em #EEE solid;
-}
-
-hr {
-   height: 0px;
-   border-bottom: none;
-   border-top-width: thin;
-   border-top-style: dotted;
-   border-top-color: #999999;
-}
-
-@media print {
-   * {
-      background: transparent !important;
-      color: black !important;
-      filter:none !important;
-      -ms-filter: none !important;
-   }
-
-   body {
-      font-size:12pt;
-      max-width:100%;
-   }
-
-   a, a:visited {
-      text-decoration: underline;
-   }
-
-   hr {
-      visibility: hidden;
-      page-break-before: always;
-   }
-
-   pre, blockquote {
-      padding-right: 1em;
-      page-break-inside: avoid;
-   }
-
-   tr, img {
-      page-break-inside: avoid;
-   }
-
-   img {
-      max-width: 100% !important;
-   }
-
-   @page :left {
-      margin: 15mm 20mm 15mm 10mm;
-   }
-
-   @page :right {
-      margin: 15mm 10mm 15mm 20mm;
-   }
-
-   p, h2, h3 {
-      orphans: 3; widows: 3;
-   }
-
-   h2, h3 {
-      page-break-after: avoid;
-   }
-}
 </style>
 
 
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
 
 </head>
 
 <body>
+
+
+
+<div id="header">
+<h1 class="title">Introduction to MazamaSpatialUtils</h1>
+<h4 class="author"><em>Jonathan Callahan</em></h4>
+<h4 class="date"><em>2016-02-16</em></h4>
+</div>
+
+
+<div id="background" class="section level2">
 <h2>Background</h2>
-
-<p>The MazamaSpatialUtils package was created by <a href="http://mazamascience.com">MazamaScience</a> to 
-regularize our work with spatial data. The <strong>sp</strong>, <strong>rgdal</strong> and <strong>maptools</strong> packages have 
-made it much easier to work with spatial data found in shapefiles. Many sources of shapefile 
-data are available and can be used to make beautfiul maps in R. Unfortunately, the data attached 
-to these datasets, even when fairly complete, often lacks standardized identifiers such as the 
-ISO 3166-1 alpha-2 encodings for countries. Maddeningly, even when these ISO codes are used, 
-the dataframe column in which they are stored does not have a standardized name. It may be
-called <code>ISO</code> or <code>ISO2</code> or <code>alpha</code> or <code>COUNTRY</code> or any of a dozen other names we have seen.</p>
-
-<p>While many mapping packages provide &#39;natural&#39; naming of countries, those who wish to develop 
-operational, GIS-like systems need something that is both standardized and language-independent. 
-The ISO 3166-1 alpha-2 encodings have emerged as the <em>defacto</em> standard for this sort of work. 
-In similar fashion, ISO 3166-2 alpha-2 encodings are aviailable for the next administrative 
-level down &ndash; state/province/oblast, <em>etc.</em>. For timezones, the <em>defacto</em> standard is the set 
-of Olson timezones used in all UNIX systems.</p>
-
-<p>The main goal of this package is to create an internally standardized set of spatial data 
-that we can use in various projects. Along with two built-in datasets, this package provides 
-&#39;convert~&#39; functions for other spatial datasets that we currently use. These convert functions 
-all follow the same recipe:</p>
-
+<p>The MazamaSpatialUtils package was created by <a href="http://mazamascience.com">MazamaScience</a> to regularize our work with spatial data. The <strong>sp</strong>, <strong>rgdal</strong> and <strong>maptools</strong> packages have made it much easier to work with spatial data found in shapefiles. Many sources of shapefile data are available and can be used to make beautfiul maps in R. Unfortunately, the data attached to these datasets, even when fairly complete, often lacks standardized identifiers such as the ISO 3166-1 alpha-2 encodings for countries. Maddeningly, even when these ISO codes are used, the dataframe column in which they are stored does not have a standardized name. It may be called <code>ISO</code> or <code>ISO2</code> or <code>alpha</code> or <code>COUNTRY</code> or any of a dozen other names we have seen.</p>
+<p>While many mapping packages provide ‘natural’ naming of countries, those who wish to develop operational, GIS-like systems need something that is both standardized and language-independent. The ISO 3166-1 alpha-2 encodings have emerged as the <em>defacto</em> standard for this sort of work. In similar fashion, ISO 3166-2 alpha-2 encodings are aviailable for the next administrative level down – state/province/oblast, <em>etc.</em>. For timezones, the <em>defacto</em> standard is the set of Olson timezones used in all UNIX systems.</p>
+<p>The main goal of this package is to create an internally standardized set of spatial data that we can use in various projects. Along with two built-in datasets, this package provides ‘convert~’ functions for other spatial datasets that we currently use. These convert functions all follow the same recipe:</p>
 <ul>
 <li>download spatial data in shapefile format into a standard directory</li>
 <li>convert shapefile data into a <em>sp</em> SpatialPolygonsDataFrame</li>
-<li>modify the dataframe in the @data slot so that it adheres to package internal standards</li>
+<li>modify the dataframe in the <span class="citation">@data</span> slot so that it adheres to package internal standards</li>
 </ul>
-
 <p>Other datasets can be added following the same procedure.</p>
-
-<p>The &#39;package internal standards&#39; are very simple. Every spatial dataset will have at least one 
-of the following, consistently named colums of data:</p>
-
+<p>The ‘package internal standards’ are very simple. Every spatial dataset will have at least one of the following, consistently named colums of data:</p>
 <ul>
-<li>countryCode &ndash; ISO 3166-1 alpha-2</li>
-<li>stateCode &ndash; ISO 3166-2 alpha-2</li>
-<li>timezone &ndash; Olson timezone</li>
+<li>countryCode – ISO 3166-1 alpha-2</li>
+<li>stateCode – ISO 3166-2 alpha-2</li>
+<li>timezone – Olson timezone</li>
 </ul>
-
-<p>If another column contains this data, that column must be renamed or duplicated with the 
-internally standardized name. This simple level of consistency makes it posisble to generate 
-maps for any data that is ISO encoded. It also makes it possible to create functions that 
-return the country, state or timezone associated with a set of locations.</p>
-
+<p>If another column contains this data, that column must be renamed or duplicated with the internally standardized name. This simple level of consistency makes it posisble to generate maps for any data that is ISO encoded. It also makes it possible to create functions that return the country, state or timezone associated with a set of locations.</p>
+</div>
+<div id="functionality" class="section level2">
 <h2>Functionality</h2>
-
-<p>The core functionality for which this package was developed is determining spatial information 
-associated with a set of locations.</p>
-
+<p>The core functionality for which this package was developed is determining spatial information associated with a set of locations.</p>
 <p>Current functionality includes the following:</p>
-
 <ul>
-<li><code>getCountry~(lon,lat)</code> &ndash; returns names, ISO codes and other country-level data specified locations</li>
-<li><code>getState~(lon,lat)</code> &ndash; returns names, ISO codes and other state-level at specified locations</li>
-<li><code>getUSCounty~(lon,lat)</code> &ndash; returns names and other county-level data at specified locations</li>
-<li><code>getTimezones(lon,lat)</code> &ndash; returns Olson timezones and other data at specified locations</li>
+<li><code>getCountry~(lon,lat)</code> – returns names, ISO codes and other country-level data specified locations</li>
+<li><code>getState~(lon,lat)</code> – returns names, ISO codes and other state-level at specified locations</li>
+<li><code>getUSCounty~(lon,lat)</code> – returns names and other county-level data at specified locations</li>
+<li><code>getTimezones(lon,lat)</code> – returns Olson timezones and other data at specified locations</li>
 </ul>
-
 <p>For those working with geo-located data, this information is key.</p>
-
+</div>
+<div id="standard-datasets-and-setup" class="section level2">
 <h2>Standard Datasets and Setup</h2>
-
-<p>When using MazamaSpatialUtils, always run <code>setSpatialDataDir(&#39;SOME_DIRECTORY&#39;)</code> first. This 
-sets the directory where spatial data will be installed and loaded from.</p>
-
+<p>When using MazamaSpatialUtils, always run <code>setSpatialDataDir('SOME_DIRECTORY')</code> first. This sets the directory where spatial data will be installed and loaded from.</p>
 <p>MazamaSpatialUtils has 2 built-in datasets:</p>
-
 <ul>
 <li><code>SimpleCountries</code></li>
 <li><code>SimpleTimezones</code></li>
 </ul>
-
-<p>Version 0.1 of the package is built around the two internal datasets and five other core 
-datasets that may be installed: </p>
-
+<p>Version 0.1 of the package is built around the two internal datasets and five other core datasets that may be installed:</p>
 <ul>
 <li><code>NaturalEarthAdm1</code></li>
 <li><code>TMWorldBorders</code></li>
@@ -284,72 +105,43 @@ datasets that may be installed: </p>
 <li><code>USCensusCounties</code></li>
 <li><code>WorldTimezones</code></li>
 </ul>
+<p>These datasets are not included in the package. You must instead run <code>initializeSpatialData()</code> which will download each dataset into your data directory as <code>.RData</code> files.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MazamaSpatialUtils)
 
-<p>These datasets are not included in the package. You must instead run <code>initializeSpatialData()</code> 
-which will download each dataset into your data directory as <code>.RData</code> files.</p>
-
-<pre><code class="r">library(MazamaSpatialUtils)
-
-# Set data directory to working directory
-setSpatialDataDir(&#39;./SpatialData&#39;)
-initializeSpatialData()
-</code></pre>
-
+<span class="co"># Set data directory to working directory</span>
+<span class="kw">setSpatialDataDir</span>(<span class="st">'./SpatialData'</span>)
+<span class="kw">initializeSpatialData</span>()</code></pre>
 <p>You may also install datasets individually.</p>
-
-<pre><code class="r">convertNaturalEarthAdm1()
-convertTMWorldBorders()
-convertTMWorldBordersSimple()
-convertUSCensusCounties()
-convertWorldTimezones()
-</code></pre>
-
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">convertNaturalEarthAdm1</span>()
+<span class="kw">convertTMWorldBorders</span>()
+<span class="kw">convertTMWorldBordersSimple</span>()
+<span class="kw">convertUSCensusCounties</span>()
+<span class="kw">convertWorldTimezones</span>()</code></pre>
+</div>
+<div id="loading-datasets" class="section level2">
 <h2>Loading Datasets</h2>
-
-<p>Running <code>initializeSpatialData()</code> will also load each dataset into the environment. 
-If you installed a dataset individually or are coming back to a project, load a dataset 
-with the <code>loadSpatialData(DATASET)</code> function.</p>
-
-<pre><code class="r">loadSpatialData(&#39;NaturalEarthAdm1&#39;)
-loadSpatialData(&#39;TMWorldBorders&#39;)
-loadSpatialData(&#39;TMWorldBordersSimple&#39;)
-loadSpatialData(&#39;USCensusCounties&#39;)
-loadSpatialData(&#39;WorldTimezones&#39;)
-</code></pre>
-
+<p>Running <code>initializeSpatialData()</code> will also load each dataset into the environment. If you installed a dataset individually or are coming back to a project, load a dataset with the <code>loadSpatialData(DATASET)</code> function.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">loadSpatialData</span>(<span class="st">'NaturalEarthAdm1'</span>)
+<span class="kw">loadSpatialData</span>(<span class="st">'TMWorldBorders'</span>)
+<span class="kw">loadSpatialData</span>(<span class="st">'TMWorldBordersSimple'</span>)
+<span class="kw">loadSpatialData</span>(<span class="st">'USCensusCounties'</span>)
+<span class="kw">loadSpatialData</span>(<span class="st">'WorldTimezones'</span>)</code></pre>
+</div>
+<div id="getcountry-and-getcountrycode" class="section level2">
 <h2><code>getCountry()</code> and <code>getCountryCode()</code></h2>
+<p>These two functions are used for finding which country one or many spatial points are in. <code>getCountry()</code> returns English country names and <code>getCountryCode()</code> returns the ISO-3166 two character country code. Both functions can be passed <code>allData = TRUE</code> which returns a dataframe with more information on the countries. You can also specify <code>countryCodes = c(CODES)</code> to speed up searching.</p>
+<p>These functions use the package-internal <code>SimpleCountries</code> dataset which can be used without loading any additional datasets.</p>
+<p>In this example we’ll find which countries a vector of points fall in.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MazamaSpatialUtils)
 
-<p>These two functions are used for finding which country one or many spatial points are in. 
-<code>getCountry()</code> returns English country names and <code>getCountryCode()</code> returns the ISO-3166 two 
-character country code. Both functions can be passed <code>allData = TRUE</code> which returns a dataframe 
-with more information on the countries. You can also specify <code>countryCodes = c(CODES)</code> to speed
-up searching.</p>
+lon &lt;-<span class="st"> </span><span class="kw">c</span>(-<span class="fl">122.3</span>, -<span class="fl">73.5</span>, <span class="fl">21.1</span>, <span class="fl">2.5</span>)
+lat &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">47.5</span>, <span class="fl">40.75</span>, <span class="fl">52.1</span>, <span class="fl">48.5</span>)
 
-<p>These functions use the package-internal <code>SimpleCountries</code> dataset which can be used without 
-loading any additional datasets.</p>
-
-<p>In this example we&#39;ll find which countries a vector of points fall in. </p>
-
-<pre><code class="r">library(MazamaSpatialUtils)
-
-lon &lt;- c(-122.3, -73.5, 21.1, 2.5)
-lat &lt;- c(47.5, 40.75, 52.1, 48.5)
-
-getCountry(lon, lat)
-</code></pre>
-
-<pre><code>## [1] &quot;United States&quot; &quot;United States&quot; &quot;Poland&quot;        &quot;France&quot;
-</code></pre>
-
-<pre><code class="r">getCountryCode(lon, lat)
-</code></pre>
-
-<pre><code>## [1] &quot;US&quot; &quot;US&quot; &quot;PL&quot; &quot;FR&quot;
-</code></pre>
-
-<pre><code class="r">getCountry(lon, lat, allData=TRUE)
-</code></pre>
-
+<span class="kw">getCountry</span>(lon, lat)</code></pre>
+<pre><code>## [1] &quot;United States&quot; &quot;United States&quot; &quot;Poland&quot;        &quot;France&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getCountryCode</span>(lon, lat)</code></pre>
+<pre><code>## [1] &quot;US&quot; &quot;US&quot; &quot;PL&quot; &quot;FR&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getCountry</span>(lon, lat, <span class="dt">allData=</span><span class="ot">TRUE</span>)</code></pre>
 <pre><code>##   FIPS countryCode ISO3 UN_country   countryName        area
 ## 1   US          US  USA        840 United States 9.15896e+12
 ## 2   US          US  USA        840 United States 9.15896e+12
@@ -359,65 +151,43 @@ getCountry(lon, lat)
 ## 1      299846449        19           21   -98.606   39.622
 ## 2      299846449        19           21   -98.606   39.622
 ## 3       38195558       150          151    19.401   52.125
-## 4       60990544       150          155     2.550   46.565
-</code></pre>
-
+## 4       60990544       150          155     2.550   46.565</code></pre>
+</div>
+<div id="getstate-and-getstatecode" class="section level2">
 <h2><code>getState()</code> and <code>getStateCode()</code></h2>
+<p>Similar to above, these functions return state names and ISO 3166 code. They also take the same arguments. Adding the <code>countryCodes</code> argument is more important for <code>getState()</code> and <code>getStateCode()</code> because the <code>NaturalEarthAdm1</code> dataset is fairly large. Lets use the same <code>lat</code> and <code>lon</code> variables as above and find out which states those points are in.</p>
+<p>These functions require installation of the large <code>NaturalEarthAdm1</code> dataset which is not distributed with the package.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load states dataset if you haven't already</span>
+<span class="kw">loadSpatialData</span>(<span class="st">&quot;NaturalEarthAdm1&quot;</span>)
 
-<p>Similar to above, these functions return state names and ISO 3166 code. They also take 
-the same arguments. Adding the <code>countryCodes</code> argument is more important for <code>getState()</code> 
-and <code>getStateCode()</code> because the <code>NaturalEarthAdm1</code> dataset is fairly large. Lets use the 
-same <code>lat</code> and <code>lon</code> variables as above and find out which states those points are in.</p>
+<span class="co"># Get which countries the points are in</span>
+countryCodes &lt;-<span class="st"> </span><span class="kw">getCountryCode</span>(lon, lat)
 
-<p>These functions require installation of the large <code>NaturalEarthAdm1</code> dataset which is not 
-distributed with the package.</p>
+<span class="co"># Pass the country codes as an argument to speed everything up</span>
+<span class="kw">getState</span>(lon, lat, <span class="dt">countryCodes =</span> countryCodes)
 
-<pre><code class="r"># Load states dataset if you haven&#39;t already
-loadSpatialData(&quot;NaturalEarthAdm1&quot;)
+<span class="kw">getStateCode</span>(lon, lat, <span class="dt">countryCodes =</span> countryCodes)
 
-# Get which countries the points are in
-countryCodes &lt;- getCountryCode(lon, lat)
-
-# Pass the country codes as an argument to speed everything up
-getState(lon, lat, countryCodes = countryCodes)
-
-getStateCode(lon, lat, countryCodes = countryCodes)
-
-# This is a very detailed dataset so we&#39;ll grab a few important columns
-states &lt;- getState(lon, lat, allData=TRUE, countryCodes = countryCodes)
-states[c(&#39;countryCode&#39;, &#39;stateCode&#39;, &#39;stateName&#39;)]
-</code></pre>
-
+<span class="co"># This is a very detailed dataset so we'll grab a few important columns</span>
+states &lt;-<span class="st"> </span><span class="kw">getState</span>(lon, lat, <span class="dt">allData=</span><span class="ot">TRUE</span>, <span class="dt">countryCodes =</span> countryCodes)
+states[<span class="kw">c</span>(<span class="st">'countryCode'</span>, <span class="st">'stateCode'</span>, <span class="st">'stateName'</span>)]</code></pre>
+</div>
+<div id="gettimezone" class="section level2">
 <h2><code>getTimezone()</code></h2>
-
-<p>Returns the Olsen Timezone where the given points are located. Arguments are the same as 
-the previous functions. <code>allData=TRUE</code> will return other useful information such as the UTC Offset.</p>
-
-<p>These functions use the package-internal <code>SimpleTimezones</code> dataset which can be used 
-without loading any additional datasets.</p>
-
-<pre><code class="r"># Find the timezones the points are in
-getTimezone(lon, lat)
-</code></pre>
-
+<p>Returns the Olsen Timezone where the given points are located. Arguments are the same as the previous functions. <code>allData=TRUE</code> will return other useful information such as the UTC Offset.</p>
+<p>These functions use the package-internal <code>SimpleTimezones</code> dataset which can be used without loading any additional datasets.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Find the timezones the points are in</span>
+<span class="kw">getTimezone</span>(lon, lat)</code></pre>
 <pre><code>## [1] &quot;America/Los_Angeles&quot; &quot;America/New_York&quot;    &quot;Europe/Warsaw&quot;      
-## [4] &quot;Europe/Paris&quot;
-</code></pre>
+## [4] &quot;Europe/Paris&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Find which countries the points are in</span>
+countryCodes &lt;-<span class="st"> </span><span class="kw">getCountryCode</span>(lon, lat)
 
-<pre><code class="r"># Find which countries the points are in
-countryCodes &lt;- getCountryCode(lon, lat)
-
-# Pass the country codes as an argument to potentially speed things up
-getTimezone(lon, lat, countryCodes = countryCodes)
-</code></pre>
-
+<span class="co"># Pass the country codes as an argument to potentially speed things up</span>
+<span class="kw">getTimezone</span>(lon, lat, <span class="dt">countryCodes =</span> countryCodes)</code></pre>
 <pre><code>## [1] &quot;America/Los_Angeles&quot; &quot;America/New_York&quot;    &quot;Europe/Warsaw&quot;      
-## [4] &quot;Europe/Paris&quot;
-</code></pre>
-
-<pre><code class="r">getTimezone(lon, lat, allData=TRUE, countryCodes = countryCodes)
-</code></pre>
-
+## [4] &quot;Europe/Paris&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getTimezone</span>(lon, lat, <span class="dt">allData=</span><span class="ot">TRUE</span>, <span class="dt">countryCodes =</span> countryCodes)</code></pre>
 <pre><code>##              timezone UTC_offset UTC_DST_offset countryCode   longitude
 ## 1 America/Los_Angeles         -8             -7          US -118.242778
 ## 2    America/New_York         -5             -4          US  -74.006389
@@ -427,100 +197,98 @@ getTimezone(lon, lat, countryCodes = countryCodes)
 ## 1 34.05083
 ## 2 40.71167
 ## 3 52.25417
-## 4 48.88111
-</code></pre>
-
+## 4 48.88111</code></pre>
+</div>
+<div id="getuscounty" class="section level2">
 <h2><code>getUSCounty()</code></h2>
+<p>Returns the US County which name pairs of coordinates fall in. The arguments are similar as above except that <code>stateCodes=c()</code> is used instead of <code>countryCodes=c()</code> since this dataset is US specific.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load counties dataset if you haven't already</span>
+<span class="kw">loadSpatialData</span>(<span class="st">&quot;USCensusCounties&quot;</span>)
 
-<p>Returns the US County which name pairs of coordinates fall in. The arguments are similar 
-as above except that <code>stateCodes=c()</code> is used instead of <code>countryCodes=c()</code> since this 
-dataset is US specific. </p>
+<span class="co"># New dataset of points only in the US</span>
+stateCodes &lt;-<span class="st"> </span><span class="kw">getStateCode</span>(lon,lat)
 
-<pre><code class="r"># Load counties dataset if you haven&#39;t already
-loadSpatialData(&quot;USCensusCounties&quot;)
+<span class="co"># Optionally pass the state codes as an argument to speed everything up</span>
+<span class="kw">getUSCounty</span>(lon, lat, <span class="dt">stateCodes=</span>stateCodes)
 
-# New dataset of points only in the US
-stateCodes &lt;- getStateCode(lon,lat)
-
-# Optionally pass the state codes as an argument to speed everything up
-getUSCounty(lon, lat, stateCodes=stateCodes)
-
-getUSCounty(lon, lat, allData=TRUE, stateCodes=stateCodes)
-</code></pre>
-
+<span class="kw">getUSCounty</span>(lon, lat, <span class="dt">allData=</span><span class="ot">TRUE</span>, <span class="dt">stateCodes=</span>stateCodes)</code></pre>
+</div>
+<div id="timezone-map" class="section level2">
 <h2>Timezone Map</h2>
+<p>While identifying the states, countries and timezones associatated with a set of locations is important, we can also generate some quick eye candy with these datasets. Let’s color the timezones by the data variable ‘UTC_offset’</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)         <span class="co"># For spatial plotting</span>
 
-<p>While identifying the states, countries and timezones associatated with a set of 
-locations is important, we can also generate some quick eye candy with these datasets.
-Let&#39;s color the timezones by the data variable &#39;UTC_offset&#39;</p>
+<span class="co"># Assign timezones polygons an index based on UTC_offset</span>
+colorIndices &lt;-<span class="st"> </span><span class="kw">.bincode</span>(SimpleTimezones@data$UTC_offset, <span class="dt">breaks=</span><span class="kw">seq</span>(-<span class="fl">12.5</span>,<span class="fl">12.5</span>,<span class="dv">1</span>))
 
-<pre><code class="r">library(sp)         # For spatial plotting
-
-# Assign timezones polygons an index based on UTC_offset
-colorIndices &lt;- .bincode(SimpleTimezones@data$UTC_offset, breaks=seq(-12.5,12.5,1))
-
-# Color our timezones by UTC_offset
-plot(SimpleTimezones, col=rainbow(25)[colorIndices])
-title(line=-3,&#39;Timezone Offsets from UTC&#39;)
-</code></pre>
-
+<span class="co"># Color our timezones by UTC_offset</span>
+<span class="kw">plot</span>(SimpleTimezones, <span class="dt">col=</span><span class="kw">rainbow</span>(<span class="dv">25</span>)[colorIndices])
+<span class="kw">title</span>(<span class="dt">line=</span>-<span class="dv">3</span>,<span class="st">'Timezone Offsets from UTC'</span>)</code></pre>
+</div>
+<div id="working-with-iso-3166-1-encoded-data" class="section level2">
 <h2>Working with ISO 3166-1 Encoded Data</h2>
+<p>On of the main reasons for ensuring that our spatial datasets use ISO encoding is that it makes it easy to generate plots with any datasets that use that encoding. Here is a slightly more involved example using Energy data from the British Petroleum Statistical Review that has been ISO-encoded.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)         <span class="co"># For spatial plotting</span>
 
-<p>On of the main reasons for ensuring that our spatial datasets use ISO encoding is that 
-it makes it easy to generate plots with any datasets that use that encoding. Here is a 
-slightly more involved example using Energy data from the British Petroleum Statistical 
-Review that has been ISO-encoded.</p>
+<span class="co"># Read in ISO-encoded oil production and consumption data</span>
+prod &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">url</span>(<span class="st">'http://mazamascience.com/OilExport/BP_2014_oil_production_bbl.csv'</span>),
+                 <span class="dt">skip=</span><span class="dv">6</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>, <span class="dt">na.strings=</span><span class="st">'na'</span>)
+cons &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">url</span>(<span class="st">'http://mazamascience.com/OilExport/BP_2014_oil_consumption_bbl.csv'</span>),
+                 <span class="dt">skip=</span><span class="dv">6</span>, <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>, <span class="dt">na.strings=</span><span class="st">'na'</span>)
 
-<pre><code class="r">library(sp)         # For spatial plotting
+<span class="co"># Only work with ISO-encoded columns of data</span>
+prodCountryCodes &lt;-<span class="st"> </span><span class="kw">names</span>(prod)[ stringr::<span class="kw">str_length</span>(<span class="kw">names</span>(prod)) ==<span class="st"> </span><span class="dv">2</span> ]
+consCountryCodes &lt;-<span class="st"> </span><span class="kw">names</span>(cons)[ stringr::<span class="kw">str_length</span>(<span class="kw">names</span>(cons)) ==<span class="st"> </span><span class="dv">2</span> ]
 
-# Read in ISO-encoded oil production and consumption data
-prod &lt;- read.csv(url(&#39;http://mazamascience.com/OilExport/BP_2014_oil_production_bbl.csv&#39;),
-                 skip=6, stringsAsFactors=FALSE, na.strings=&#39;na&#39;)
-cons &lt;- read.csv(url(&#39;http://mazamascience.com/OilExport/BP_2014_oil_consumption_bbl.csv&#39;),
-                 skip=6, stringsAsFactors=FALSE, na.strings=&#39;na&#39;)
+<span class="co"># Use the last row (most recent data)</span>
+lastRow &lt;-<span class="st"> </span><span class="kw">nrow</span>(prod)
+year &lt;-<span class="st"> </span>prod$YEAR[lastRow]
 
-# Only work with ISO-encoded columns of data
-prodCountryCodes &lt;- names(prod)[ stringr::str_length(names(prod)) == 2 ]
-consCountryCodes &lt;- names(cons)[ stringr::str_length(names(cons)) == 2 ]
+<span class="co"># Neither dataframe contains all countries so create four categories based on the</span>
+<span class="co"># amount of information we have:  netExporters, netImporters, exportOnly, importOnly</span>
+sharedCountryCodes &lt;-<span class="st"> </span><span class="kw">intersect</span>(prodCountryCodes,consCountryCodes)
+net &lt;-<span class="st"> </span>prod[lastRow, sharedCountryCodes] -<span class="st"> </span>cons[lastRow, sharedCountryCodes]
 
-# Use the last row (most recent data)
-lastRow &lt;- nrow(prod)
-year &lt;- prod$YEAR[lastRow]
+<span class="co"># Find codes associated with each category</span>
+netExportCodes &lt;-<span class="st"> </span>sharedCountryCodes[net &gt;<span class="st"> </span><span class="dv">0</span>]
+netImportCodes &lt;-<span class="st"> </span>sharedCountryCodes[net &lt;=<span class="st"> </span><span class="dv">0</span>]
+exportOnlyCodes &lt;-<span class="st"> </span><span class="kw">setdiff</span>(prodCountryCodes,consCountryCodes)
+importOnlyCodes &lt;-<span class="st"> </span><span class="kw">setdiff</span>(consCountryCodes,prodCountryCodes)
 
-# Neither dataframe contains all countries so create four categories based on the
-# amount of information we have:  netExporters, netImporters, exportOnly, importOnly
-sharedCountryCodes &lt;- intersect(prodCountryCodes,consCountryCodes)
-net &lt;- prod[lastRow, sharedCountryCodes] - cons[lastRow, sharedCountryCodes]
+<span class="co"># Create a logical 'mask' associated with each category</span>
+netExportMask &lt;-<span class="st"> </span>SimpleCountries@data$countryCode %in%<span class="st"> </span>netExportCodes
+netImportMask &lt;-<span class="st"> </span>SimpleCountries@data$countryCode %in%<span class="st"> </span>netImportCodes
+onlyExportMask &lt;-<span class="st"> </span>SimpleCountries@data$countryCode %in%<span class="st"> </span>exportOnlyCodes
+onlyImportMask &lt;-<span class="st"> </span>SimpleCountries@data$countryCode %in%<span class="st"> </span>importOnlyCodes
 
-# Find codes associated with each category
-netExportCodes &lt;- sharedCountryCodes[net &gt; 0]
-netImportCodes &lt;- sharedCountryCodes[net &lt;= 0]
-exportOnlyCodes &lt;- setdiff(prodCountryCodes,consCountryCodes)
-importOnlyCodes &lt;- setdiff(consCountryCodes,prodCountryCodes)
+color_export =<span class="st"> '#40CC90'</span>
+color_import =<span class="st"> '#EE5555'</span>
+color_missing =<span class="st"> 'gray90'</span>
 
-# Create a logical &#39;mask&#39; associated with each category
-netExportMask &lt;- SimpleCountries@data$countryCode %in% netExportCodes
-netImportMask &lt;- SimpleCountries@data$countryCode %in% netImportCodes
-onlyExportMask &lt;- SimpleCountries@data$countryCode %in% exportOnlyCodes
-onlyImportMask &lt;- SimpleCountries@data$countryCode %in% importOnlyCodes
+<span class="co"># Base plot (without Antarctica)</span>
+notAQ &lt;-<span class="st"> </span>SimpleCountries@data$countryCode !=<span class="st"> 'AQ'</span>
+<span class="kw">plot</span>(SimpleCountries[notAQ,],<span class="dt">col=</span>color_missing)
 
-color_export = &#39;#40CC90&#39;
-color_import = &#39;#EE5555&#39;
-color_missing = &#39;gray90&#39;
+<span class="kw">plot</span>(SimpleCountries[netExportMask,],<span class="dt">col=</span>color_export,<span class="dt">add=</span><span class="ot">TRUE</span>)
+<span class="kw">plot</span>(SimpleCountries[onlyExportMask,],<span class="dt">col=</span>color_export,<span class="dt">add=</span><span class="ot">TRUE</span>)
+<span class="kw">plot</span>(SimpleCountries[netImportMask,],<span class="dt">col=</span>color_import,<span class="dt">add=</span><span class="ot">TRUE</span>)
+<span class="kw">plot</span>(SimpleCountries[onlyImportMask,],<span class="dt">col=</span>color_import,<span class="dt">add=</span><span class="ot">TRUE</span>)
 
-# Base plot (without Antarctica)
-notAQ &lt;- SimpleCountries@data$countryCode != &#39;AQ&#39;
-plot(SimpleCountries[notAQ,],col=color_missing)
+<span class="kw">legend</span>(<span class="st">'bottomleft'</span>,<span class="dt">legend=</span><span class="kw">c</span>(<span class="st">'Net Exporters'</span>,<span class="st">'Net Importers'</span>),<span class="dt">fill=</span><span class="kw">c</span>(color_export,color_import))
+<span class="kw">title</span>(<span class="dt">line=</span><span class="dv">0</span>,<span class="kw">paste</span>(<span class="st">'World Crude Oil in'</span>,year))</code></pre>
+</div>
 
-plot(SimpleCountries[netExportMask,],col=color_export,add=TRUE)
-plot(SimpleCountries[onlyExportMask,],col=color_export,add=TRUE)
-plot(SimpleCountries[netImportMask,],col=color_import,add=TRUE)
-plot(SimpleCountries[onlyImportMask,],col=color_import,add=TRUE)
 
-legend(&#39;bottomleft&#39;,legend=c(&#39;Net Exporters&#39;,&#39;Net Importers&#39;),fill=c(color_export,color_import))
-title(line=0,paste(&#39;World Crude Oil in&#39;,year))
-</code></pre>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 </body>
-
 </html>

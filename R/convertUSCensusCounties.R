@@ -5,7 +5,7 @@
 #' @description Returns a SpatialPolygonsDataFrame for a US county divisions
 #' @details A US county borders shapefile is downloaded and converted to a 
 #' SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
-#' in the package \code{SpatialDataDir} which can be set with \code{setSpatialDataDir()}.
+#' in the spatial data directory which is set with \code{setSpatialDataDir()}.
 #' @return Name of the dataset being created.
 #' @references \url{http://www2.census.gov/geo/tiger/GENZ2013}
 #' @seealso setSpatialDataDir
@@ -32,7 +32,7 @@ convertUSCensusCounties <- function(nameOnly=FALSE) {
   # NOTE:  The 'counties' directory has been created
   dsnPath <- paste(dataDir,'counties',sep='/')
   shpName <- 'cb_2013_us_county_20m'
-  SPDF <- convertLayer(dsn=dsnPath,layerName=shpName)
+  SPDF <- convertLayer(dsn=dsnPath, layerName=shpName, encoding='latin1')
   
   # Rationalize naming:
   # * human readable full nouns with descriptive prefixes
