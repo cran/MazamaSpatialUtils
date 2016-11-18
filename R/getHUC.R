@@ -16,16 +16,11 @@
 
 getHUC <- function(lon, lat, SPDF, HUCs=NULL, allData=FALSE) {
   
-  # TODO:  sanity check that dataset is a character string 
+  # check if longitude and latitude falls in the right range
+  if ( min(lon)< -180 || max(lon) > 180 || min(lat) < -90 || max(lat) > 90 ) {
+    stop('Longitude or latitude is not specified in the correct range -180:180, -90:90',call.=FALSE)
+  }  
   
-#   # Sanity check
-#   if (!exists(dataset)) {
-#     stop('Missing database. Please loadSpatialData("',dataset,'")',call.=FALSE)
-#   }
-#   
-#   # Use standard internal name (assumes pre-loaded dataset)
-#   SPDF <- get(dataset) 
-#   
   # Identify HUC string partial matches to use as a mask 
   if (!is.null(HUCs)){
     HUCMask <- rep(FALSE, nrow(SPDF))
