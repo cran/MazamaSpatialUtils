@@ -5,7 +5,7 @@
 \title{Convert USGS Hydrologic Unit Shapefiles}
 \usage{
 convertWBDHUC(dsnPath = NULL, level = 8, extension = "",
-  nameOnly = FALSE)
+  nameOnly = FALSE, simplify = FALSE)
 }
 \arguments{
 \item{dsnPath}{directory where the WBD HUC datasets are found}
@@ -15,6 +15,8 @@ convertWBDHUC(dsnPath = NULL, level = 8, extension = "",
 \item{extension}{character extsion associated with mapshaper simplified files}
 
 \item{nameOnly}{logical specifying whether to only return the name without creating the file}
+
+\item{simplify}{logical specifying whether to create "_02" and "_01" versions of the file that are simplified to 2\% and 1\%}
 }
 \value{
 Name of the dataset being created.
@@ -29,14 +31,15 @@ created in the spatial data directory which is set with \code{setSpatialDataDir(
 The full WBD dataset can be downloaded from the USGS with the 
 following command:
 \preformatted{
-curl ftp://rockyftp.cr.usgs.gov/vdelivery/Datasets/Staged/WBD/Shape/WBD_National.zip -O
+curl https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/WBD/National/GDB/WBD_National_GDB.zip -O
 }
+
 
 Typically, the raw data will be simplified using the command line version of
 \href{https://github.com/mbloch/mapshaper}{mapshpaper}. (Installation instructions are
 found at this URL.)
 
-With mapshaper, you can reduce the number of vertices in the polygons, greatlyl improving
+With mapshaper, you can reduce the number of vertices in the polygons, greatly improving
 the efficiency of spatial searches. Experimentation at the 
 \href{http://www.mapshaper.org}{mapshaper website} show that a reduction to 1-2%
 of the original shapefile size still retains the recognizable shape of polygons, removing
@@ -56,4 +59,3 @@ A full suite of \code{.shp, .shx, .dbf, .prj} files will be created for the new 
 setSpatialDataDir
 }
 \keyword{datagen}
-

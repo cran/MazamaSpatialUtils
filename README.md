@@ -1,14 +1,16 @@
-<!-- [![Build Status](https://travis-ci.org/mazamascience/MazamaSpatialUtils.svg)](https://travis-ci.org/mazamascience/MazamaSpatialUtils)
-[![Coverage Status](https://coveralls.io/repos/mazamascience/MazamaSpatialUtils/badge.svg?branch=master&service=github)](https://coveralls.io/github/mazamascience/MazamaSpatialUtils?branch=master) -->
+<!-- [![Build Status](https://travis-ci.org/mazamascience/MazamaSpatialUtils.svg)](https://travis-ci.org/mazamascience/MazamaSpatialUtils) -->
+<!-- [![Coverage Status](https://coveralls.io/repos/mazamascience/MazamaSpatialUtils/badge.svg?branch=master&service=github)](https://coveralls.io/github/mazamascience/MazamaSpatialUtils?branch=master) -->
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MazamaSpatialUtils)](https://cran.r-project.org/package=MazamaSpatialUtils)
 [![Downloads](http://cranlogs.r-pkg.org/badges/MazamaSpatialUtils)](https://cran.r-project.org/package=MazamaSpatialUtils)
 
 # MazamaSpatialUtils
 
-```A suite of conversion scripts to create internally standardized spatial
+```
+A suite of conversion scripts to create internally standardized spatial
 polygons dataframes. Utility scripts use these datasets to return values such
 as country, state, timezone, watershed, etc. associated with a set of 
-longitude/latitude pairs. (They also make cool maps.)```
+longitude/latitude pairs. (They also make cool maps.)
+```
 
 ## Background
 
@@ -37,16 +39,17 @@ that we currently use. These convert functions all follow the same recipe:
 
  * download spatial data in shapefile format into a standard directory
  * convert shapefile data into a sp SpatialPolygonsDataFrame
- * modify the dataframe in the @data slot so that it adheres to package internal standards
+ * modify the dataframe in the `@data` slot so that it adheres to package internal standards
 
 Other datasets can be added following the same procedure.
 
 The ‘package internal standards’ are very simple. Every spatial dataset will
 have at least one of the following, consistently named colums of data:
 
- * countryCode – ISO 3166-1 alpha-2
- * stateCode – ISO 3166-2 alpha-2
- * timezone – Olson timezone
+ * `polygonID` – unique identifier associated with each polygon
+ * `countryCode` – ISO 3166-1 alpha-2
+ * `stateCode` – ISO 3166-2 alpha-2
+ * `timezone` – Olson timezone
 
 If another column contains this data, that column must be renamed or
 duplicated with the internally standardized name. This simple level of
@@ -69,26 +72,34 @@ The following packages should be installed with devtools by typing the following
 
 ## Data
 
-Pre-generated .RData versions of the following standardized shapefiles are available:
-
- * NaturalEarthAdm1.RData	15M	 
- * TMWorldBorders.RData	3.6M	 
- * USCensusCounties.RData	2.2M	 
- * WBDHU2.RData	1.2M	 
- * WBDHU4.RData	3.3M	 
- * WBDHU6.RData	4.0M	 
- * WBDHU8.RData	7.2M	 
- * WBDHU10.RData 21M	 
- * WBDHU12.RData 48M	 
- * WorldTimezones.RData	16M
-
-To get these datasets you should execute the following commands from a shell terminal:
+Pre-generated .RData versions of the following standardized shapefiles are available
+at http://mazamascience.com/RData/Spatial/:
 
 ```
-mkdir ~/Data
-cd ~/Data
-curl -O http://mazamascience.com/RData/Spatial.tar.gz
-tar -xzf Spatial.tar.gz
+ * 2.1M	EEZCountries.RData
+ *  15M	NaturalEarthAdm1.RData
+ *  61M	OSMTimezones.RData
+ * 3.0M	OSMTimezones_05.RData
+ * 3.6M	TMWorldBorders.RData
+ *  48M	TerrestrialEcoregions.RData
+ * 3.5M	TerrestrialEcoregions_05.RData
+ * 7.5M	USCensus115thCongress.RData
+ * 2.2M	USCensusCounties.RData
+ * 3.4M	USCensusStates.RData
+ * 1.2M	USIndianLands.RData
+ * 768M	WBDHU10.RData
+ * 1.4G	WBDHU12.RData
+ *  38M	WBDHU2.RData
+ * 424K	WBDHU2_01.RData
+ * 840K	WBDHU2_02.RData
+ * 107M	WBDHU4.RData
+ * 1.1M	WBDHU4_01.RData
+ * 2.2M	WBDHU4_02.RData
+ * 136M	WBDHU6.RData
+ * 1.4M	WBDHU6_01.RData
+ * 2.8M	WBDHU6_02.RData
+ * 294M	WBDHU8.RData
+ *  17M	WorldTimezones.RData
 ```
 
 ## Examples

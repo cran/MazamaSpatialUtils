@@ -27,14 +27,12 @@ each location falls in. The dataframe row associated with each polygon is then
 associated with each ocation.
 }
 \details{
-For coastal locations it can often happen that the precise coordinates
-of the location lie outside the boundaries of low resolution SpatialPolygonsDataFrame.
-To account for this, locations that remain unassociated after the first pass are then
-buffered to create small circles. All polygons are then checked to see if there is any
-intersection with the now buffered locations. A buffering loop increases buffer size
-though the following radii until an intersecting polygon is found:  1km, 2km, 5km,
-10km, 20km, 50km, 100km, 200km.
-
+Occasionally for coastal locations the precise coordinates
+lie outside the boundaries of a low resolution SpatialPolygonsDataFrame.
+To account for this any location that remains unassociated after the first pass is then
+buffered to create a small circle around the original location. All polygons are then checked to see if there is any
+intersection with the now larger buffered locations. Each point is then checked for an intersectiing polygon at the followinr radii:
+1km, 2km, 5km, 10km, 20km, 50km, 100km, 200km.
 If a buffered location is more than 200km away from any polygon, a value of \code{NA}
 (or data frame row with all \code{NA}s) is returned for that location.
 
@@ -42,4 +40,3 @@ Missing or invalid values in the incoming \code{lon} or \code{lat} vectors resul
 those positions in the returned vector or data frame.
 }
 \keyword{locator}
-

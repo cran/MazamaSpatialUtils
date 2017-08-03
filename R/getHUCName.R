@@ -5,7 +5,7 @@
 #' @param lat vector of latitudes in decimal degrees
 #' @param dataset name of spatial dataset to use
 #' @param HUCs vector of Hydrologic Unit Codes
-#' @param allData logical specifying whether to return a full dataframe
+#' @param allData logical specifying whether a full dataframe should be returned
 #' @description Uses spatial comparison to determine which HUC polygons the 
 #'     locations fall into and returns the HUC names for those polygons.
 #'     
@@ -13,7 +13,6 @@
 #' @return Vector of HUC names. 
 #' @seealso getSpatialData
  
-
 getHUCName <- function(lon, lat, dataset='WBDHU10-ms', HUCs=NULL, allData=FALSE) {
   
   # Sanity check
@@ -57,7 +56,6 @@ getHUCName <- function(lon, lat, dataset='WBDHU10-ms', HUCs=NULL, allData=FALSE)
     return(HUCName)
     
   }
-  
   
 }
 

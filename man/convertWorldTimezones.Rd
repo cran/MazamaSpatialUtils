@@ -2,7 +2,7 @@
 % Please edit documentation in R/convertWorldTimezones.R
 \name{convertWorldTimezones}
 \alias{convertWorldTimezones}
-\title{Create Timezone Dataset}
+\title{Convert Timezone Shapefile}
 \usage{
 convertWorldTimezones(nameOnly = FALSE)
 }
@@ -23,13 +23,16 @@ These timezones also have no \code{countryCode} assigned. We hope to rectify thi
 \preformatted{
 > WorldTimezones@data$timezone[is.na(WorldTimezones$countryCode)]
 [1] "Europe/Zagreb"         "Europe/Vatican"        "America/Coral_Harbour"
-[4] "Arctic/Longyearbyen"   "uninhabited"           "America/Kralendijk"   
+[4] "Arctic/Longyearbyen"   "uninhabited"           "America/Kralendijk"
 [7] "Europe/Jersey"         "Europe/Bratislava"     "America/St_Barthelemy"
-[10] "Europe/Ljubljana"      "Europe/Mariehamn"      "Europe/Podgorica"     
-[13] "Europe/Isle_of_Man"    "Europe/Guernsey"       "Europe/San_Marino"    
+[10] "Europe/Ljubljana"      "Europe/Mariehamn"      "Europe/Podgorica"
+[13] "Europe/Isle_of_Man"    "Europe/Guernsey"       "Europe/San_Marino"
 [16] "Europe/Skopje"         "Europe/Sarajevo"       "America/Lower_Princes"
-[19] "America/Marigot"       "Africa/Juba"          
+[19] "America/Marigot"       "Africa/Juba"
 }
+}
+\references{
+\url{http://efele.net/maps/tz/world/}
 }
 \seealso{
 setSpatialDataDir
@@ -37,4 +40,3 @@ setSpatialDataDir
 convertWikipediaTimezoneTable
 }
 \keyword{datagen}
-

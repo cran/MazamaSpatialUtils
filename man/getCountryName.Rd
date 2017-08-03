@@ -4,8 +4,8 @@
 \alias{getCountryName}
 \title{Return Country Names at Specified Locations}
 \usage{
-getCountryName(lon, lat, dataset = "SimpleCountries", countryCodes = NULL,
-  allData = FALSE, useBuffering = FALSE)
+getCountryName(lon, lat, dataset = "SimpleCountriesEEZ",
+  countryCodes = NULL, allData = FALSE, useBuffering = FALSE)
 }
 \arguments{
 \item{lon}{vector of longitudes in decimal degrees}
@@ -18,7 +18,7 @@ getCountryName(lon, lat, dataset = "SimpleCountries", countryCodes = NULL,
 
 \item{allData}{logical specifying whether a full dataframe should be returned}
 
-\item{useBuffering}{logical flag specyfing the use of location buffering to find the nearest polygon if not target polygon is found}
+\item{useBuffering}{logical flag specifying the use of location buffering to find the nearest polygon if no target polygon is found}
 }
 \value{
 Vector of country names in English.
@@ -43,4 +43,3 @@ SimpleCountries
 getSpatialData
 }
 \keyword{locator}
-

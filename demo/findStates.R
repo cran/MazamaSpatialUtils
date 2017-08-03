@@ -4,14 +4,15 @@ library(MazamaSpatialUtils)
 library(sp)
 library(maps)
 
-# Specify the directory for spatial data
-setSpatialDataDir('./SpatialData')
-
-# Install NaturalEarthAdm1 if not already installed
-installSpatialData('NaturalEarthAdm1', adm=1)
+# This demo only works if spatial has been installed in '~/Data/Spatial'
+setSpatialDataDir('~/Data/Spatial')
 
 # Load the data
-loadSpatialData('NaturalEarthAdm1')
+result <- try( loadSpatialData('NaturalEarthAdm1') )
+
+if ( "try-error" %in% class(result) ) {
+  stop('This demo requires default installation directories for spatial data. See installSpatialData().')
+}
 
 # Vector of lons and lats
 lons <- seq(-120,-60,5)
@@ -67,9 +68,3 @@ text(lons,lats,stateText,pos=4)
 title('**WARNING** 2-Character State Codes are not Unique!')
 uniqueCodesText <- paste(sort(unique(stateCodes[!is.na(stateCodes)])),collapse=', ')
 title(line=0,paste0('Showing all polygons with "stateCode" matching ',uniqueCodesText))
-
-
-
-      
-
-

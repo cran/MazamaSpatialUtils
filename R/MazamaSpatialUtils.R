@@ -48,7 +48,7 @@
 #'
 #' version 0.4.1 -- patch
 #' \itemize{
-#'   \item{Added \code{useBuffering} to get-Sate,CountryTimezone functions.}
+#'   \item{Added \code{useBuffering} to get-State,CountryTimezone functions.}
 #' }
 #'
 #' version 0.3.2 -- patch
@@ -90,6 +90,18 @@
 #' version 0.1 -- initial release
 NULL
 
+#' @docType data
+#' @keywords datasets
+#' @name SimpleCountriesEEZ
+#' @title World Country EEZ Polygons 
+#' @format A SpatialPolygonsDataFrame with 261 elements and 6 columns of data.
+#' @description SimpleCountriesEEZ is a simplified world borders dataset with a  
+#' 200 mile coastal buffer corresponding to Exclusive Economic Zones, suitable for 
+#' quick spatial searches. This dataset is distributed with the package and is used by
+#' default whenever a dataset with country polygons is required.
+#' @details This dataset is equivalent to EEZCountries but with fewer columns of data.
+#' @seealso convertEEZCountries
+NULL
 
 #' @docType data
 #' @keywords datasets
@@ -118,6 +130,8 @@ NULL
 NULL
 
 
+
+
 # ----- Internal Package State -------------------------------------------------
 
 spatialEnv <- new.env(parent = emptyenv())
@@ -139,6 +153,7 @@ NULL
 
 #' @keywords environment
 #' @export
+#' @import sp
 #' @title Get Package Data Directory
 #' @description Returns the package data directory where spatial data is located.
 #' @return Absolute path string.
@@ -180,25 +195,39 @@ setSpatialDataDir <- function(dataDir) {
 
 #' @keywords conversion
 #' @export
-#' @title Convert Between ISO2 and ISO3 Country Codes
+#' @title Convert From ISO2 to ISO3 Country Codes
 #' @param countryCodes vector of country codes to be converted
-#' @description Converts a vector of ISO 3166-1 alpha-2 codes to the corresponding ISO 3166-1 alpha-3 codes or vice versa.
-#' @return A vector of ISO country codes
-codeToCode <- function(countryCodes) {
-  countryTable <- MazamaSpatialUtils::SimpleCountries@data
+#' @description Converts a vector of ISO 3166-1 alpha-2 codes to the corresponding ISO 3166-1 alpha-3 codes.
+#' @return A vector of ISO3 country codes
+iso2ToIso3 <- function(countryCodes) {
+  countryTable <- convertISOCodeTable()
   nonMissingCountryCodes <- countryCodes[!is.na(countryCodes)]
   if ( all(stringr::str_length(nonMissingCountryCodes) == 2) ) {
     # Create a vector of ISO3 identified by countryCode
     allISO3 <- countryTable$ISO3
     names(allISO3) <- countryTable$countryCode
     return(as.character(allISO3[countryCodes]))
-  } else if ( all(stringr::str_length(nonMissingCountryCodes) == 3) ) {
+  } else {
+    stop('countryCodes must be all ISO 3166-1 alpha-2', call.=FALSE)
+  }
+}
+
+#' @keywords conversion
+#' @export
+#' @title Convert Betweenrom ISO3 to ISO2 Country Codes
+#' @param countryCodes vector of country codes to be converted
+#' @description Converts a vector of ISO 3166-1 alpha-3 codes to the corresponding ISO 3166-1 alpha-2 codes.
+#' @return A vector of ISO2 country codes
+iso3ToIso2 <- function(countryCodes) {
+  countryTable <- convertISOCodeTable()
+  nonMissingCountryCodes <- countryCodes[!is.na(countryCodes)]
+  if ( all(stringr::str_length(nonMissingCountryCodes) == 3) ) {
     # Create a vector of ISO2 identified by ISO3
     allISO2 <- countryTable$countryCode
     names(allISO2) <- countryTable$ISO3
     return(as.character(allISO2[countryCodes]))    
   } else {
-    stop('countryCodes must be either all ISO 3166-1 alpha-2 or all ISO 3166-1 alpha-3', call.=FALSE)
+    stop('countryCodes must be all ISO 3166-1 alpha-3', call.=FALSE)
   }
 }
 
@@ -209,7 +238,7 @@ codeToCode <- function(countryCodes) {
 #' @description Converts a vector of ISO 3166-1 alpha-2 codes to the corresponding English names.
 #' @return A vector of English country names or NA.
 codeToCountry <- function(countryCodes) {
-  countryTable <- MazamaSpatialUtils::SimpleCountries@data
+  countryTable <- convertISOCodeTable()
   # Create a vector of countryNames identified by countryCode
   allNames <- countryTable$countryName
   names(allNames) <- countryTable$countryCode
@@ -223,7 +252,7 @@ codeToCountry <- function(countryCodes) {
 #' @description Converts a vector of English country names to the corresponding ISO 3166-1 alpha-2 codes.
 #' @return A vector of ISO 3166-1 alpha-2 codes or NA.
 countryToCode <- function(countryNames) {
-  countryTable <- MazamaSpatialUtils::SimpleCountries@data
+  countryTable <- convertISOCodeTable()
   # Create a vector of countryCodes identified by countryName
   allCodes <- countryTable$countryCode
   names(allCodes) <- countryTable$countryName
