@@ -220,7 +220,7 @@ level down &ndash; state/province/oblast, <em>etc</em>. For timezones, the <em>d
 of Olson timezones used in all UNIX systems.</p>
 
 <p>The main goal of this package is to create an internally standardized set of spatial data 
-that we can use in various projects. Along with two built-in datasets, this package provides 
+that we can use in various projects. Along with three built-in datasets, this package provides 
 <code>convert~()</code> functions for other spatial datasets that we currently use. These convert functions 
 all follow the same recipe:</p>
 
@@ -234,28 +234,23 @@ all follow the same recipe:</p>
 
 <p>The &#39;package internal standards&#39; are very simple.</p>
 
-<p>1) Every spatial dataset must contain the following column:</p>
+<p>1) Every spatial dataset <strong>must</strong> contain the following columns:</p>
 
 <ul>
 <li>polygonID &ndash; unique identifier for each polygon</li>
+<li>countryCode &ndash; country at centroid of polygon (ISO 3166-1 alpha-2)</li>
 </ul>
 
-<p>2) Every spatial dataset must contain the following column:</p>
-
-<ul>
-<li>countryCode &ndash; ISO 3166-1 alpha-2</li>
-</ul>
-
-<p>3) Spatial datasets with timezone data must contain the following column:</p>
+<p>2) Spatial datasets with timezone data <strong>must</strong> contain the following column:</p>
 
 <ul>
 <li>timezone &ndash; Olson timezone</li>
 </ul>
 
-<p>4) Spatial datasets at scales smaller than the nation-state <strong>should</strong> contain the following column:</p>
+<p>3) Spatial datasets at scales smaller than the nation-state <strong>should</strong> contain the following column:</p>
 
 <ul>
-<li>stateCode &ndash; ISO 3166-2 alpha-2</li>
+<li>stateCode &ndash; &#39;state&#39; at centroid of polygon (ISO 3166-2 alpha-2)</li>
 </ul>
 
 <p>If other columns contain these data, those columns must be renamed or duplicated with the 
@@ -278,7 +273,8 @@ associated with a set of locations.</p>
 <li><code>getHUC~(lon,lat,...)</code> &ndash; returns USGS Hydrologic Unit Codes and other data at specified locations</li>
 </ul>
 
-<p>A generic <code>getSpatialData(lon,lat,...)</code> returns a dataframe whose rows are associated with specified locations. This function can be used with newly converted SpatialPolygonsDataFrames.</p>
+<p>A generic <code>getSpatialData(lon,lat,...)</code> returns a dataframe whose rows are associated with specified locations.
+This function can be used with newly converted SpatialPolygonsDataFrames.</p>
 
 <p>For those working with geo-located data, the ability to enhance location metadata with this information can be extremely helpful.</p>
 
@@ -322,7 +318,7 @@ installSpatialData()
 <p>Once datasets have been installed, <code>loadSpatialData()</code> can be used load datasets found in the <code>SpatialDataDir</code> that match a particular pattern, <em>e.g</em>:</p>
 
 <pre><code class="r">loadSpatialData(&#39;NaturalEarthAdm1&#39;)
-loadSpatialData(&#39;WBDHU&#39;)
+loadSpatialData(&#39;USCensus&#39;)
 </code></pre>
 
 <p>Additional watershed data from the <a href="http://nhd.usgs.gov/wbd.html">Watershed Boundary Dataset</a> are quite
@@ -343,7 +339,7 @@ large and can be downloaded separately from <a href="http://mazamascience.com/RD
 <code>getCountry()</code> returns English country names and <code>getCountryCode()</code> returns the ISO-3166 two 
 character country code. Both functions can be passed <code>allData = TRUE</code> which returns a dataframe 
 with more information on the countries. You can also specify <code>countryCodes = c(&lt;codes&gt;)</code> to speed
-up searching.</p>
+up searching by restricting the search to polygons associated within those countries.</p>
 
 <p>These functions use the package-internal <code>SimpleCountries</code> dataset which can be used without 
 loading any additional datasets.</p>

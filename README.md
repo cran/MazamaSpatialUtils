@@ -33,7 +33,7 @@ state/province/oblast, etc.. For timezones, the defacto standard is the set of
 Olson timezones used in all UNIX systems.
 
 The main goal of this package is to create an internally standardized set of
-spatial data that we can use in various projects. Along with two built-in
+spatial data that we can use in various projects. Along with three built-in
 datasets, this package provides ‘convert~’ functions for other spatial datasets
 that we currently use. These convert functions all follow the same recipe:
 
@@ -56,7 +56,6 @@ duplicated with the internally standardized name. This simple level of
 consistency makes it posisble to generate maps for any data that is ISO encoded.
 It also makes it possible to create functions that return the country, state or
 timezone associated with a set of locations.
-
 
 ## Installation
 
