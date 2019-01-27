@@ -66,12 +66,9 @@ NULL
 #' @description SimpleTimezones is a simplified world timezones dataset suitable for global maps
 #' and quick spatial searches. This dataset is distributed with the package and is used by
 #' default whenever a dataset with timezone polygons is required.
-#' @details This dataset is a simplified version of WorldTimezones. It was simplified with
-#' \url{http://mapshaper.org}.
+#' @details This dataset is a simplified version of WorldTimezones.
 #' @seealso convertWorldTimezones
 NULL
-
-
 
 
 # ----- Internal Package State -------------------------------------------------
@@ -128,8 +125,22 @@ setSpatialDataDir <- function(dataDir) {
     warning("Invalid path name.")
   }, error   = function(err) {
     stop(paste0("Error in setSpatialDataDir(",dataDir,")."))
-  })     
+  })
   return(invisible(old))
+}
+
+#' @keywords environment
+#' @keywords internal
+#' @export
+#' @title Remove Package Data Directory
+#' @description Resets the package data dir to NULL. Used for internal testing. 
+#' @return Silently returns previous value of data directory.
+#' @seealso SpatialDataDir
+#' @seealso getSpatialDataDir
+#' @seealso setSpatialDataDir
+removeSpatialDataDir <- function() {
+  old <- spatialEnv$dataDir
+  spatialEnv$dataDir <- NULL
 }
 
 
@@ -142,13 +153,12 @@ setSpatialDataDir <- function(dataDir) {
 #' @description Converts a vector of ISO 3166-1 alpha-2 codes to the corresponding ISO 3166-1 alpha-3 codes.
 #' @return A vector of ISO3 country codes
 iso2ToIso3 <- function(countryCodes) {
-  countryTable <- convertISOCodeTable()
   nonMissingCountryCodes <- countryCodes[!is.na(countryCodes)]
   if ( all(stringr::str_length(nonMissingCountryCodes) == 2) ) {
-    # Create a vector of ISO3 identified by countryCode
-    allISO3 <- countryTable$ISO3
-    names(allISO3) <- countryTable$countryCode
-    return(as.character(allISO3[countryCodes]))
+    # Create a vector of ISO3 identified by the countrycode package
+    iso3Codes <- countrycode::countrycode(countryCodes, "iso2c", "iso3c",
+                                          custom_match = c("AN" = "ANT"))  # Custom match for Netherlands Antilles
+    return(iso3Codes)
   } else {
     stop('countryCodes must be all ISO 3166-1 alpha-2', call.=FALSE)
   }
@@ -156,18 +166,17 @@ iso2ToIso3 <- function(countryCodes) {
 
 #' @keywords conversion
 #' @export
-#' @title Convert Betweenrom ISO3 to ISO2 Country Codes
+#' @title Convert from ISO3 to ISO2 Country Codes
 #' @param countryCodes vector of country codes to be converted
 #' @description Converts a vector of ISO 3166-1 alpha-3 codes to the corresponding ISO 3166-1 alpha-2 codes.
 #' @return A vector of ISO2 country codes
 iso3ToIso2 <- function(countryCodes) {
-  countryTable <- convertISOCodeTable()
   nonMissingCountryCodes <- countryCodes[!is.na(countryCodes)]
   if ( all(stringr::str_length(nonMissingCountryCodes) == 3) ) {
     # Create a vector of ISO2 identified by ISO3
-    allISO2 <- countryTable$countryCode
-    names(allISO2) <- countryTable$ISO3
-    return(as.character(allISO2[countryCodes]))    
+    iso2Codes <- countrycode::countrycode(countryCodes, 'iso3c', 'iso2c',
+                                          custom_match = c("ANT" = "AN"))  # custom match for Netherlands Antilles
+    return(iso2Codes)
   } else {
     stop('countryCodes must be all ISO 3166-1 alpha-3', call.=FALSE)
   }
@@ -180,11 +189,9 @@ iso3ToIso2 <- function(countryCodes) {
 #' @description Converts a vector of ISO 3166-1 alpha-2 codes to the corresponding English names.
 #' @return A vector of English country names or NA.
 codeToCountry <- function(countryCodes) {
-  countryTable <- convertISOCodeTable()
-  # Create a vector of countryNames identified by countryCode
-  allNames <- countryTable$countryName
-  names(allNames) <- countryTable$countryCode
-  return(as.character(allNames[countryCodes]))
+  countryNames <- countrycode::countrycode(countryCodes, "iso2c", "country.name",
+                                           custom_match = c("AN" = "Netherlands Antilles"))  # custom match for Netherlands Antilles
+  return(countryNames)
 }
 
 #' @keywords conversion
@@ -194,11 +201,9 @@ codeToCountry <- function(countryCodes) {
 #' @description Converts a vector of English country names to the corresponding ISO 3166-1 alpha-2 codes.
 #' @return A vector of ISO 3166-1 alpha-2 codes or NA.
 countryToCode <- function(countryNames) {
-  countryTable <- convertISOCodeTable()
-  # Create a vector of countryCodes identified by countryName
-  allCodes <- countryTable$countryCode
-  names(allCodes) <- countryTable$countryName
-  return(as.character(allCodes[countryNames]))
+  countryCodes <- countrycode::countrycode(countryNames, "country.name", "iso2c",
+                                           custom_match = c("Netherlands Antilles" = "AN"))  # custom match for Netherlands Antilles
+  return(countryCodes)
 }
 
 #' @keywords conversion
@@ -224,6 +229,16 @@ codeToState <- function(stateCodes, countryCodes=NULL,
   stateTable <- SPDF@data[!is.na(SPDF@data$stateCode),]
   # Filter by countryCodes to make searching faster
   if (!is.null(countryCodes)) stateTable <- stateTable[stateTable$countryCode %in% countryCodes,]
+  # Test to see if any state codes have duplicate names
+  for (stateCode in stateCodes) {
+    repeatCount <- sum(stateTable$stateCode == stateCode)
+    if (repeatCount > 1) {
+      warning(
+        paste0(repeatCount, " states with code '", stateCode, "'. ",
+               "Returning the first instance. ", 
+               "Please specify countryCode to return the state name from the desired country."))
+    }
+  }
   # Create a vector of state names identified by state code
   allStates <- stateTable$stateName
   names(allStates) <- stateTable$stateCode
@@ -263,3 +278,109 @@ stateToCode <- function(stateNames, countryCodes=NULL,
   names(allCodes) <- stateTable$stateName
   return(as.character(allCodes[stateNames]))
 }
+
+# ----- Simplification  --------------------------------------------------------
+
+#' @export
+#' @title Simplify SpatialPolygonsDataFrame
+#' @param SPDF object of class SpatialPolygonsDataFrame
+#' @param keep proportion of points to retain (0-1; default 0.05)
+#' @param ... arguments passed to \code{rmapshaper::ms_simplify()}
+#' @description Simplify a spatial polygons dataframe. This is a convenience
+#' wrapper for \code{rmapshaper::ms_simplify()}
+#' @return A simplified spatial polygons dataframe.
+#' @examples 
+#' FR <- subset(SimpleCountries, countryCode == 'FR')
+#' par(mfrow=c(3,3), mar=c(1,1,3,1))
+#' for (i in 9:1) {
+#'   keep <- 0.1 * i
+#'   plot(simplify(FR, keep), main=paste0("keep = ",keep))
+#' }
+#' layout(1)
+#' par(mar = c(5,4,4,2)+.1)
+
+simplify <- function(SPDF, keep = 0.05, ...) {
+  SPDF_simple <- rmapshaper::ms_simplify(SPDF, keep, ...)
+  return(SPDF_simple)
+}
+
+
+# ----- Dissolve --------------------------------------------------------------
+
+#' @export
+#' @title Aggregate shapes in a SpatialPolygonsDataFrame
+#' @param SPDF object of class SpatialPolygonsDataFrame
+#' @param field proportion of points to retain (0-1; default 0.05)
+#' @param sum_fields fields to sum
+#' @param copy_fields fields to copy. The first instance of each field will be copied to the aggregated feature
+#' @param ... arguments passed to \code{rmapshaper::ms_dissolve()}
+#' @description Aggregate shapes in a spatial polygons dataframe. This is a convenience
+#' wrapper for \code{rmapshaper::ms_dissolve()}
+#' @return A spatial polygons dataframe with aggregated shapes.
+#' @examples 
+#' regions <- dissolve(SimpleCountries, field = "UN_region", sum_fields = "area")
+#' plot(regions)
+#' regions@data
+
+dissolve <- function(SPDF, field = NULL, sum_fields = NULL, copy_fields = NULL, ...) {
+  if (!field %in% names(SPDF)) {
+    stop(paste0("Field '", field, "' not found."))
+  }
+  SPDF_dissolved <- rmapshaper::ms_dissolve(SPDF, field, sum_fields, copy_fields, ...)
+  return(SPDF_dissolved)
+}
+
+
+# ----- State codes -----------------------------------------------------------
+
+#' @docType data
+#' @keywords datasets
+#' @name US_stateCodes
+#' @title Dataframe of US State Codes
+#' @format A dataframe with 51 rows and 6 columns of data.
+#' @description US_stateCodes contains the following columns of data for the
+#' 50 United States plus the District of Columbia:
+#' \itemize{
+#' \item{\code{stateCode} -- e.g. MT}
+#' \item{\code{stateName} -- e.g. Montana}
+#' \item{\code{adm1_code} -- e.g. USA-3515}
+#' \item{\code{code_hasc} -- e.g. US.MT}
+#' \item{\code{fips} -- e.g. US30}
+#' }
+NULL
+
+
+#' CONUS state codes
+#'
+#' @export
+#' @docType data
+#' @name CONUS
+#' @title CONUS State Codes
+#' @format A vector with 49 elements
+#' @description
+#' State codes for the 48 contiguous states +DC that make up the CONtinental US
+
+
+CONUS <- c(     "AL","AZ","AR","CA","CO","CT","DE","FL","GA",
+                "ID","IL","IN","IA","KS","KY","LA","ME","MD",
+           "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+           "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+           "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY",
+           "DC"     )
+
+#' US state codes
+#'
+#' @export
+#' @docType data
+#' @name US_52
+#' @title US State Codes
+#' @format A vector with 52 elements
+#' @description
+#' State codes for the 50 states +DC +PR (Puerto Rico)
+
+US_52 <- c("AK","AL","AZ","AR","CA","CO","CT","DE","FL","GA",
+           "HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+           "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+           "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+           "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY",
+           "DC","PR")

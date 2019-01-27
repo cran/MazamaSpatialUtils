@@ -8,6 +8,10 @@
 #' SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
 #' in the spatial data directory which is set with \code{setSpatialDataDir()}.
 #' 
+#' The CBSA datasets was obtained from the following URL:
+#' 
+#' https://catalog.data.gov/dataset/tiger-line-shapefile-2017-nation-u-s-current-metropolitan-statistical-area-micropolitan-statist
+#' 
 #' From the Census Bureau:
 #' 
 #' Metropolitan and Micropolitan Statistical Areas are together termed Core Based Statistical 
@@ -23,7 +27,6 @@
 #' Boundaries are those defined by OMB based on the 2010 Census, published in 2013, and updated in 2015.
 #' 
 #' @return Name of the dataset being created.
-#' @references \url{https://catalog.data.gov/dataset/tiger-line-shapefile-2017-nation-u-s-current-metropolitan-statistical-area-micropolitan-statist}
 #' @seealso setSpatialDataDir
 #' @seealso getUSCounty
 convertUSCensusCBSA <- function(nameOnly=FALSE, simplify=FALSE) {
@@ -39,14 +42,14 @@ convertUSCensusCBSA <- function(nameOnly=FALSE, simplify=FALSE) {
   # Build appropriate request URL for US County Borders data
   url <- 'http://www2.census.gov/geo/tiger/TIGER2017/CBSA/tl_2017_us_cbsa.zip'
   
-  filePath <- paste(dataDir,basename(url),sep='/')
+  filePath <- file.path(dataDir,basename(url))
   utils::download.file(url,filePath)
   # NOTE:  This zip file has no directory so extra subdirectory needs to be created
-  utils::unzip(filePath,exdir=paste0(dataDir, '/tl_2017_us_cbsa'))
+  utils::unzip(filePath,exdir=file.path(dataDir,'tl_2017_us_cbsa'))
   
   # Convert shapefile into SpatialPolygonsDataFrame
   # NOTE:  The 'counties' directory has been created
-  dsnPath <- paste(dataDir,'tl_2017_us_cbsa',sep='/')
+  dsnPath <- file.path(dataDir,'tl_2017_us_cbsa')
   shpName <- 'tl_2017_us_cbsa'
   SPDF <- convertLayer(dsn=dsnPath, layerName=shpName)###, encoding='latin1')
   
@@ -69,7 +72,7 @@ convertUSCensusCBSA <- function(nameOnly=FALSE, simplify=FALSE) {
   # 4   154  39700 39700 Raymondville, TX Raymondville, TX Micro Area   M2    2 G3110  1529611927  501715022 +26.4803815 -097.5832561
   
   usefulColumns <- c("CBSAFP",  "NAME", "MEMI", "ALAND", "AWATER","INTPTLAT", "INTPTLON")
-  SPDF@data <- SPDF@data[usefulColumns]
+  SPDF@data <- SPDF@data[,usefulColumns]
   names(SPDF@data) <- c("CBSAFP", "CBSAName", "sizeClass", "areaLand", "areaWater","latitude", "longitude")
 
   # Area already in m^2 according to tl_2017_us_cbsa.shp.xml
@@ -97,7 +100,7 @@ convertUSCensusCBSA <- function(nameOnly=FALSE, simplify=FALSE) {
   SPDF <- organizePolygons(SPDF, uniqueID='CBSAFP', sumColumns=c('areaLand','areaWater'))
 
   # Assign a name and save the data
-  cat("Saving full resolution version...\n")
+  message("Saving full resolution version...\n")
   assign(datasetName,SPDF)
   save(list=c(datasetName),file=paste0(dataDir,'/',datasetName,'.RData'))
   rm(list=datasetName)
@@ -105,29 +108,29 @@ convertUSCensusCBSA <- function(nameOnly=FALSE, simplify=FALSE) {
   if ( simplify ) {
     # Create new, simplified datsets: one with 5%, 2%, and one with 1% of the vertices of the original
     # NOTE:  This may take several minutes. 
-    cat("Simplifying to 5%...\n")
+    message("Simplifying to 5%...\n")
     SPDF_05 <- rmapshaper::ms_simplify(SPDF, 0.05)
     SPDF_05@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
     datasetName_05 <- paste0(datasetName, "_05")
-    cat("Saving 5% version...\n")
+    message("Saving 5% version...\n")
     assign(datasetName_05, SPDF_05)
     save(list=datasetName_05, file = paste0(dataDir,"/",datasetName_05, '.RData'))
     rm(list=c("SPDF_05",datasetName_05))
     
-    cat("Simplifying to 2%...\n")
+    message("Simplifying to 2%...\n")
     SPDF_02 <- rmapshaper::ms_simplify(SPDF, 0.02)
     SPDF_02@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
     datasetName_02 <- paste0(datasetName, "_02")
-    cat("Saving 2% version...\n")
+    message("Saving 2% version...\n")
     assign(datasetName_02, SPDF_02)
     save(list=datasetName_02, file = paste0(dataDir,"/",datasetName_02, '.RData'))
     rm(list=c("SPDF_02",datasetName_02))
     
-    cat("Simplifying to 1%...\n")
+    message("Simplifying to 1%...\n")
     SPDF_01 <- rmapshaper::ms_simplify(SPDF, 0.01) 
     SPDF_01@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
     datasetName_01 <- paste0(datasetName, "_01")
-    cat("Saving 1% version...\n")
+    message("Saving 1% version...\n")
     assign(datasetName_01, SPDF_01)
     save(list=datasetName_01, file = paste0(dataDir,"/",datasetName_01, '.RData'))
     rm(list=c("SPDF_01",datasetName_01))
@@ -137,5 +140,6 @@ convertUSCensusCBSA <- function(nameOnly=FALSE, simplify=FALSE) {
   unlink(dsnPath, recursive=TRUE, force=TRUE)
   
   return(invisible(datasetName))
+  
 }
 

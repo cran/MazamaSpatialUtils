@@ -1,18 +1,22 @@
 #' @keywords datagen
 #' @export
-#' @title Convert Exclusive Economic Zones Countries Shapefile
-#' @param nameOnly logical specifying whether to only return the name without creating the file
-#' @param dsnPath directory where EEZCountries .zip file is found
-#' @description A previously downloaded file from \url{http://www.marineregions.org/downloads.php#unioneezcountry} 
-#' is converted to a SpatialPolygonsDataFrame with additional columns of data. The resulting
-#' file will be created in the spatial data directory which is set with \code{setSpatialDataDir()}.
+#' @title Convert Exclusive Economic Zones countries shapefile
+#' @param nameOnly Logical specifying whether to only return the name without 
+#' creating the file.
+#' @param dsnPath Directory where EEZCountries .zip file is found.
+#' @description A previously downloaded file from 
+#' \url{http://www.marineregions.org/downloads.php#unioneezcountry} is converted
+#' to a SpatialPolygonsDataFrame with additional columns of data. The resulting
+#' file will be created in the spatial data directory which is set with 
+#' \code{setSpatialDataDir()}.
 #' @details  The dataset can be downloaded from 
 #' \url{http://www.marineregions.org/download_file.php?name=EEZ_land_union_v2_201410.zip}
 #' by answering the questions and clicking "download".  
 #' @return Name of the dataset being created.
 #' @references \url{http://www.marineregions.org/downloads.php#unioneezcountry}
 #' @references VLIZ (2014). Union of the ESRI Country shapefile and the Exclusive 
-#' Economic Zones (version 2). Available online at http://www.marineregions.org/. Consulted on 2017-07-20.
+#' Economic Zones (version 2). Available online at http://www.marineregions.org/.
+#' Consulted on 2017-07-20.
 #' @examples
 #' \dontrun{
 #' convertEEZCountries("~/Data/Spatial/EEZ_land_union_v2_201410.zip")
@@ -32,8 +36,8 @@ convertEEZCountries <- function(dsnPath=NULL, nameOnly=FALSE) {
   if (nameOnly) return(datasetName)
   
   # Unzip the downloaded file
-  utils::unzip(dsnPath,exdir=paste0(dataDir, '/', "EEZ"))
-  dsnPath <- paste(dataDir, 'EEZ', sep='/')
+  utils::unzip(dsnPath,exdir=file.path(dataDir,'EEZ'))
+  dsnPath <- file.path(dataDir,'EEZ')
   
   # Convert shapefile into SpatialPolygonsDataFrame
   # NOTE:  The 'EEZCountries' directory has been created
@@ -69,6 +73,8 @@ convertEEZCountries <- function(dsnPath=NULL, nameOnly=FALSE) {
   # 152      154 MNP++ Northern Marinana Islands-Guam    <NA> 82.66514
   SPDF@data["65","ISO3"] <- "CUW"
   SPDF@data["152","ISO3"] <- "GUM"
+  SPDF@data["258", "ISO3"] <-"VAT"
+  SPDF@data["61", "ISO3"] <- "FRA" # changing Clipperton Island iso code to France iso code
   
   # Add more standard columns
   SPDF$countryCode <- iso3ToIso2(SPDF$ISO3)

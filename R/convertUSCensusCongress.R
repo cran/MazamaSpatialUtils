@@ -1,11 +1,14 @@
 #' @keywords datagen
 #' @export
-#' @title Convert US Congressional Disctricts Shapefile
-#' @param nameOnly logical specifying whether to only return the name without creating the file
-#' @description Returns a SpatialPolygonsDataFrame for US Congressional Districts for the 115th US House of Representatives
-#' @details A US congressional district shapefile is downloaded and converted to a
-#' SpatialPolygonsDataFrame with additional columns of data. The resulting file will be created
-#' in the spatial data directory which is set with \code{setSpatialDataDir()}.
+#' @title Convert US congressional districts shapefile
+#' @param nameOnly Logical specifying whether to only return the name without 
+#' creating the file.
+#' @description Returns a SpatialPolygonsDataFrame for US Congressional Districts 
+#' for the 115th US House of Representatives.
+#' @details A US congressional district shapefile is downloaded and converted to
+#' a SpatialPolygonsDataFrame with additional columns of data. The resulting 
+#' file will be created in the spatial data directory which is set with 
+#' \code{setSpatialDataDir()}.
 #' @return Name of the dataset being created.
 #' @references \url{https://www.census.gov/geo/maps-data/data/cbf/cbf_cds.html}
 #' @seealso setSpatialDataDir
@@ -15,21 +18,21 @@ convertUSCensusCongress <- function(nameOnly=FALSE) {
   dataDir <- getSpatialDataDir()
   
   # Specify the name of the dataset and file being created
-  datasetName <- 'USCensus115thCongress'
+  datasetName <- 'USCensusCongress'
   
   if (nameOnly) return(datasetName)
   
   # Build appropriate request URL for US Census Sates data
   url <- 'http://www2.census.gov/geo/tiger/GENZ2016/shp/cb_2016_us_cd115_500k.zip'
   
-  filePath <- paste(dataDir,basename(url),sep='/')
+  filePath <- file.path(dataDir,basename(url))
   utils::download.file(url,filePath)
   # NOTE:  This zip file has no directory so extra subdirectory needs to be created
-  utils::unzip(filePath,exdir=paste0(dataDir,'/congress'))
+  utils::unzip(filePath,exdir=file.path(dataDir,'congress'))
   
   # Convert shapefile into SpatialPolygonsDataFrame
   # NOTE:  The 'states' directory has been created
-  dsnPath <- paste(dataDir,'congress',sep='/')
+  dsnPath <- file.path(dataDir,'congress')
   shpName <- 'cb_2016_us_cd115_500k'
   SPDF <- convertLayer(dsn=dsnPath,layerName=shpName)
   
@@ -53,27 +56,14 @@ convertUSCensusCongress <- function(nameOnly=FALSE) {
   names(SPDF) <- c('stateFIPS','congressionalDistrictFIPS','AFFGeoID','GeoID','LSAD',
                    'CDSession','areaLand','areaWater')
   
+  # Given state FIPS code, find state code, name, or adm1_code
+  extractState <- function(row) {
+    fips <- row['stateFIPS']
+    stateCode <- MazamaSpatialUtils::US_stateCodes$stateCode[MazamaSpatialUtils::US_stateCodes$fips==paste0("US", fips)]
+    return(stateCode)
+  }
   
-  # Get stateFIPS conversion table from wikipedia. We need this to find state names and codes
-  # from stateFIPS values.
-  # URL of S conversions
-  url <- 'http://en.wikipedia.org/wiki/Federal_Information_Processing_Standard_state_code'
-  
-  # Get the raw html from the url
-  wikiDoc <- xml2::read_html(url)
-  
-  # Get a list of tables in the document
-  tables <- rvest::html_nodes(wikiDoc, 'table')
-  
-  # Assume the relevant list is the first table and parse that into a dataframe
-  StateTable <- rvest::html_table(tables[[1]])
-  
-  # Create a vector of stateCodes which are named by their FIPS
-  stateCodeVector <- StateTable[["Alpha code"]]
-  names(stateCodeVector) <- StateTable[["Numeric code"]]
-  
-  # Use stateCodeVector to create a stateCode variable
-  SPDF$stateCode <- stateCodeVector[as.character(as.numeric(SPDF$stateFIPS))]
+  SPDF$stateCode <- apply(SPDF@data, 1, extractState)
   
   # Add countryCode to adhere to the package internal standards
   SPDF$countryCode <- 'US'
