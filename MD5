@@ -1,7 +1,7 @@
-19431f412f16071378379524f7746690 *DESCRIPTION
+162c6a724ffa83328be74a9bce7b8d49 *DESCRIPTION
 2f124dfe6baf29f20883829183a8b9dc *NAMESPACE
-e2a1d5776656d1d246a6bfbef1fa54aa *NEWS.md
-659c0ed1fd84f548a7f3415b93522c2b *R/MazamaSpatialUtils.R
+0da84aba68bc11a757c1f2afa7daea9d *NEWS.md
+08a95b416b6d9ea5a54fcd3613fe8acf *R/MazamaSpatialUtils.R
 8097e247be55f9c7cf1782ef4a4798fe *R/convertCARBAirBasins.R
 5797573de00e595be0368e04bc1ebfba *R/convertEEZCountries.R
 36f000e2a5554aef80f26cbf38549fc5 *R/convertGACC.R
@@ -61,7 +61,7 @@ e498554d8acc646f665efb58c6f5de2f *demo/findStates.R
 621bc15b1bdd5895069e4247050b29c4 *demo/findTimezones.R
 290654ea5dd9b33575526332c2683108 *inst/doc/MazamaSpatialUtils.R
 96571c2a56d708b6bc43f0a88a265202 *inst/doc/MazamaSpatialUtils.Rmd
-7d34b4fcca2f0ca8b523b36be5c75e81 *inst/doc/MazamaSpatialUtils.html
+ad50e1c8d8b3021d04b15a6e6f60300c *inst/doc/MazamaSpatialUtils.html
 ae87446b70bc242788cff2c5b4640e33 *inst/shiny_examples/map_app/README.md
 7160a1f902473386c0994bb2678e0aa6 *inst/shiny_examples/map_app/app.R
 5a8694374e0353617c855fdc935b916a *inst/shiny_examples/map_app/data/wa_bridges.RData
@@ -128,7 +128,7 @@ ae3746d00d29c48e4b95279a6945a192 *man/getStateCode.Rd
 d1c2a0288d544926e3b1f17b669fa53a *man/removeSpatialDataDir.Rd
 ef214dc2e1bb3058fce70fb59ae6d8b8 *man/runExample.Rd
 1f9de8d660409a776f3f08876e79059f *man/setSpatialDataDir.Rd
-b588008bc0834cfa59ff876fbb38118e *man/simplify.Rd
+c789ca6005b1bf6ee8102f76671d4a85 *man/simplify.Rd
 3b8700a72f76173d1491e59f952ed687 *man/stateToCode.Rd
 a4a146e38a411c3e92637e7c1221863e *man/subsetHUC.Rd
 97f7b5672b2d5962ee31601c0d569eeb *man/summarizeByPolygon.Rd
