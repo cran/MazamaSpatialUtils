@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Mazama Science" />
+
+<meta name="date" content="2020-11-30" />
+
+<title>Available Data</title>
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Available Data</h1>
+<h4 class="author">Mazama Science</h4>
+<h4 class="date">2020-11-30</h4>
+
+
+
+<div id="available-data-for-mazamaspatialutils" class="section level2">
+<h2>Available Data for MazamaSpatialUtils</h2>
+<p>This document provides documentation for the most important of the available datasets that can be used with <strong>MazamaSpatialUtils</strong>.</p>
+<p>Spatial datasets that have been converted to objects of class  and adhere to the <strong>MazamaSpatialUtils</strong> standards are considerd to be “harmonized”.</p>
+<p>For reproducibility, the R code that ingests and harmonizes each spatial dataset is included in the package as a  function. Most of the resulting datasets have been been pre-generated and can be downloaded from <a href="http://data.mazamascience.com/MazamaSpatialUtils/Spatial_0.7/">http://data.mazamascience.com/MazamaSpatialUtils/Spatial_0.7/</a>.</p>
+<div id="built-in-data" class="section level3">
+<h3>Built in data</h3>
+<p><strong>MazamaSpatialUtils</strong> has three built-in datasets which are included with the package when it is installed. Each of these is a simplified dataset suitable for quick identification of  or .</p>
+<ul>
+<li><code>SimpleCountries</code> – Country outlines</li>
+<li><code>SimpleCountriesEEZ</code> – Country outlines including Exclusive Economic Zones over water</li>
+<li><code>SimpleTimezones</code> – Timezones</li>
+</ul>
+</div>
+<div id="downloadable-data" class="section level3">
+<h3>Downloadable data</h3>
+<p>Running <code>installSpatialData()</code> allows users to install the following pregenerated datasets, which can then be loaded with <code>loadSpatialData(&lt;dataset&gt;)</code></p>
+<ul>
+<li><code>CA_AirBasins</code> – California regional air basin boundaries</li>
+<li><code>EEZCountries</code> – Country boundaries including Exclusive Economic Zones</li>
+<li><code>EPARegions</code> – US EPA region boundaries</li>
+<li><code>GACC</code> – Geographic Area Coordination Center (GACC) boundaries</li>
+<li><code>GADM</code> – GADM administrative area boundaries</li>
+<li><code>HIFLDFederalLands</code> – US federal lands</li>
+<li><code>HMSSmoke</code> – NOAA Hazard Mapping System Smoke (HMSS) areas</li>
+<li><code>HouseLegislativeDistricts</code> – US state legislative districts, by chamber</li>
+<li><code>MTBSBurnAreas</code> – MTBS burn areas from 1984 - 2017</li>
+<li><code>NaturalEarthAdm1</code> – State/province/oblast level boundaries</li>
+<li><code>NWSFireZones</code> – NWS fire weather forecast zones</li>
+<li><code>OSMTimezones</code> – OpenStreetMap time zones</li>
+<li><code>PHDs</code> – Public Health Districts for Washington, Oregon, Idaho, and California</li>
+<li><code>SimpleCountries</code> – Simplified version of the TMWorldBorders</li>
+<li><code>SimpleCountriesEEZ</code> – Simplified version of EEZCountries</li>
+<li><code>SimpleTimezones</code> – Simplified version of WorldTimezones</li>
+<li><code>TerrestrialEcoregions</code> – Terrestrial eco-regions</li>
+<li><code>TMWorldBorders</code> – Country level boundaries</li>
+<li><code>USCensus116thCongress</code> – US congressional districts</li>
+<li><code>USCensusCBSA</code> – US Core Based Statistical Areas</li>
+<li><code>USCensusCounties</code> – US county level boundaries</li>
+<li><code>USCensusStates</code> – US state level boundaries</li>
+<li><code>USCensusUrbanAreas</code> – US urban areas</li>
+<li><code>USFSRangerDistricts</code> – US Forest Service ranger districts</li>
+<li><code>USIndianLands</code> – US tribal boundaries</li>
+<li><code>WBDHU2</code> – Watershed boundary level-2 hydrologic units</li>
+<li><code>WBDHU4</code> – Watershed boundary level-4 hydrologic units</li>
+<li><code>WBDHU6</code> – Watershed boundary level-6 hydrologic units</li>
+<li><code>WBDHU8</code> – Watershed boundary level-8 hydrologic units</li>
+<li><code>WBDHU10</code> – Watershed boundary level-10 hydrologic units</li>
+<li><code>WBDHU12</code> – Watershed boundary level-12 hydrologic units</li>
+<li><code>weatherZones</code> – NWS public weather forecast zones</li>
+<li><code>WorldEEZ</code> – Country boundaries including Exclusive Economic Zones over water</li>
+<li><code>WorldTimezones</code> – Timezone</li>
+</ul>
+</div>
+</div>
+<div id="dataset-descriptions" class="section level2">
+<h2>Dataset Descriptions</h2>
+<ul>
+<li><a href="#ca_airbasins"><code>CA_AirBasins</code>:</a> California regional air basin boundaries</li>
+<li><a href="#eparegions"><code>EPARegions</code>:</a> US EPA region boundaries</li>
+<li><a href="#gacc"><code>GACC</code>:</a> Geographic Area Coordination Center (GACC) boundaries</li>
+<li><a href="#gadm"><code>GADM</code>:</a> GADM administrative area boundaries</li>
+<li><a href="#hifldfederallands"><code>HIFLDFederalLands</code>:</a> US Federal Lands</li>
+<li><a href="#hmssmoke"><code>HMSSmoke</code>:</a> NOAA Hazard Mapping System Smoke (HMSS) areas</li>
+<li><a href="#mtbsburnareas"><code>MTBSBurnAreas</code>:</a> MTBS Burn Areas from 1984 - 2017</li>
+<li><a href="#nwsfirezones"><code>NWSFireZones</code>:</a> NWS fire weather forecast zones</li>
+<li><a href="#phds"><code>PHDs</code>:</a> Public Health Districts for Washington, Oregon, Idaho, and California</li>
+<li><a href="#simplecountries"><code>SimpleCountries</code>:</a> Simplified version of the TMWorldBorders shapefile</li>
+<li><a href="#simplecountriesEEZ"><code>SimpleCountriesEEZ</code>:</a> Simplified version of EEZCountries</li>
+<li><a href="#simpletimezones"><code>SimpleTimezones</code>:</a> Simplified version of WorldTimezones</li>
+<li><a href="#houselegislativedistricts"><code>HouseLegislativeDistricts</code>:</a> US State Legislative Districts, by chamber</li>
+<li><a href="#tmworldborderssimple"><code>TMWorldBordersSimple</code>:</a> Simplified version of TMWorldBorders</li>
+<li><a href="#uscensuscbsa"><code>USCensusCBSA</code>:</a> US Core Based Statistical Areas</li>
+<li><a href="#uscensusurbanareas"><code>USCensusUrbanAreas</code>:</a> US urban areas</li>
+<li><a href="#usfsrangerdistricts"><code>USFSRangerDistricts</code>:</a> US Forest Service ranger districts</li>
+<li><a href="#wbdhu"><code>WBDHU</code>:</a> Watershed boundary hydrologic units</li>
+<li><a href="#weatherzones"><code>weatherZones</code>:</a> NWS public weather forecast zones</li>
+<li><a href="#worldeez"><code>WorldEEZ</code>:</a> Country boundaries including Exclusive Economic Zones</li>
+</ul>
+<div id="ca_airbasins" class="section level4">
+<h4>CA_AirBasins:</h4>
+<p>Use <code>convertCARBAirBasins()</code> to download and convert this dataset.</p>
+<p>The California Air Basins dataset is a <code>SpatialPolygonsDataFrame</code> representing the 15 California air basins. Air Basins are designated pursuant to California statute and regulation and identify regions of similar meteorological and geographic conditions. Political boundaries are also considered in determining the air basin boundaries.</p>
+<p><em>See the California Health and Safety Code, Section 39606 et seq. and California Code of Regulations, Title 17, Section 60100 et seq.</em></p>
+<p>March, 2004 version.</p>
+</div>
+<div id="eparegions" class="section level4">
+<h4>EPARegions</h4>
+<p>Use <code>convertEPARegions()</code> to download and convert this dataset.</p>
+<p>The EPARegions dataset is a <code>SpatialPolygonsDataFrame</code> representing the boundaries of the ten Regional Offices of the United States Environmental Protection Agency in the United States. Each regional office monitors the environmental regulations within a group of states.</p>
+<p>7/26/2019 Version</p>
+</div>
+<div id="gacc" class="section level4">
+<h4>GACC</h4>
+<p>Use <code>convertGACC()</code> to download and convert this dataset.</p>
+<p>The GACC dataset is a <code>SpatialPolygonsDataFrame</code> representing the Geographic Area Coordination Center (GACC) boundaries. GACCs are defined as, “The physical location of an interagency, regional operation center for the effective coordination, mobilization and demobilization of emergency management resources.”<br />
+A coordination center serves federal, state and local wildland fire agencies through logistical coordination of resources throughout the geographic area, and with other geographic areas, as well.</p>
+<p>The United States and Alaska are divided into 11 Geographic Areas for the purpose of incident management and mobilization of resources (people, aircraft, ground equipment). Within each Area, an interagency Geographic Area Coordinating Group (GACG), made up of Fire Directors from each of the Federal and State land management agencies from within the Area, is established.</p>
+<p>(NOTE: the current geojson download link seems to be dead. A new, shapefile based, link to the data is <a href="https://opendata.arcgis.com/datasets/7dc5f4a286bd47e0aaafa0ab05302fe9_0.zip" class="uri">https://opendata.arcgis.com/datasets/7dc5f4a286bd47e0aaafa0ab05302fe9_0.zip</a>)</p>
+</div>
+<div id="gadm" class="section level4">
+<h4>GADM</h4>
+<p>Use <code>convertGADM()</code> to download and convert this dataset.</p>
+<p>The GADM dataset is a <code>SpatialPolygonsDataFrame</code> representing the administrative divisions of a specific country at a specific administrative level. GADM, the <em>Database of Global Administrative Areas</em>, is a high-resolution database of country administrative areas.</p>
+<p><strong>NOTE:</strong> This script will generate .rda files named <code>GADM_&lt;countryCode&gt;_&lt;admLevel&gt;.rda</code> and requires user input to specify the country and admin level desired. For example, to generate Admin 1 level boundaries for Belgium, run <code>convertGADM(countryCode = &quot;BE&quot;, admLevel = 1</code>.<br />
+This will create <code>GADM_BE_1.rda</code>. Not all countries have the same number of levels. Many just have two levels while France has five.</p>
+</div>
+<div id="hifldfederallands" class="section level4">
+<h4>HIFLDFederalLands</h4>
+<p>Use <code>convertHIFLDFederalLands()</code> to download and convert this dataset.</p>
+<p>The HIFLDFederalLands dataset is a <code>SpatialPolygonsDataFrame</code> representing the federally owned or administered lands and Indian Reservations of the United States, Puerto Rico, and the US Virgin Islands. Only areas of 640 acres or more are included in this dataset.</p>
+</div>
+<div id="hmssmoke" class="section level4">
+<h4>HMSSmoke</h4>
+<p>Use <code>convertHMSSmoke()</code> to download and convert this dataset.</p>
+<p>The HMSSmoke dataset is a <code>SpatialPolygonsDataFrame</code> representing the areas of smoke identified for a specific day. This data is derived from analysis of visible satellite imagery obtained during daylight hours.</p>
+<p><strong>NOTE:</strong> This script will generate .rda files named <code>HMSSmoke_&lt;datestamp&gt;</code> and requires user input to specify the date of interest using the <code>datestamp</code> parameter in the format of <code>datestamp = &quot;YYYYmmdd&quot;</code>.</p>
+</div>
+<div id="mtbsburnareas" class="section level4">
+<h4>MTBSBurnAreas</h4>
+<p>Use <code>convertMTBSBurnArea()</code> to download and convert this datset.</p>
+<p>The MTBSBurnAreas dataset is a <code>SpatialPolygonsDataFrame</code> representing all large wildland fires (includes wildfire, wildland fire use, and prescribed fire) in the conterminous United States (CONUS), Alaska, Hawaii, and Puerto Rico for the period of 1984 through 2017. All fires reported as greater than 1,000 acres in the western US and greater than 500 acres in the eastern US are mapped across all ownerships.</p>
+<p>August 22, 2019 Version</p>
+</div>
+<div id="nwsfirezones" class="section level4">
+<h4>NWSFireZones</h4>
+<p>Use <code>convertNWSFireZones()</code> to download and convert this data set.</p>
+<p>The NWSFireZones dataset is a <code>SpatialPolygonsDataFrame</code> representing weather forecast zones. These areas are used to delineate the Fire Weather Zones that are used by National Weather Service (NWS) in the fire weather forecast program.</p>
+</div>
+<div id="phds" class="section level4">
+<h4>PHDs</h4>
+<p>Use <code>convertPHDs()</code> to download and convert this data set.</p>
+<p>The PHDs dataset is a <code>SpatialPolygonsDataFrame</code> representing Public Health Districts for Washington, Oregon, Idaho, and California. This is Mazama internal data obtained from USFS AirFire.</p>
+</div>
+<div id="simplecountries" class="section level4">
+<h4>SimpleCountries</h4>
+<p>Use <code>convertSimpleCountries()</code> to download and convert this data set.</p>
+<p>The SimpleCountries dataset is a <code>SpatialPolygonsDataFrame</code> representing country borders. It is a greatly simplified version of the TMWorldBorders shapefile and is especially suited for spatial searches. Users may wish to use a higher resolution dataset when plotting.</p>
+<p>30 July 2008 Version</p>
+</div>
+<div id="simplecountrieseez" class="section level4">
+<h4>SimpleCountriesEEZ</h4>
+<p>Use <code>convertSimpleCountriesEEZ()</code> to download and convert this data set.</p>
+<p>The SimpleCountriesEEZ dataset is a <code>SpatialPolygonsDataFrame</code> representing simple world divisions which match those in the EEZCountries layer. Polygons for coastal countries include a 200 mile buffer, corresponding to their Exclusive Economic Zones, so this layer is especially suited for spatial searches. This is the default dataset used in <code>getCountry()</code> and <code>getCountryCode()</code>.</p>
+</div>
+<div id="simpletimezones" class="section level4">
+<h4>SimpleTimeZones</h4>
+<p>Use <code>convertSimpleTimezones()</code> to download and convert this data set.</p>
+<p>The SimpleTimeZones dataset is a <code>SpatialPolygonsDataFrame</code> representing timezones of the world.</p>
+<p>May 28, 2016 Version</p>
+</div>
+<div id="houselegislativedistricts" class="section level4">
+<h4>HouseLegislativeDistricts</h4>
+<p>Use <code>convertStateLegislativeDistricts()</code> to download and convert this data set.</p>
+<p>This creates a <code>SpatialPolygonsDataFrame</code> for US State Legislative Districts.<br />
+User input is required to specify the <code>stateCode</code> (2-digit ISO 3166) and which <code>house</code> (Upper or Lower chamber) the data should represent. For example, to obtain data on the Washington State Senate Legislative Districts, run <code>convertStateLegislativeDistricts(stateCode = &quot;WA&quot;, house = &quot;Upper&quot;)</code>. This will generate a file named <code>WA_upperHouseLegislativeDistricts.rda</code></p>
+</div>
+<div id="tmworldborderssimple" class="section level4">
+<h4>TMWorldBordersSimple</h4>
+<p>Use <code>convertTMWorldBordersSimple()</code> to download and convert this data set.</p>
+<p>The TMWorldBordersSimple dataset is a simplified version of the TMWorldBorders layer which is useful for spatial searches. Users may wish to use a higher resolution dataset when plotting.</p>
+</div>
+<div id="uscensuscbsa" class="section level4">
+<h4>USCensusCBSA</h4>
+<p>Use <code>convertUSCensusCBSA()</code> to download and convert this data set.</p>
+<p>The USCensusCBSA dataset is a <code>SpatialPolygonsDataFrame</code> which represents Core Based Statistical Areas (CBSAs) as defined by the Office of Management and Budget (OMB). CBSAs consist of the county or counties or equivalent entities associated with at least one core (urbanized area or urban cluster) of at least 10,000 population, plus adjacent counties having a high degree of social and economic integration with the core as measured through commuting ties with the counties associated with the core.</p>
+<p>2017 Version</p>
+</div>
+<div id="uscensusurbanareas" class="section level4">
+<h4>USCensusUrbanAreas</h4>
+<p>Use <code>convertUSCensusUrbanAreas()</code> to download and convert this data set.</p>
+<p>The USCensusUrbanAreas dataset is a SpatialPolygonsDataFrame which represent the urban areas delineated by the US Census that represent densely developed territory. There are two types of urban areas: urbanized areas (UAs) that contain 50,000 or more people and urban clusters (UCs) that contain at least 2,500 people, but fewer than 50,000 people.</p>
+<p>2018 Version</p>
+</div>
+<div id="usfsrangerdistricts" class="section level4">
+<h4>USFSRangerDistricts</h4>
+<p>Use <code>convertUSFSRangerDistricts()</code> to download and convert this data set.</p>
+<p>The USFSRangerDistricts dataset is a SpatialPolygonsDataFrame representing US Forest Service ranger district administrative boundaries. Ranger districts are sub units of National Forests intended to identify the specific organizational units that administer areas.</p>
+<p>Feb 3, 2020 Version</p>
+</div>
+<div id="wbdhu" class="section level4">
+<h4>WBDHU</h4>
+<p>Use <code>convertWBDHUC()</code> to download and convert this data set.</p>
+<p>This creates a <code>SpatialPolygonsDataFrame</code> that represents a specific level of hydrologic unit from national Watershed Boundary Dataset (WBD). This is a seamless, national dataset which represents the area of the landscape that drains to a portion of the stream network.</p>
+<p>User input is required to specify the <code>level</code> of data to generate. The <code>level</code> must be one of the following: [2, 4, 6, 8, 10, 12 or 14]. To generate a Level 8 data set, run <code>convertWBDHUC(level = 8)</code> which will generate a file named <code>WBDHU8.rda</code>.</p>
+</div>
+<div id="weatherzones" class="section level4">
+<h4>WeatherZones</h4>
+<p>Use <code>convertWeatherZones()</code> to download and convert this data set.</p>
+<p>This creates a <code>SpatialPolygonsDataFrame</code> that represents public zone weather forecast areas. The NWS issues forecasts, and some watches and warnings, for public zones which are usually the same as counties but in many cases are subsets of counties. Counties are subset into smaller zones to allow for more accurate forecasts because of differences in weather within a county due to such things as elevation, or proximity to large bodies of water.</p>
+</div>
+<div id="worldeez" class="section level4">
+<h4>WorldEEZ</h4>
+<p>Use <code>convertWorldEEZ()</code> to download and convert this data set.</p>
+<p>This creates a <code>SpatialPolygonsDataFrame</code> that represents World Exclusive Economic Zones Boundaries. An exclusive economic zone is a sea zone prescribed by the 1982 United Nations Convention on the Law of the Sea over which a state has special rights regarding the exploration and use of marine resources, including energy production from water and wind.</p>
+<p>Version 8</p>
+<hr />
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

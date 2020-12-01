@@ -1,3 +1,134 @@
+# MazamaSpatialUtils 0.7.3
+
+* URL corrections for CRAN submission.
+* Vignette wordsmithing.
+* Test updates.
+
+# MazamaSpatialUtils 0.7.2
+
+* URL corrections after testing with win-builder.
+
+# MazamaSpatialUtils 0.7.1
+
+* Reordered parameters in `installSpatialData()` so that `dataset` comes first.
+* `installSpatialData()` attempts to install simplified versions of datasets:
+"_05", "_02" and "_01".
+* Replacement of `lon` and `lat` in `getHUC()` and `getHUCName()`.
+* `subsetHUC()` now handles `NA` values in `SPDF@data$allStateCodes`.
+* Congressional districts dataset name now includes session number:  
+`USCensus116thCongress`.
+
+# MazamaSpatialUtils 0.7.0
+
+Version 0.7 includes more datasets that have all been through identical
+processing and harmonization steps. In general, this release represents a
+clean-and-update revision that brings all aspects of the package up to modern
+standards.
+
+Improvements include:
+
+* Fewer package dependencies.
+* Minor updates to vignettes and articles.
+* Consistent replacement of `lon` and `lat with `longitude` and `latitude` in
+all functions.
+
+# MazamaSpatialUtils 0.6.16
+
+* Updated `convertWikipediaTimezeonTable()`.
+* Updated `convertWorldTimezones()` and package internal dataset `SimpleTimezones`.
+* Updated `convertGADM()` to support GADM version 3.6.
+* Updated `convertEEZCountries()` and `SimpleCountriesEEZ` dataset.
+* Updated `SimpleCountries` dataset
+
+# MazamaSpatialUtils 0.6.15
+
+* Added `US_countyCodes` dataset with `stateCode`, `stateFIPS`, `countyName`,
+`countyFIPS`.
+
+New functions for converting between US county names/FIPS:
+ * `US_countyNameToFIPS()`
+ * `US_countyFIPSToName()`
+
+# MazamaSpatialUtils 0.6.14
+
+* Fixed a bug in `loadSpatialData()` that was returning dataset names with `".rda"`.
+
+# MazamaSpatialUtils 0.6.13
+
+* Updated `convertWorldEEZ.R`.
+* Updated `convertHMSSmoke.R`.
+* Updated `convertStateLegislativeDistricts.R`.
+* Updated `convertTMWorldBordersSimple.R`.
+* Updated `convertTMWorldBorders.R`.
+* Updated `convertSimpleCountries.R`.
+* Updated `convertGACC.R`.
+* Updated `convertNWSFireZones.R`.
+
+# MazamaSpatialUtils 0.6.12
+
+* Updated `convertMTBSBurnArea.R`.
+* Updated `convertNaturalEarthAdm1.R`.
+
+# MazamaSpatialUtils 0.6.11
+
+* Removed non-working `app/` directory and dependency on **shiny**.
+* Corrected Bosnia country code in `convertWikipediaTimezoneTable.R`.
+* Updated `convertEPARegions.R`.
+* Updated `convertOSMTimeZones.R`.
+* Updated `convertTerrestrialEcoregions.R`.
+* Updated `convertWeatherZones.R`.
+
+# MazamaSpatialUtils 0.6.10
+
+* Updated `convertGACC.R` to use 2020 data.
+* Removed outlying territories from `US_stateCodes`.
+* Updated `convertUSCensusStates.R` to use 2019 data.
+* Updated `convertCARBAirBains.R` to latest coding style.
+* Updated `convertUSCensusCBSA.R` to latest coding style.
+* Updated `convertIndianLands.R` to latest coding style.
+* Now using the *cleangeo* package to fix topology errors and geometry validity
+issues.
+
+New functions for converting among US state names/codes/FIPS:
+ * `US_stateCodeToName()`
+ * `US_stateCodeToFIPS()`
+ * `US_stateFIPSToCode()`
+ * `US_stateFIPSToName()`
+ * `US_stateNameToCode()`
+ * `US_stateNameToFIPS()`
+
+# MazamaSpatialUtils 0.6.9
+
+* Changed `US_stateCodes` dataset to include only `stateName`, `stateCode` and
+`stateFIPS` columns. It is now more complete with codes for all states and
+territories.
+* `convertLayer()` now properly passes encoding to `rgdal::readOGR()`.
+* Updated `convertUSCensusCounties()` to use 2019 data.
+
+# MazamaSpatialUtils 0.6.8
+
+* New "Developer Style Guide" article.
+
+# MazamaSpatialUtils 0.6.7
+
+* New "Basic GIS in R" article.
+
+# MazamaSpatialUtils 0.6.6
+
+* `loadSpatialData()` now recognizes both `.RData` and `.rda` files.
+* Improved documentation
+* New convert functions:
+  - `convertEPARegions()`
+  - `convertMTBSBurnArea()`
+  - `convertUSCensusUrbanAreas()`
+  - `convertUSFSRangerDistricts()`
+
+# MazamaSpatialUtils 0.6.5
+
+* New `convertHILFDFederalLands()` function.
+* Added **tidyr** package to Imports.
+* Updated docker image.
+
 # MazamaSpatialUtils 0.6.4
 
 * Modified test infrastructure to address CRAN issues.
@@ -19,13 +150,14 @@ avoid a CRAN testing failure on fedora only -- Ugh.
 # MazamaSpatialUtils 0.6.0
 
 * changes associated with minor version bump
+
 # MazamaSpatialUtils 0.5.10
 
 * refactored shiny app from localShiny and added it to package in inst
 * added `runExample()` to run shiny examples
 * updated `README.md`
 
-# MazamaSpatialutils 0.5.9
+# MazamaSpatialUtils 0.5.9
 
 * New convert function for public health districts
 * New convert function for GACCs
@@ -123,7 +255,7 @@ generating warnings
 # MazamaSpatialUtils 0.4.3
 
 * New `convertHMSSmoke()` function for smoke data from the 
-[NOAA Hazard Mapping Service](http://www.ospo.noaa.gov/Products/land/hms.html).
+[NOAA Hazard Mapping Service](https://www.ospo.noaa.gov/Products/land/hms.html).
 * Shapefiles with no projection information are assigned 
 `"+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"`.
 * Added dependency on **lubridate** package.
@@ -135,11 +267,11 @@ generating warnings
 
 # MazamaSpatialUtils 0.4.1
 
-* Added `useBuffering` arguent to `getState()`, `getCountry()` and `getTimezone()`.
+* Added `useBuffering` argument to `getState()`, `getCountry()` and `getTimezone()`.
 
 # MazamaSpatialUtils 0.3.2
 
-* `getSpatialData()` no longer fails on invliad/missing locations, now returns 
+* `getSpatialData()` no longer fails on invalid/missing locations, now returns 
 dataframe rows with all NA.
 
 # MazamaSpatialUtils 0.3.1 -- addition of buffered search and WorldEEZ polygons
@@ -148,7 +280,6 @@ dataframe rows with all NA.
 `"+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"`.
 * Addition of buffered search so that locations can find nearby polygons.
 * Addition of `convertWorldEEZ()` function.
-
 
 # MazamaSpatialUtils 0.2.4
 
@@ -164,7 +295,6 @@ to support libproj >= 4.9.1
 
 * User specification of `SpatialDataDir` is now required.
 * Minor documentation improvements.
-
 
 # MazamaSpatialUtils 0.2.1 -- addition of GADM and USGS HUC8
 

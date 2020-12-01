@@ -10,10 +10,10 @@ pagetitle: MazamaSpatialUtils
 # MazamaSpatialUtils
 
 ```
-A suite of conversion scripts to create internally standardized spatial
-polygons dataframes. Utility scripts use these datasets to return values such
-as country, state, timezone, watershed, etc. associated with a set of 
-longitude/latitude pairs. (They also make cool maps.)
+A suite of conversion functions to create internally standardized
+spatial polygons data frames. Utility functions use these data sets to
+return values such as country, state, timezone, watershed, etc. associated
+with a set of longitude/latitude pairs. (They also make cool maps.)
 ```
 
 ## Background
@@ -47,24 +47,30 @@ that we currently use. These convert functions all follow the same recipe:
 
 Other datasets can be added following the same procedure.
 
-The ‘package internal standards’ are very simple. Every spatial dataset will
-have at least one of the following, consistently named columns of data:
+The 'package internal standards' are very simple.
 
- * `polygonID` – unique identifier associated with each polygon
- * `countryCode` – ISO 3166-1 alpha-2
- * `stateCode` – ISO 3166-2 alpha-2
- * `timezone` – Olson timezone
+1) Every spatial dataset **must** contain the following columns:
 
-If another column contains this data, that column must be renamed or
-duplicated with the internally standardized name. This simple level of
-consistency makes it possible to generate maps for any data that is ISO encoded.
-It also makes it possible to create functions that return the country, state or
-timezone associated with a set of locations.
+* polygonID -- unique identifier for each polygon
+* countryCode -- country at centroid of polygon (ISO 3166-1 alpha-2)
+
+2) Spatial datasets with timezone data **must** contain the following column:
+
+* timezone -- Olson timezone
+
+3) Spatial datasets at scales smaller than the nation-state **should** contain the following column:
+
+* stateCode -- 'state' at centroid of polygon (ISO 3166-2 alpha-2)
+
+If other columns contain these data, those columns must be renamed or duplicated with the 
+internally standardized name. This simple level of consistency makes it possible to generate 
+maps for any data that is ISO encoded. It also makes it possible to create functions that 
+return the country, state or timezone associated with a set of locations.
 
 ## Installation
 
 This package is designed to be used with [R](https://cran.r-project.org) (>= 3.1.0)
-and [RStudio](http://rstudio.com) so make sure you have those installed first.
+and [RStudio](https://rstudio.com/) so make sure you have those installed first.
 
 Users can use the **devtools** package to install the latest version of the 
 package which may have new features that are not yet available on CRAN:
@@ -90,7 +96,8 @@ timezones.
 
 ### Core Datasets
 
-Additional datasets are available at http://mazamascience.com/RData/Spatial/
+Additional datasets are available at 
+http://data.mazamascience.com/MazamaSpatialUtils/Spatial/
 and can be loaded with the following commands:
 
 ```
@@ -128,7 +135,8 @@ polygons retain only 5% of the vertices of the original .
 ### Additional Datasets
 
 Mazama Science regularly generates new datasets that adhere to package standards.
-These can be download manually from http://mazamascience.com/RData/Spatial/. As
+These can be download manually from 
+http://data.mazamascience.com/MazamaSpatialUtils/Spatial/. As
 of Jan 10, 2019, the full list of available datasets includes:
 
 ```
