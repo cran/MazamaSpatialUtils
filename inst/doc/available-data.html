@@ -16,6 +16,29 @@
 
 <title>Available Data</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 
 
 
@@ -222,7 +245,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="available-data-for-mazamaspatialutils" class="section level2">
 <h2>Available Data for MazamaSpatialUtils</h2>
 <p>This document provides documentation for the most important of the available datasets that can be used with <strong>MazamaSpatialUtils</strong>.</p>
-<p>Spatial datasets that have been converted to objects of class  and adhere to the <strong>MazamaSpatialUtils</strong> standards are considerd to be “harmonized”.</p>
+<p>Spatial datasets that have been converted to objects of class  and adhere to the <strong>MazamaSpatialUtils</strong> standards are considered to be “harmonized”.</p>
 <p>For reproducibility, the R code that ingests and harmonizes each spatial dataset is included in the package as a  function. Most of the resulting datasets have been been pre-generated and can be downloaded from <a href="http://data.mazamascience.com/MazamaSpatialUtils/Spatial_0.7/">http://data.mazamascience.com/MazamaSpatialUtils/Spatial_0.7/</a>.</p>
 <div id="built-in-data" class="section level3">
 <h3>Built in data</h3>
@@ -230,12 +253,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <ul>
 <li><code>SimpleCountries</code> – Country outlines</li>
 <li><code>SimpleCountriesEEZ</code> – Country outlines including Exclusive Economic Zones over water</li>
-<li><code>SimpleTimezones</code> – Timezones</li>
+<li><code>SimpleTimezones</code> – Time zones</li>
 </ul>
 </div>
 <div id="downloadable-data" class="section level3">
 <h3>Downloadable data</h3>
-<p>Running <code>installSpatialData()</code> allows users to install the following pregenerated datasets, which can then be loaded with <code>loadSpatialData(&lt;dataset&gt;)</code></p>
+<p>Running <code>installSpatialData()</code> allows users to install the following pre-generated datasets, which can then be loaded with <code>loadSpatialData(&lt;dataset&gt;)</code></p>
 <ul>
 <li><code>CA_AirBasins</code> – California regional air basin boundaries</li>
 <li><code>EEZCountries</code> – Country boundaries including Exclusive Economic Zones</li>
@@ -339,7 +362,7 @@ This will create <code>GADM_BE_1.rda</code>. Not all countries have the same num
 </div>
 <div id="mtbsburnareas" class="section level4">
 <h4>MTBSBurnAreas</h4>
-<p>Use <code>convertMTBSBurnArea()</code> to download and convert this datset.</p>
+<p>Use <code>convertMTBSBurnArea()</code> to download and convert this dataset.</p>
 <p>The MTBSBurnAreas dataset is a <code>SpatialPolygonsDataFrame</code> representing all large wildland fires (includes wildfire, wildland fire use, and prescribed fire) in the conterminous United States (CONUS), Alaska, Hawaii, and Puerto Rico for the period of 1984 through 2017. All fires reported as greater than 1,000 acres in the western US and greater than 500 acres in the eastern US are mapped across all ownerships.</p>
 <p>August 22, 2019 Version</p>
 </div>

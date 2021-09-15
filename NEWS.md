@@ -1,3 +1,20 @@
+# MazamaSpatialUtils 0.7.6
+
+* Removed links to slow-to-respond http://www.naturalearthdata.com/ to pass CRAN 
+submission tests.
+* Updated out-of-date URLs.
+
+# MazamaSpatialUtils 0.7.5
+
+* Updated `ebolamap.Rmd` vignette to pass R CMD check.
+
+# MazamaSpatialUtils 0.7.4
+
+* Minor documentation improvements.
+* Removed unused dependency on *tidyr*.
+* Replaced non-ASCII characters to satisfy CRAN checks.
+* Consistent parameter validation in all `get~()` functions.
+
 # MazamaSpatialUtils 0.7.3
 
 * URL corrections for CRAN submission.

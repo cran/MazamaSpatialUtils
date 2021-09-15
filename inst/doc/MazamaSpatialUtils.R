@@ -38,7 +38,7 @@ getCountry(longitude, latitude, allData = TRUE)
 #  states[c('countryCode', 'stateCode', 'stateName')]
 
 ## ----getTimezone--------------------------------------------------------------
-# Find the timezones the points are in
+# Find the time zones the points are in
 getTimezone(longitude, latitude)
 
 # Get country codes associated with locations
@@ -64,10 +64,10 @@ getTimezone(longitude, latitude, allData = TRUE, countryCodes = countryCodes)
 ## ----timezoneMap--------------------------------------------------------------
 library(sp)         # For spatial plotting
 
-# Assign timezones polygons an index based on UTC_offset
+# Assign time zones polygons an index based on UTC_offset
 colorIndices <- .bincode(SimpleTimezones@data$UTC_offset, breaks = seq(-12.5,12.5,1))
 
-# Color our timezones by UTC_offset
+# Color our time zones by UTC_offset
 plot(SimpleTimezones, col = rainbow(25)[colorIndices])
 title(line = 0, 'Timezone Offsets from UTC')
 

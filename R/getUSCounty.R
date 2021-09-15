@@ -33,12 +33,12 @@
 #' getUSCounty(longitude, latitude)
 #' }
 #'
-#' @references \url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}
+#' @references http://www.naturalearthdata.com/downloads/10m-cultural-vectors/
 #' @seealso getSpatialData
 #'
 getUSCounty <- function(
-  longitude,
-  latitude,
+  longitude = NULL,
+  latitude = NULL,
   dataset = 'USCensusCounties',
   stateCodes = NULL,
   allData = FALSE,
@@ -46,6 +46,12 @@ getUSCounty <- function(
 ) {
 
   # ----- Validate parameters --------------------------------------------------
+
+  MazamaCoreUtils::stopIfNull(longitude)
+  MazamaCoreUtils::stopIfNull(latitude)
+  MazamaCoreUtils::stopIfNull(dataset)
+  MazamaCoreUtils::stopIfNull(allData)
+  MazamaCoreUtils::stopIfNull(useBuffering)
 
   # Check existence of dataset
   if ( !exists(dataset) ) {

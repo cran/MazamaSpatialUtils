@@ -1,6 +1,6 @@
 Type: Package
 Package: MazamaSpatialUtils
-Version: 0.7.3
+Version: 0.7.6
 Title: Spatial Data Download and Utility Functions
 Authors@R: c(
     person("Jonathan", "Callahan", email="jonathan.s.callahan@gmail.com", role=c("aut","cre")), 
@@ -31,7 +31,7 @@ Author: Jonathan Callahan [aut, cre],
 Maintainer: Jonathan Callahan <jonathan.s.callahan@gmail.com>
 Description: A suite of conversion functions to create internally standardized
     spatial polygons data frames. Utility functions use these data sets to
-    return values such as country, state, timezone, watershed, etc. associated
+    return values such as country, state, time zone, watershed, etc. associated
     with a set of longitude/latitude pairs. (They also make cool maps.)
 License: GPL-2
 URL: https://github.com/MazamaScience/MazamaSpatialUtils
@@ -39,12 +39,12 @@ BugReports: https://github.com/MazamaScience/MazamaSpatialUtils/issues
 Repository: CRAN
 Depends: R (>= 3.5.0), sp
 Imports: cleangeo, countrycode, dplyr, magrittr, MazamaCoreUtils (>=
-        0.4.5), rgdal, rgeos, rlang, rmapshaper, stringr, tidyr
+        0.4.5), rgdal, rgeos, rlang, rmapshaper, stringr
 Suggests: knitr, maps, markdown, readr, rmarkdown, testthat
 Encoding: UTF-8
 VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2020-12-01 19:49:16 UTC; jonathan
-Date/Publication: 2020-12-01 20:20:02 UTC
+Packaged: 2021-09-14 17:55:03 UTC; jonathancallahan
+Date/Publication: 2021-09-15 07:10:02 UTC
