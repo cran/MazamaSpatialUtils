@@ -1,3 +1,19 @@
+# MazamaSpatialUtils 0.8.1
+
+* Tweaks to satisfy CRAN submission checks.
+
+# MazamaSpatialUtils 0.8.0
+
+Version 0.8.x is a complete refactoring of **MazamaSpatialUtils** to upgrade
+from dependence on the **sp** package to use of the **sf** package. As much as
+possible, the suite of functions and arguments will remain the same.
+
+The following changes have been made:
+
+* The `dataset` parameter has been renamed to `datasetName` in all functions
+where a name is expected rather than a sf dataframe object. This should have no
+effect on existing code which should "fuzzy match" `dataset => datasetName`.
+
 # MazamaSpatialUtils 0.7.6
 
 * Removed links to slow-to-respond http://www.naturalearthdata.com/ to pass CRAN 
@@ -17,7 +33,7 @@ submission tests.
 
 # MazamaSpatialUtils 0.7.3
 
-* URL corrections for CRAN submission.
+* URL corrections for CRAN submission. 
 * Vignette wordsmithing.
 * Test updates.
 
@@ -31,7 +47,7 @@ submission tests.
 * `installSpatialData()` attempts to install simplified versions of datasets:
 "_05", "_02" and "_01".
 * Replacement of `lon` and `lat` in `getHUC()` and `getHUCName()`.
-* `subsetHUC()` now handles `NA` values in `SPDF@data$allStateCodes`.
+* `subsetHUC()` now handles `NA` values in `SFDF$allStateCodes`.
 * Congressional districts dataset name now includes session number:  
 `USCensus116thCongress`.
 

@@ -2,22 +2,22 @@
 % Please edit documentation in R/getPolygonID.R
 \name{getPolygonID}
 \alias{getPolygonID}
-\title{Get polygonID from SPDF of interest}
+\title{Get polygonID from SFDF of interest}
 \usage{
-getPolygonID(SPDF)
+getPolygonID(SFDF)
 }
 \arguments{
-\item{SPDF}{Spatial polygons dataset of interest.}
+\item{SFDF}{Spatial polygons dataset of interest.}
 }
 \value{
 Vector of polygon identifiers.
 }
 \description{
 Extracts the the vector of unique polygon identifiers from
-\code{SPDF}.
+\code{SFDF}.
 
 This function is useful when writing code to aggregate data by polygon and
-calculate per-polygon statistics. Each unique SpatialPolygonsDataFrame will
+calculate per-polygon statistics. Each unique simple features data frame will
 have a different set of data columns but each is guaranteed to have a column
 named \code{polygonID} that uniquely identifies each polygon.
 

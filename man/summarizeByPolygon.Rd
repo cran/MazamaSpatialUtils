@@ -8,7 +8,7 @@ summarizeByPolygon(
   longitude,
   latitude,
   value,
-  SPDF,
+  SFDF,
   useBuffering = FALSE,
   FUN,
   varName = "summaryValue"
@@ -21,7 +21,7 @@ summarizeByPolygon(
 
 \item{value}{vector of values at the locations of interest}
 
-\item{SPDF}{SpatialPolygonsDataFrame with polygons used for aggregating}
+\item{SFDF}{simple features data frame with polygons used for aggregating}
 
 \item{useBuffering}{passed to MazamaSpatialUtils::getSpatialData()}
 
@@ -30,7 +30,7 @@ summarizeByPolygon(
 \item{varName}{variable name assigned to the summary variable}
 }
 \value{
-A dataframe with the same rows as `SPDF@data` but containing only two
+A dataframe with the same rows as `SFDF` but containing only two
 columns: `polygonID` and the summary value.
 }
 \description{
@@ -39,6 +39,6 @@ will summarize given values by spatial polygon using the \code{FUN} and return
 a dataframe with polygon IDs and summary values.
 }
 \note{
-This function has not been thoroughly tested and should only be included
+This function has not been thoroughly tested and is included
 in the package for experimental use only.
 }

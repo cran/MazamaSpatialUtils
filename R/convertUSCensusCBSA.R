@@ -1,18 +1,17 @@
-#' @keywords datagen
 #' @importFrom rlang .data
 #' @export
 #'
-#' @title Convert US Core Based Statistical Areas Shapefile
+#' @title Convert US Core Based Statistical Areas shapefile
 #'
-#' @param nameOnly Logical specifying whether to only return the name without
-#' creating the file.
-#' @param simplify Logical specifying whether to create "_05", _02" and "_01"
-#' versions of the file that are simplified to 5\%, 2\% and 1\%.
+#' @description Returns a simple features data frame for US CBSAs
 #'
-#' @description Returns a SpatialPolygonsDataFrame for US CBSAs
+#' The full resolution file will be named "USCensusCBSA.rda". In addition,
+#' "_05", _02" and "_01" versions of the file will be created that that are
+#' simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+#' speed of both searching and plotting.
 #'
 #' @details A US Core Based Statistical Areas (CBSA) shapefile is downloaded and converted to a
-#' SpatialPolygonsDataFrame with additional columns of data. The resulting file
+#' simple features data frame with additional columns of data. The resulting file
 #' will be created in the spatial data directory which is set with
 #' \code{setSpatialDataDir()}.
 #'
@@ -29,20 +28,17 @@
 #' Areas, based on urban clusters of at least 10,000 population but less than 50,000
 #' population.
 #'
-#' The CBSA boundaries are those defined by OMB based on the 2010 Census, published
-#' in 2013, and updated in 2018
+#' The CBSA boundaries are those defined by OMB based on the 2010 Census,
+#' published in 2013, and updated in 2020.
 #'
-#' @return Name of the dataset being created.
+#' @return Name of the datasetName being created.
 #'
-#' @references \url{https://www2.census.gov/geo/tiger/TIGER2019/CBSA/}
+#' @references \url{https://www2.census.gov/geo/tiger/TIGER2021/CBSA/}
 #'
 #' @seealso setSpatialDataDir
 #' @seealso getUSCounty
 
-convertUSCensusCBSA <- function(
-  nameOnly = FALSE,
-  simplify = TRUE
-) {
+convertUSCensusCBSA <- function() {
 
   # ----- Setup ----------------------------------------------------------------
 
@@ -54,48 +50,46 @@ convertUSCensusCBSA <- function(
   # Specify the name of the dataset and file being created
   datasetName <- 'USCensusCBSA'
 
-  if (nameOnly)
-    return(datasetName)
-
   # ----- Get the data ---------------------------------------------------------
 
   # Build appropriate request URL for US County Borders data
-  url <- 'https://www2.census.gov/geo/tiger/TIGER2019/CBSA/tl_2019_us_cbsa.zip'
+  url <- 'https://www2.census.gov/geo/tiger/TIGER2021/CBSA/tl_2021_us_cbsa.zip'
 
   filePath <- file.path(dataDir, basename(url))
   utils::download.file(url, filePath)
   # NOTE:  This zip file has no directory so extra subdirectory needs to be created
   utils::unzip(filePath, exdir = file.path(dataDir, 'cbsa'))
 
-  # ----- Convert to SPDF ------------------------------------------------------
+  # ----- Convert to SFDF ------------------------------------------------------
 
-  # Convert shapefile into SpatialPolygonsDataFrame
+  # Convert shapefile into simple features data frame
   # NOTE:  The 'cbsa' directory has been created
   dsnPath <- file.path(dataDir,'cbsa')
-  shpName <- 'tl_2019_us_cbsa'
-  SPDF <- convertLayer(
+  shpName <- 'tl_2021_us_cbsa'
+  SFDF <- convertLayer(
     dsn = dsnPath,
-    layerName = shpName,
-    encoding = 'UTF-8'
+    layer = shpName
   )
 
   # ----- Select useful columns and rename -------------------------------------
 
-  #   > dplyr::glimpse(SPDF@data)
-  #   Rows: 938
-  #   Columns: 12
-  #   $ CSAFP    <chr> "122", "122", "428", "426", "258", "532", "194", NA, NA, "4 …
-  #   $ CBSAFP   <chr> "12020", "12060", "12100", "12120", "12140", "12180", "1222 …
-  #   $ GEOID    <chr> "12020", "12060", "12100", "12120", "12140", "12180", "1222 …
-  #   $ NAME     <chr> "Athens-Clarke County, GA", "Atlanta-Sandy Springs-Alpharet …
-  #   $ NAMELSAD <chr> "Athens-Clarke County, GA Metro Area", "Atlanta-Sandy Spring…
-  #   $ LSAD     <chr> "M1", "M1", "M1", "M2", "M2", "M2", "M1", "M1", "M2", "M2", …
-  #   $ MEMI     <chr> "1", "1", "1", "2", "2", "2", "1", "1", "2", "2", "1", "2", …
-  #   $ MTFCC    <chr> "G3110", "G3110", "G3110", "G3110", "G3110", "G3110", "G311 …
-  #   $ ALAND    <chr> "2654601832", "22494938651", "1438776649", "2448115116", "9 …
-  #   $ AWATER   <chr> "26140309", "387716575", "301268696", "20504948", "2657419" …
-  #   $ INTPTLAT <chr> "+33.9439840", "+33.6937280", "+39.4693555", "+31.1222867", …
-  #   $ INTPTLON <chr> "-083.2138965", "-084.3999113", "-074.6337591", "-087.16840 …
+  # > dplyr::glimpse(SFDF, width = 75)
+  # Rows: 939
+  # Columns: 13
+  # $ CSAFP    <chr> "122", "122", "428", "426", "258", "532", "194", NA, NA,…
+  # $ CBSAFP   <chr> "12020", "12060", "12100", "12120", "12140", "12180", "1…
+  # $ GEOID    <chr> "12020", "12060", "12100", "12120", "12140", "12180", "1…
+  # $ NAME     <chr> "Athens-Clarke County, GA", "Atlanta-Sandy Springs-Alpha…
+  # $ NAMELSAD <chr> "Athens-Clarke County, GA Metro Area", "Atlanta-Sandy Sp…
+  # $ LSAD     <chr> "M1", "M1", "M1", "M2", "M2", "M2", "M1", "M1", "M2", "M…
+  # $ MEMI     <chr> "1", "1", "1", "2", "2", "2", "1", "1", "2", "2", "1", "…
+  # $ MTFCC    <chr> "G3110", "G3110", "G3110", "G3110", "G3110", "G3110", "G…
+  # $ ALAND    <dbl> 2654607902, 22495873026, 1438775279, 2448595161, 9397319…
+  # $ AWATER   <dbl> 26109459, 386782308, 301270067, 20024887, 2657419, 44569…
+  # $ INTPTLAT <chr> "+33.9439840", "+33.6937280", "+39.4693555", "+31.122286…
+  # $ INTPTLON <chr> "-083.2138965", "-084.3999113", "-074.6337591", "-087.16…
+  # $ geometry <MULTIPOLYGON [°]> MULTIPOLYGON (((-83.36003 3..., MULTIPOLYGO…
+
   #
   # Data Dictionary:
   #   $ CSAFP  ----->  (drop)
@@ -112,35 +106,35 @@ convertUSCensusCBSA <- function(
   #   $ INTPTLON -----> longitude
 
   # Convert lat/lon to numeric
-  SPDF@data$INTPTLAT <- as.numeric(SPDF$INTPTLAT)
-  SPDF@data$INTPTLON <- as.numeric(SPDF$INTPTLON)
+  SFDF$INTPTLAT <- as.numeric(SFDF$INTPTLAT)
+  SFDF$INTPTLON <- as.numeric(SFDF$INTPTLON)
 
   # We can use longitude and latitude to get one state code for each polygon.
   # Validation plot -- check if lon/lat are polygon centroids
   if ( FALSE ) {
-    tx <- subset(SPDF, stringr::str_detect(SPDF$NAME, "TX"))
+    tx <- dplyr::filter(SFDF, stringr::str_detect(SFDF$NAME, "TX"))
     plot(tx)
     points(tx$INTPTLON, tx$INTPTLAT, pch = 16, col = 'red')
   }
 
-  SPDF@data$stateCode <- getStateCode(SPDF$INTPTLON, SPDF$INTPTLAT, dataset = 'USCensusStates', useBuffering = TRUE)
-  SPDF@data$countryCode <- "US"
+  SFDF$stateCode <- getStateCode(SFDF$INTPTLON, SFDF$INTPTLAT, datasetName = 'USCensusStates', useBuffering = TRUE)
+  SFDF$countryCode <- "US"
 
   # Get CBSAName and allStateCodes from the CBSAName column
-  nameMatrix <- stringr::str_split_fixed(SPDF@data$NAME, ',', 2)
-  SPDF@data$CBSAName <- nameMatrix[, 1]
+  nameMatrix <- stringr::str_split_fixed(SFDF$NAME, ',', 2)
+  SFDF$CBSAName <- nameMatrix[, 1]
   # allStateCodes is a comma-separate list of stateCodes
-  SPDF@data$allStateCodes <- stringr::str_trim( stringr::str_replace_all(nameMatrix[,2], '-',',') )
+  SFDF$allStateCodes <- stringr::str_trim( stringr::str_replace_all(nameMatrix[,2], '-',',') )
 
   # Convert MEMI to explicitly indicate Micropolitan and Metropolitan classes
-  metroMask <- SPDF@data$MEMI == "1"
-  SPDF@data$MEMI[metroMask] <- "metro"
-  SPDF@data$MEMI[!metroMask] <- "micro"
+  metroMask <- SFDF$MEMI == "1"
+  SFDF$MEMI[metroMask] <- "metro"
+  SFDF$MEMI[!metroMask] <- "micro"
 
   # Create the new dataframe in a specific column order
-  SPDF@data <-
+  SFDF <-
     dplyr::select(
-      .data = SPDF@data,
+      .data = SFDF,
       countryCode = .data$countryCode,
       stateCode = .data$stateCode,
       allStateCodes = .data$allStateCodes,
@@ -153,72 +147,16 @@ convertUSCensusCBSA <- function(
       longitude = .data$INTPTLON
     )
 
-  # ----- Clean SPDF -----------------------------------------------------------
+  # ----- Simplify and save ----------------------------------------------------
 
-  # Group polygons with the same identifier (countyName)
-  SPDF <- organizePolygons(
-    SPDF,
-    uniqueID = 'CBSAFP',
-    sumColumns = c('landArea', 'waterArea')
+  uniqueIdentifier <- "CBSAFP"
+
+  simplifyAndSave(
+    SFDF = SFDF,
+    datasetName = datasetName,
+    uniqueIdentifier = uniqueIdentifier,
+    dataDir = dataDir
   )
-
-  # Clean topology errors
-  if ( !cleangeo::clgeo_IsValid(SPDF) ) {
-    SPDF <- cleangeo::clgeo_Clean(SPDF)
-  }
-
-  # ----- Name and save the data -----------------------------------------------
-
-  # Assign a name and save the data
-  message("Saving full resolution version...\n")
-  assign(datasetName, SPDF)
-  save(list = c(datasetName), file = paste0(dataDir, '/', datasetName, '.rda'))
-  rm(list = datasetName)
-
-  # ----- Simplify -------------------------------------------------------------
-
-  if ( simplify ) {
-    # Create new, simplified datsets: one with 5%, 2%, and one with 1% of the vertices of the original
-    # NOTE:  This may take several minutes.
-    message("Simplifying to 5%...\n")
-    SPDF_05 <- rmapshaper::ms_simplify(SPDF, 0.05)
-    SPDF_05@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_05) ) {
-      SPDF_05 <- cleangeo::clgeo_Clean(SPDF_05)
-    }
-    datasetName_05 <- paste0(datasetName, "_05")
-    message("Saving 5% version...\n")
-    assign(datasetName_05, SPDF_05)
-    save(list = datasetName_05, file = paste0(dataDir,"/", datasetName_05, '.rda'))
-    rm(list = c("SPDF_05",datasetName_05))
-
-    message("Simplifying to 2%...\n")
-    SPDF_02 <- rmapshaper::ms_simplify(SPDF, 0.02)
-    SPDF_02@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_02) ) {
-      SPDF_02 <- cleangeo::clgeo_Clean(SPDF_02)
-    }
-    datasetName_02 <- paste0(datasetName, "_02")
-    message("Saving 2% version...\n")
-    assign(datasetName_02, SPDF_02)
-    save(list = datasetName_02, file = paste0(dataDir,"/", datasetName_02, '.rda'))
-    rm(list = c("SPDF_02",datasetName_02))
-
-    message("Simplifying to 1%...\n")
-    SPDF_01 <- rmapshaper::ms_simplify(SPDF, 0.01)
-    SPDF_01@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_01) ) {
-      SPDF_01 <- cleangeo::clgeo_Clean(SPDF_01)
-    }
-    datasetName_01 <- paste0(datasetName, "_01")
-    message("Saving 1% version...\n")
-    assign(datasetName_01, SPDF_01)
-    save(list = datasetName_01, file = paste0(dataDir,"/", datasetName_01, '.rda'))
-    rm(list = c("SPDF_01",datasetName_01))
-  }
 
   # ----- Clean up and return --------------------------------------------------
 
@@ -230,3 +168,35 @@ convertUSCensusCBSA <- function(
 
 }
 
+# ===== TEST ===================================================================
+
+if ( FALSE ) {
+
+  library(sf)
+
+  # Look or horizontal lines from polygons that cross the dateline.
+  # NOTE:  These are sometimes created by sf::st_make_valid()
+  loadSpatialData(datasetName)
+  SFDF <- get(paste0(datasetName, ""))
+  SFDF_05 <- get(paste0(datasetName, "_05"))
+  SFDF_02 <- get(paste0(datasetName, "_02"))
+  SFDF_01 <- get(paste0(datasetName, "_01"))
+
+  plot(SFDF_01$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_02$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_05$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  #plot(SFDF$geometry)
+
+  # Try out getSpatialData()
+  lons <- c(-120:-110, 0:10)
+  lats <- c(30:40, 30:40)
+
+  df <- getSpatialData(lons, lats, SFDF_01)
+  df <- getSpatialData(lons, lats, SFDF_02)
+  df <- getSpatialData(lons, lats, SFDF_05)
+  df <- getSpatialData(lons, lats, SFDF)
+
+}

@@ -97,8 +97,8 @@ US_52 <- c(
 
 # ===== Data in the data/ directory ============================================
 
-#' @title Dataframe of US state codes
-#' @format A dataframe with 3196 rows and 4 columns of data.
+#' @title Dataframe of US county codes
+#' @format A dataframe with 3197 rows and 4 columns of data.
 #' @description US_countyCodes The following columns for US states and territories:
 #' \itemize{
 #' \item{\code{stateCode} -- ISO 3166-2 alpha-2}
@@ -108,16 +108,18 @@ US_52 <- c(
 #' county combined to create a unique identifier)}
 #' }
 #'
-#' This dataset was generated on 2020-10-26 by running:
+#' This dataset was generated on 2022-11-04 by running:
 #'
 #' \preformatted{
 #' library(MazamaSpatialUtils)
-#' setSpatialDataDir("~/Data/Spatial")
+#' setSpatialDataDir("~/Data/Spatial_0.8")
 #' loadSpatialData("USCensusCounties_02")
 #'
 #' US_countyCodes <-
-#'   USCensusCounties_02@data %>%
+#'   USCensusCounties_02 %>%
 #'   dplyr::select(stateCode, stateFIPS, countyName, countyFIPS)
+#'
+#' US_countyCodes$geometry <- NULL
 #'
 #' save(US_countyCodes, file = "data/US_countyCodes.rda")
 #' }
@@ -125,9 +127,9 @@ US_52 <- c(
 
 
 #' @title Simplified spatial dataset of world timezones.
-#' @format A SpatialPolygonsDataFrame with 423 records and 9 columns of data.
+#' @format A simple features data frame with 423 records and 9 columns of data.
 #' @description This dataset is used by default in the \code{getTimezones()}
-#' function and contains the following columns of data in the \code{@data} slot:
+#' function and contains the following columns of data:
 #' \itemize{
 #' \item{\code{timezone} -- Olson timezone}
 #' \item{\code{UTC_offset} -- offset from UTC (hours)}
@@ -140,23 +142,23 @@ US_52 <- c(
 #' \item{\code{polygonID} -- unique identifier (= \code{timezone})}
 #' }
 #'
-#' This dataset was generated on 2020-11-12 by running:
+#' This dataset was generated on 2022-11-03 by running:
 #'
 #' \preformatted{
 #' library(MazamaSpatialUtils)
-#' setSpatialDataDir("~/Data/Spatial")
+#' setSpatialDataDir("~/Data/Spatial_0.8")
 #'
-#' convertWorldTimezones()
+#' convertOSMTimezones()
 #'
-#' loadSpatialData("WorldTimezones_02")
+#' loadSpatialData("OSMTimezones_02")
 #'
-#' SimpleTimezones <- WorldTimezones_02
+#' SimpleTimezones <- OSMTimezones_02
 #' save(SimpleTimezones, file = "data/SimpleTimezones.rda")
 #' }
 "SimpleTimezones"
 
 #' @title Simplified spatial dataset of EEZ/country combined boundaries.
-#' @format A SpatialPolygonsDataFrame with 319 records and 5 columns of data.
+#' @format A simple features data frame with 319 records and 5 columns of data.
 #'
 #' @description SimpleCountriesEEZ is a simplified world borders dataset with a
 #' 200 mile coastal buffer corresponding to Exclusive Economic Zones, suitable for
@@ -167,11 +169,11 @@ US_52 <- c(
 #' @details This dataset is equivalent to EEZCountries but with fewer columns of data.
 #' @seealso convertEEZCountries
 #'
-#' This dataset was generated on 2020-11-18 by running:
+#' This dataset was generated on 2022-11-03 by running:
 #'
 #' \preformatted{
 #' library(MazamaSpatialUtils)
-#' setSpatialDataDir("~/Data/Spatial")
+#' setSpatialDataDir("~/Data/Spatial_0.8")
 #'
 #' convertEEZCountries()
 #'
@@ -183,7 +185,7 @@ US_52 <- c(
 "SimpleCountriesEEZ"
 
 #' @title Simplified spatial dataset of country boundaries.
-#' @format A SpatialPolygonsDataFrame with 246 records and 6 columns of data.
+#' @format A simple features data frame with 246 records and 7 columns of data.
 #'
 #' @description SimpleCountries is a simplified world borders dataset suitable
 #' for global maps and quick spatial searches. This dataset is distributed with
@@ -194,20 +196,20 @@ US_52 <- c(
 #' @details This dataset is equivalent to TMWorldBordersSimple but with fewer columns of data.
 #' @seealso convertTMWorldBordersSimple
 #'
-#' This dataset was generated on 2020-11-19 by running:
+#' This dataset was generated on 2022-11-04 by running:
 #'
 #' \preformatted{
 #' library(MazamaSpatialUtils)
-#' setSpatialDataDir("~/Data/Spatial")
+#' setSpatialDataDir("~/Data/Spatial_0.8")
 #'
-#' convertTMWorldBordersSimple()
+#' convertTMWorldBorders()
 #'
-#' loadSpatialData("TMWorldBordersSimple")
+#' loadSpatialData("NaturalEarthAdm0_05")
 #'
-# columnNames <- c("countryCode", "countryName", "ISO3", "FIPS",
-#                  "UN_region", "polygonID")
-# SimpleCountries <- TMWorldBordersSimple[, columnNames]
-# save(SimpleCountries, file = "data/SimpleCountries.rda")
+#' columnNames <- c("countryCode", "countryName", "ISO3", "FIPS",
+#'                  "UN_region", "polygonID")
+#' SimpleCountries <- NaturalEarthAdm0_05[, columnNames]
+#' save(SimpleCountries, file = "data/SimpleCountries.rda")
 #' }
 "SimpleCountries"
 

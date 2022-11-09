@@ -3,9 +3,9 @@
 \docType{data}
 \name{US_countyCodes}
 \alias{US_countyCodes}
-\title{Dataframe of US state codes}
+\title{Dataframe of US county codes}
 \format{
-A dataframe with 3196 rows and 4 columns of data.
+A dataframe with 3197 rows and 4 columns of data.
 }
 \usage{
 US_countyCodes
@@ -20,16 +20,18 @@ US_countyCodes The following columns for US states and territories:
 county combined to create a unique identifier)}
 }
 
-This dataset was generated on 2020-10-26 by running:
+This dataset was generated on 2022-11-04 by running:
 
 \preformatted{
 library(MazamaSpatialUtils)
-setSpatialDataDir("~/Data/Spatial")
+setSpatialDataDir("~/Data/Spatial_0.8")
 loadSpatialData("USCensusCounties_02")
 
 US_countyCodes <-
-  USCensusCounties_02@data %>%
+  USCensusCounties_02 %>%
   dplyr::select(stateCode, stateFIPS, countyName, countyFIPS)
+
+US_countyCodes$geometry <- NULL
 
 save(US_countyCodes, file = "data/US_countyCodes.rda")
 }

@@ -5,8 +5,8 @@
 \alias{MazamaSpatialUtils}
 \title{Mazama Science spatial data and utility functions.}
 \description{
-This package contains code to convert various spatial datasets into .RData files
-with uniformly named identifiers including:
+This package contains code to convert various spatial datasets
+into .rda files with uniformly named identifiers including:
 \itemize{
 \item{ countryCode -- ISO 3166-1 alpha-2}
 \item{ countryName -- Country name}
@@ -16,22 +16,20 @@ with uniformly named identifiers including:
 \item{ latitude -- degrees North}
 \item{ area -- m^2}
 }
-The parameters listed above will be found in the @data slot of each spatial
-dataset whose source data has an equivalent field. The only field guaranteed
+The only field guaranteed
 to exist in every dataset is \code{countryCode}.
 
 The following additional standards are applied during the data conversion process:
 \itemize{
-\item{ all spatial data are converted to a purely geographic projection (\code{CRS("+proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs"}) }
+\item{ all spatial data are converted to a purely geographic North American projection (\url{https://epsg.io/4269}) }
 \item{ no duplicated rows in the dataframe (conversion to \strong{multi-}polygons) }
 \item{ lowerCamelCase, human readable names replace original parameter names }
 \item{ redundant, software-internal or otherwise unuseful data columns may be dropped }
-\item{ parameters may be added to the @data dataframe }
 \item{ latitude and longitude of polygon centroids may be added }
 }
 
 Utility functions allow users to determine the country, state, county and timezones
-associated with a set of locations, e.g. environmental monitoring sites.
+associated with a set of locations, _e.g._ environmental monitoring sites.
 
 The uniformity of identifiers in the spatial datasets also makes it easy to generate maps
 with data from any dataset that uses standard ISO codes for countries or states.

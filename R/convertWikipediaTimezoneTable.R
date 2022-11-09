@@ -1,6 +1,6 @@
 #' @keywords datagen
 #' @export
-#' @title Convert Wikipedia Timezone Table to Dataframe
+#' @title Convert Wikipedia timezone table to dataframe
 #' @description Returns a dataframe version of the Wikipedia timezone table with
 #' the following columns:
 #'
@@ -35,19 +35,25 @@ convertWikipediaTimezoneTable <- function() {
   # 4.  Comments; present if and only if the country has multiple rows.
 
   # Assume the relevant list is the first table and parse that into a dataframe
-  tzTable <- MazamaCoreUtils::html_getTable(url, header = TRUE, index = 1)
+  tzTable <-
+    MazamaCoreUtils::html_getTable(url, header = TRUE, index = 1)
 
-  # > dplyr::glimpse(tzTable)
-  # Rows: 594
-  # Columns: 8
-  # $ `Country code`                            <chr> "CI", "GH", "ET", "DZ"…
-  # $ `Latitude, longitude ±DDMM(SS)±DDDMM(SS)` <chr> "+0519−00402", "+0533−…
-  # $ `TZ database name`                        <chr> "Africa/Abidjan", "Afr…
-  # $ `Portion of country covered`              <chr> "", "", "", "", "", ""…
-  # $ Status                                    <chr> "Canonical", "Canonica…
-  # $ `UTC offset ±hh:mm`                       <chr> "+00:00", "+00:00", "+…
-  # $ `UTC DST offset ±hh:mm`                   <chr> "+00:00", "+00:00", "+…
-  # $ Notes                                     <chr> "", "", "Link to Afric…
+  # > dplyr::glimpse(tzTable, width = 75)
+  # Rows: 597
+  # Columns: 10
+  # $ `Country code(s)`       <chr> "Country code(s)", "CI, BF, GH, GM, GN, I…
+  # $ `TZ database name`      <chr> "TZ database name", "Africa/Abidjan", "Af…
+  # $ `Area(s) covered`       <chr> "Area(s) covered", "", "", "", "", "", ""…
+  # $ Type                    <chr> "Type", "Canonical", "Link†", "Link†", "C…
+  # $ `UTC offset±hh:mm`      <chr> "STD", "+00:00", "+00:00", "+03:00", "+01…
+  # $ `UTC offset±hh:mm`      <chr> "DST", "+00:00", "+00:00", "+03:00", "+01…
+  # $ `Time zoneabbreviation` <chr> "STD", "GMT", "GMT", "EAT", "CET", "EAT",…
+  # $ `Time zoneabbreviation` <chr> "DST", "GMT", "GMT", "EAT", "CET", "EAT",…
+  # $ Sourcefile              <chr> "Sourcefile", "africa", "backward", "back…
+  # $ Notes                   <chr> "Notes", "", "Link to Africa/Abidjan", "L…
+
+  # Strip off the first row
+  tzTable <- tzTable[-1,]
 
   # Rationalize naming:
   # * human readable full nouns with descriptive prefixes
@@ -56,17 +62,29 @@ convertWikipediaTimezoneTable <- function() {
   # * timezone (Olson timezone)
   # * longitude (decimal degrees E)
   # * latitude (decimal degrees N)
-  names(tzTable) <- c('countryCode','coordinates','timezone','comments','status','UTC_offset','UTC_DST_offset','notes')
+  names(tzTable) <- c(
+    'countryCodes', 'timezone', 'areaCovered', 'type',
+    'UTC_STD_offset', 'UTC_DST_offset',
+    'timezone_STD_abbreviation', 'timezone_DST_abbreviation',
+    'sourceFile', 'notes'
+  )
+
+  # NOTE:  'countryCodes' may contain multiple codes. Here we pick the first one
+  # NOTE:  and use it as the singular 'countryCode' that must be present in
+  # NOTE:  all MazamaSpatialUtils datasets. (It appears that multiple codes are
+  # NOTE:  listed in order of importance.)
+
+  tzTable$countryCode <- stringr::str_sub(tzTable$countryCodes, 1, 2)
 
   # NOTE:  MazamaCoreUtils::html_getTable() has no argument to specify
   # NOTE:  na.strings so "NA" is converted to NA. Here we restore "NA".
   tzTable$countryCode[tzTable$timezone == 'Africa/Windhoek'] <- "NA"
 
-  # Convert UTC_offset "+HH:MM" to hours
-  sign <- ifelse(stringr::str_sub(tzTable$UTC_offset,1,1) == '+',1,-1)
-  hour <- as.numeric(stringr::str_sub(tzTable$UTC_offset,2,3))
-  min <- as.numeric(stringr::str_sub(tzTable$UTC_offset,5,6))
-  tzTable$UTC_offset <- sign * (hour + min/60)
+  # Convert UTC_STD_offset "+HH:MM" to hours
+  sign <- ifelse(stringr::str_sub(tzTable$UTC_STD_offset,1,1) == '+',1,-1)
+  hour <- as.numeric(stringr::str_sub(tzTable$UTC_STD_offset,2,3))
+  min <- as.numeric(stringr::str_sub(tzTable$UTC_STD_offset,5,6))
+  tzTable$UTC_STD_offset <- sign * (hour + min/60)
 
   # Convert UTC_DST_offset "+HH:MM" to hours
   sign <- ifelse(stringr::str_sub(tzTable$UTC_DST_offset,1,1) == '+',1,-1)
@@ -74,29 +92,14 @@ convertWikipediaTimezoneTable <- function() {
   min <- as.numeric(stringr::str_sub(tzTable$UTC_DST_offset,5,6))
   tzTable$UTC_DST_offset <- sign * (hour + min/60)
 
-  # Create longitude and latitude
-  matchMatrix <- stringr::str_match(tzTable$coordinates, '([^0-9][0-9]+)([^0-9][0-9]+)')
-
-  # Latitudes -- 5 or 7 characters
-  latString <- matchMatrix[,2]
-  sign <- ifelse(stringr::str_sub(latString,1,1) == '+',1,-1)
-  deg <- as.numeric(stringr::str_sub(latString,2,3))
-  min <- as.numeric(stringr::str_sub(latString,4,5))
-  sec <- as.numeric(stringr::str_sub(latString,4,5))
-  sec <- ifelse(is.na(sec),0,sec)
-  tzTable$latitude <- sign * (deg + min/60 + sec/3600)
-
-  # Longitudes -- 6 or 8 characters
-  lonString <- matchMatrix[,3]
-  sign <- ifelse(stringr::str_sub(lonString,1,1) == '+',1,-1)
-  deg <- as.numeric(stringr::str_sub(lonString,2,4))
-  min <- as.numeric(stringr::str_sub(lonString,5,6))
-  sec <- as.numeric(stringr::str_sub(lonString,7,8))
-  sec <- ifelse(is.na(sec),0,sec)
-  tzTable$longitude <- sign * (deg + min/60 + sec/3600)
-
   # Return desired columns in a sensible order
-  return( tzTable[,c('timezone', 'UTC_offset', 'UTC_DST_offset', 'countryCode',
-                     'longitude', 'latitude', 'status', 'notes')] )
+  keepColumns <- c(
+    'timezone', 'countryCode', 'countryCodes',
+    'timezone_STD_abbreviation', 'timezone_DST_abbreviation',
+    'UTC_STD_offset', 'UTC_DST_offset',
+    'notes'
+  )
+
+  return( tzTable[, keepColumns] )
 
 }

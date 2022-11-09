@@ -2,12 +2,12 @@
 % Please edit documentation in R/MazamaSpatialUtils.R
 \name{simplify}
 \alias{simplify}
-\title{Simplify SpatialPolygonsDataFrame}
+\title{Simplify simple features data frame}
 \usage{
-simplify(SPDF, keep = 0.05, ...)
+simplify(SFDF, keep = 0.05, ...)
 }
 \arguments{
-\item{SPDF}{Object of class SpatialPolygonsDataFrame.}
+\item{SFDF}{Object of class simple features data frame.}
 
 \item{keep}{Proportion of points to retain (0-1; default 0.05)}
 
@@ -18,15 +18,22 @@ A simplified spatial polygons dataframe.
 }
 \description{
 Simplify a spatial polygons dataframe. This is a convenience
-wrapper for \code{rmapshaper::ms_simplify()}
+wrapper for \code{\link[rmapshaper]{ms_simplify}}
 }
 \examples{
 \dontrun{
-FR <- subset(SimpleCountries, countryCode == 'FR')
+library(MazamaSpatialUtils)
+FR <-
+  SimpleCountries \%>\%
+  dplyr::filter(countryCode == "FR")
 par(mfrow = c(3, 3), mar = c(1, 1, 3, 1))
 for (i in 9:1) {
   keep <- 0.1 * i
-  plot(simplify(FR, keep), main=paste0("keep = ", keep))
+  geom <-
+    FR \%>\%
+    simplify(keep) \%>\%
+    sf::st_geometry()
+  plot(geom, main=paste0("keep = ", keep))
 }
 layout(1)
 par(mar = c(5,4,4,2)+.1)

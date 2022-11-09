@@ -5,9 +5,9 @@
 \title{Return spatial data associated with a set of locations}
 \usage{
 getSpatialData(
-  longitude,
-  latitude,
-  SPDF,
+  longitude = NULL,
+  latitude = NULL,
+  SFDF = NULL,
   useBuffering = FALSE,
   verbose = FALSE
 )
@@ -17,7 +17,7 @@ getSpatialData(
 
 \item{latitude}{Vector of latitudes in decimal degrees North.}
 
-\item{SPDF}{Object of class SpatialPolygonsDataFrame.}
+\item{SFDF}{sf dataframe with MULTIPOLYGON geometry.}
 
 \item{useBuffering}{Logical flag specifying the use of location buffering to
 find the nearest polygon if no target polygon is found.}
@@ -25,27 +25,26 @@ find the nearest polygon if no target polygon is found.}
 \item{verbose}{Logical flag controlling detailed progress statements.}
 }
 \value{
-Vector or dataframe of data.
+Dataframe of data.
 }
 \description{
 All locations are first converted to \code{SpatialPoints}
-objects. The \pkg{sp::over()} function is then used to determine which
-polygon from \code{SPDF} each location falls in. The dataframe row associated
+objects. The \code{\link[sf]{st_intersects}} function is then used to determine which
+polygon from \code{SFDF} each location falls in. The dataframe row associated
 with each polygon is then associated with each location.
 }
 \details{
-Occasionally for coastal locations the precise coordinates
-lie outside the boundaries of a low resolution SpatialPolygonsDataFrame.
+For coastal locations, locations may lie just outside the boundaries
+of an individual polygon, especially if it is of low resolution.
 To account for this any location that remains unassociated after the first
-pass is then buffered to create a small circle around the original location.
-All polygons are then checked to see if there is any intersection with the
-now larger buffered locations. Each point is then checked for an intersecting
-polygon at the following radii: 1km, 2km, 5km, 10km, 20km, 50km, 100km, 200km.
-If a buffered location is more than 200km away from any polygon, a value of
-\code{NA} (or data frame row with all \code{NA}s) is returned for that
+pass is checked to seee if it is with a specific distance of any polygon.
+The set of distances is gradually increased until a polygon is reached or the
+maximum distances is encountered. Distances include: 1km, 2km, 5km, 10km,
+20km, 50km, 100km, 200km. If a location is more than 200km away from any
+polygon, a data frame record with all \code{NA}s is returned for that
 location.
 
-Missing or invalid values in the incoming \code{longitude} or \code{latitude} vectors
-result in \code{NA}s at those positions in the returned vector or data frame.
+Missing or invalid values in the incoming \code{longitude} or \code{latitude}
+vectors result in records with all \code{NA}s at those positions in the
+returned data frame.
 }
-\keyword{locator}

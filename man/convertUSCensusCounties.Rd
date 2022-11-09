@@ -4,28 +4,26 @@
 \alias{convertUSCensusCounties}
 \title{Convert US county borders shapefile}
 \usage{
-convertUSCensusCounties(nameOnly = FALSE, simplify = TRUE)
-}
-\arguments{
-\item{nameOnly}{Logical specifying whether to only return the name without
-creating the file.}
-
-\item{simplify}{Logical specifying whether to create "_05", _02" and "_01"
-versions of the file that are simplified to 5\%, 2\% and 1\%.}
+convertUSCensusCounties()
 }
 \value{
-Name of the dataset being created.
+Name of the datasetName being created.
 }
 \description{
-Create a SpatialPolygonsDataFrame for US counties.
+Create a simple features data frame for US counties.
+
+The full resolution file will be named "USCensusCounties.rda". In addition,
+"_05", _02" and "_01" versions of the file will be created that that are
+simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+speed of both searching and plotting.
 }
 \details{
 A US county borders shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting file
+simple features data frame with additional columns of data. The resulting file
 will be created in the spatial data directory which is set with
-\code{setSpatialDataDir()}.
+\link{setSpatialDataDir}.
 
-The source data is from 2019.
+The source data is from 2021.
 }
 \note{
 From the source documentation:
@@ -52,11 +50,5 @@ You can join this file with table data downloaded from American FactFinder by
 using the AFFGEOID field in the cartographic boundary file.
 }
 \references{
-\url{https://www2.census.gov/geo/tiger/GENZ2019/}
+\url{https://www2.census.gov/geo/tiger/GENZ2021/}
 }
-\seealso{
-setSpatialDataDir
-
-getUSCounty
-}
-\keyword{datagen}

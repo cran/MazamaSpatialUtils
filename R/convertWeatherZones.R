@@ -1,22 +1,25 @@
-#' @keywords datagen
 #' @importFrom rlang .data
 #' @export
 #'
 #' @title Convert NWS Public Forecast Zones Shapefile.
 #'
-#' @param nameOnly Logical specifying whether to only return the name without
-#' creating the file.
-#' @param simplify Logical specifying whether to create "_05", _02" and "_01"
-#' versions of the file that are simplified to 5\%, 2\% and 1\%.
+#' @description Create a simple features data frame for NWS weather forecast zones.
 #'
-#' @description Create a SpatialPolygonsDataFrame for NWS weather forecast zones.
+#' The full resolution file will be named "WeatherZones.rda". In addition,
+#' "_05", _02" and "_01" versions of the file will be created that that are
+#' simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+#' speed of both searching and plotting.
 #'
 #' @details A weather forecast zone shapefile is downloaded and converted to a
-#' SpatialPolygonsDataFrame with additional columns of data. The resulting file
+#' simple features data frame with additional columns of data. The resulting file
 #' will be created in the spatial data directory which is set with
 #' \code{setSpatialDataDir()}.
 #'
-#' The source data is from 2020.
+#' The source data is from 2022-09-13.
+#'
+#' @note Records with a duplicated \code{zoneID} column (typically representing
+#' coastal land and its watery inlets separately) are combined so that \code{zoneID}
+#' becomes a unique identifier.
 #'
 #' @note From the source documentation:
 #'
@@ -26,18 +29,12 @@
 #' of the differences in weather within a county due to such things as elevation
 #' or proximity to large bodies of water.
 #'
-#' @return Name of the dataset being created.
+#' @return Name of the datasetName being created.
 #'
 #' @references \url{https://www.weather.gov/gis/PublicZones}
 #'
-#' @seealso setSpatialDataDir
-#' @seealso getVariale
 
-
-convertWeatherZones <- function(
-  nameOnly = FALSE,
-  simplify = TRUE
-) {
+convertWeatherZones <- function() {
 
   # ----- Setup ----------------------------------------------------------------
 
@@ -47,50 +44,43 @@ convertWeatherZones <- function(
   # Specify the name of the dataset and file being created
   datasetName <- 'WeatherZones'
 
-  if (nameOnly)
-    return(datasetName)
-
   # ----- Get the data ---------------------------------------------------------
 
   # Build appropriate request URL
-  url <- "https://www.weather.gov/source/gis/Shapefiles/WSOM/z_03mr20.zip"
+  url <- "https://www.weather.gov/source/gis/Shapefiles/WSOM/z_13se22.zip"
 
   filePath <- file.path(dataDir, basename(url))
   utils::download.file(url, filePath)
   # NOTE:  This zip file has no directory so extra subdirectory needs to be created
   utils::unzip(filePath, exdir = file.path(dataDir, 'WeatherZones'))
 
-  # ----- Convert to SPDF ------------------------------------------------------
+  # ----- Convert to SFDF ------------------------------------------------------
 
-  # Convert shapefile into SpatialPolygonsDataFrame
+  # Convert shapefile into simple features data frame
   # NOTE:  The 'WeatherZones' directory has been created
   dsnPath <- file.path(dataDir, 'WeatherZones')
-  shpName <- 'z_03mr20'
-  SPDF <- convertLayer(
+  shpName <- 'z_13se22'
+  SFDF <- convertLayer(
     dsn = dsnPath,
-    layerName = shpName,
-    encoding = 'UTF-8'
+    layer = shpName
   )
 
   # ----- Select useful columns and rename -------------------------------------
 
-  # > dplyr::glimpse(SPDF@data)
-  # Observations: 3,853
-  # Variables: 14
-  # $ STATE      <chr> "GU", "GU", "GU", "GU", "GU", "GU", "GU", "GU", "GU", "GU"…
-  # $ CWA        <chr> "GUM", "GUM", "GUM", "GUM", "GUM", "GUM", "GUM", "GUM", "G…
-  # $ TIME_ZONE  <chr> "J", "J", "F", "G", "G", "G", "F", "G", "G", "F", "F", "K"…
-  # $ FE_AREA    <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
-  # $ ZONE       <chr> "013", "011", "041", "021", "024", "022", "033", "023", "0…
-  # $ NAME       <chr> "Kayangel", "Koror", "Pohnpei", "Yap", "Sorol", "Ngulu", "…
-  # $ STATE_ZONE <chr> "GU013", "GU011", "GU041", "GU021", "GU024", "GU022", "GU0…
-  # $ LON        <dbl> 134.7129, 134.5351, 158.2252, 138.1244, 140.6973, 137.5079…
-  # $ LAT        <dbl> 8.0736, 7.4442, 6.8807, 9.5366, 8.2143, 8.3022, 5.4999, 10…
-  # $ SHORTNAME  <chr> "Kayangel", "Koror", "Pohnpei", "Yap", "Sorol", "Ngulu", "…
-  # $ InPoly_FID <chr> "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "…
-  # $ SimPgnFlag <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-  # $ MaxSimpTol <dbl> 1e-04, 1e-04, 1e-04, 1e-04, 1e-04, 1e-04, 1e-04, 1e-04, 1e…
-  # $ MinSimpTol <dbl> 1e-04, 1e-04, 1e-04, 1e-04, 1e-04, 1e-04, 1e-04, 1e-04, 1e…
+  # > dplyr::glimpse(SFDF, width = 75)
+  # Rows: 3,996
+  # Columns: 11
+  # $ STATE      <chr> "AL", "AL", "AL", "AL", "AL", "AL", "AL", "AL", "AL", …
+  # $ CWA        <chr> "BMX", "MOB", "BMX", "BMX", "BMX", "BMX", "HUN", "BMX"…
+  # $ TIME_ZONE  <chr> "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C",…
+  # $ FE_AREA    <chr> "ec", "sc", "se", "cc", "cc", "se", "ne", "ne", "cc", …
+  # $ ZONE       <chr> "019", "057", "046", "017", "034", "050", "009", "020"…
+  # $ NAME       <chr> "Calhoun", "Butler", "Bullock", "Blount", "Bibb", "Bar…
+  # $ STATE_ZONE <chr> "AL019", "AL057", "AL046", "AL017", "AL034", "AL050", …
+  # $ LON        <dbl> -85.8261, -86.6803, -85.7161, -86.5674, -87.1264, -85.…
+  # $ LAT        <dbl> 33.7714, 31.7524, 32.1005, 33.9809, 32.9986, 31.8696, …
+  # $ SHORTNAME  <chr> "Calhoun", "Butler", "Bullock", "Blount", "Bibb", "Bar…
+  # $ geometry   <MULTIPOLYGON [°]> MULTIPOLYGON (((-85.5301 33..., MULTIPOLY…
 
   # Data Dictionary:
   #   STATE -------> stateCode: 2-character postal code
@@ -103,16 +93,13 @@ convertWeatherZones <- function(
   #   LON ---------> longitude: longitude of zone centroid
   #   LAT ---------> latitude: latitude of zone centroid
   #   SHORTNAME ---> (drop)
-  #   InPoly_FID --> (drop)
-  #   SimPgnFlag --> (drop)
-  #   MaxSimpTol --> (drop)
-  #   MinSimpTol --> (drop)
 
-  SPDF@data$countryCode <- "US"
 
-  SPDF@data <-
+  SFDF$countryCode <- "US"
+
+  SFDF <-
+    SFDF %>%
     dplyr::select(
-      .data = SPDF@data,
       countryCode = .data$countryCode,
       stateCode = .data$STATE,
       weatherForecastOffice = .data$CWA,
@@ -123,72 +110,34 @@ convertWeatherZones <- function(
       latitude = .data$LAT
     )
 
-  # ----- Clean SPDF -----------------------------------------------------------
+  # ----- Combine polygons -----------------------------------------------------
 
-  # Group polygons with the same identifier (zoneID)
-  SPDF <- organizePolygons(
-    SPDF,
-    uniqueID = 'zoneID',
-    sumColumns = c('longitude', 'latitude')
+  # NOTE:  Some zoneIDs are duplicated, e.g. "MD018" which is used for the land
+  # NOTE:  part of a peninsula in Maryland as well as the water inlets. Presumablyl
+  # NOTE:  This is so the NWS can issue separate land and maritime forecasts for
+  # NOTE:  users.
+  # NOTE:
+  # NOTE:  We combine them here.
+
+  copy_fields <- setdiff(names(SFDF), c("geometry"))
+
+  SFDF <-
+    SFDF %>%
+    MazamaSpatialUtils::dissolve(
+      "zoneID",
+      copy_fields = copy_fields
+    )
+
+  # ----- Simplify and save ----------------------------------------------------
+
+  uniqueIdentifier <- "zoneID"
+
+  simplifyAndSave(
+    SFDF = SFDF,
+    datasetName = datasetName,
+    uniqueIdentifier = uniqueIdentifier,
+    dataDir = dataDir
   )
-
-  # Clean topology errors
-  if ( !cleangeo::clgeo_IsValid(SPDF) ) {
-    SPDF <- cleangeo::clgeo_Clean(SPDF)
-  }
-
-  # ----- Name and save the data -----------------------------------------------
-
-  # Assign a name and save the data
-  message("Saving full resolution version...\n")
-  assign(datasetName, SPDF)
-  save(list = c(datasetName), file = paste0(dataDir, '/', datasetName, '.rda'))
-  rm(list = datasetName)
-
-  # ----- Simplify -------------------------------------------------------------
-
-  if ( simplify ) {
-    # Create new, simplified datsets: one with 5%, 2%, and one with 1% of the vertices of the original
-    # NOTE:  This may take several minutes.
-    message("Simplifying to 5%...\n")
-    SPDF_05 <- rmapshaper::ms_simplify(SPDF, 0.05)
-    SPDF_05@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_05) ) {
-      SPDF_05 <- cleangeo::clgeo_Clean(SPDF_05)
-    }
-    datasetName_05 <- paste0(datasetName, "_05")
-    message("Saving 5% version...\n")
-    assign(datasetName_05, SPDF_05)
-    save(list = datasetName_05, file = paste0(dataDir,"/", datasetName_05, '.rda'))
-    rm(list = c("SPDF_05",datasetName_05))
-
-    message("Simplifying to 2%...\n")
-    SPDF_02 <- rmapshaper::ms_simplify(SPDF, 0.02)
-    SPDF_02@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_02) ) {
-      SPDF_02 <- cleangeo::clgeo_Clean(SPDF_02)
-    }
-    datasetName_02 <- paste0(datasetName, "_02")
-    message("Saving 2% version...\n")
-    assign(datasetName_02, SPDF_02)
-    save(list = datasetName_02, file = paste0(dataDir,"/", datasetName_02, '.rda'))
-    rm(list = c("SPDF_02",datasetName_02))
-
-    message("Simplifying to 1%...\n")
-    SPDF_01 <- rmapshaper::ms_simplify(SPDF, 0.01)
-    SPDF_01@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_01) ) {
-      SPDF_01 <- cleangeo::clgeo_Clean(SPDF_01)
-    }
-    datasetName_01 <- paste0(datasetName, "_01")
-    message("Saving 1% version...\n")
-    assign(datasetName_01, SPDF_01)
-    save(list = datasetName_01, file = paste0(dataDir,"/", datasetName_01, '.rda'))
-    rm(list = c("SPDF_01",datasetName_01))
-  }
 
   # ----- Clean up and return --------------------------------------------------
 
@@ -197,5 +146,38 @@ convertWeatherZones <- function(
   unlink(dsnPath, recursive = TRUE, force = TRUE)
 
   return(invisible(datasetName))
+
+}
+
+# ===== TEST ===================================================================
+
+if ( FALSE ) {
+
+  library(sf)
+
+  # Look or horizontal lines from polygons that cross the dateline.
+  # NOTE:  These are sometimes created by sf::st_make_valid()
+  loadSpatialData(datasetName)
+  SFDF <- get(paste0(datasetName, ""))
+  SFDF_05 <- get(paste0(datasetName, "_05"))
+  SFDF_02 <- get(paste0(datasetName, "_02"))
+  SFDF_01 <- get(paste0(datasetName, "_01"))
+
+  plot(SFDF_01$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_02$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_05$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  #plot(SFDF$geometry)
+
+  # Try out getSpatialData()
+  lons <- c(-120:-110, 0:10)
+  lats <- c(30:40, 30:40)
+
+  df <- getSpatialData(lons, lats, SFDF_01)
+  df <- getSpatialData(lons, lats, SFDF_02)
+  df <- getSpatialData(lons, lats, SFDF_05)
+  df <- getSpatialData(lons, lats, SFDF)
 
 }

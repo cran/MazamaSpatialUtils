@@ -5,9 +5,9 @@
 \title{Return Olson timezones at specified locations}
 \usage{
 getTimezone(
-  longitude,
-  latitude,
-  dataset = "SimpleTimezones",
+  longitude = NULL,
+  latitude = NULL,
+  datasetName = "SimpleTimezones",
   countryCodes = NULL,
   allData = FALSE,
   useBuffering = FALSE
@@ -18,7 +18,7 @@ getTimezone(
 
 \item{latitude}{Vector of latitudes in decimal degrees North.}
 
-\item{dataset}{Name of spatial dataset to use.}
+\item{datasetName}{Name of spatial dataset to use.}
 
 \item{countryCodes}{Vector of ISO 3166-1 alpha-2 country codes.}
 
@@ -42,18 +42,13 @@ If \code{allData=TRUE}, additional data is returned.
 \examples{
 library(MazamaSpatialUtils)
 
-longitude <- seq(-120,-60,5)
-latitude <- seq(20,80,5)
+longitude <- seq(-120, -60, 5)
+latitude <- seq(20, 80, 5)
 
 getTimezone(longitude, latitude)
 
 }
 \references{
-\url{http://efele.net/maps/tz/}
-}
-\seealso{
-SimpleTimezones
-
-getSpatialData
+\url{https://github.com/evansiroky/timezone-boundary-builder}
 }
 \keyword{locator}

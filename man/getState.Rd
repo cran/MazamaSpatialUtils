@@ -5,9 +5,9 @@
 \title{Return state names at specified locations}
 \usage{
 getState(
-  longitude,
-  latitude,
-  dataset = "NaturalEarthAdm1",
+  longitude = NULL,
+  latitude = NULL,
+  datasetName = "NaturalEarthAdm1",
   countryCodes = NULL,
   allData = FALSE,
   useBuffering = FALSE
@@ -18,7 +18,7 @@ getState(
 
 \item{latitude}{Vector of latitudes in decimal degrees North.}
 
-\item{dataset}{Name of spatial dataset to use.}
+\item{datasetName}{Name of spatial dataset to use.}
 
 \item{countryCodes}{Vector of ISO 3166-1 alpha-2 country codes.}
 
@@ -43,7 +43,7 @@ If \code{allData = TRUE}, additional data is returned.
 \examples{
 \dontrun{
 library(MazamaSpatialUtils)
-setSpatialData("~/Data/Spatial")
+setSpatialData("~/Data/Spatial_0.8")
 
 loadSpatialData("NaturalEarthAdm1")
 

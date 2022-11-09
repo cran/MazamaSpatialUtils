@@ -5,14 +5,14 @@
 \alias{SimpleTimezones}
 \title{Simplified spatial dataset of world timezones.}
 \format{
-A SpatialPolygonsDataFrame with 423 records and 9 columns of data.
+A simple features data frame with 423 records and 9 columns of data.
 }
 \usage{
 SimpleTimezones
 }
 \description{
 This dataset is used by default in the \code{getTimezones()}
-function and contains the following columns of data in the \code{@data} slot:
+function and contains the following columns of data:
 \itemize{
 \item{\code{timezone} -- Olson timezone}
 \item{\code{UTC_offset} -- offset from UTC (hours)}
@@ -25,17 +25,17 @@ function and contains the following columns of data in the \code{@data} slot:
 \item{\code{polygonID} -- unique identifier (= \code{timezone})}
 }
 
-This dataset was generated on 2020-11-12 by running:
+This dataset was generated on 2022-11-03 by running:
 
 \preformatted{
 library(MazamaSpatialUtils)
-setSpatialDataDir("~/Data/Spatial")
+setSpatialDataDir("~/Data/Spatial_0.8")
 
-convertWorldTimezones()
+convertOSMTimezones()
 
-loadSpatialData("WorldTimezones_02")
+loadSpatialData("OSMTimezones_02")
 
-SimpleTimezones <- WorldTimezones_02
+SimpleTimezones <- OSMTimezones_02
 save(SimpleTimezones, file = "data/SimpleTimezones.rda")
 }
 }

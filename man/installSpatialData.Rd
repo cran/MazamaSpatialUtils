@@ -6,7 +6,7 @@
 \usage{
 installSpatialData(
   dataset = NULL,
-  urlBase = "http://data.mazamascience.com/MazamaSpatialUtils/Spatial_0.7"
+  urlBase = "http://data.mazamascience.com/MazamaSpatialUtils/Spatial_0.8"
 )
 }
 \arguments{

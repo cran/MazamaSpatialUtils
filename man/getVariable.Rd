@@ -2,11 +2,11 @@
 % Please edit documentation in R/getVariable.R
 \name{getVariable}
 \alias{getVariable}
-\title{Return SPDF variable at specified locations}
+\title{Return SFDF variable at specified locations}
 \usage{
 getVariable(
-  longitude,
-  latitude,
+  longitude = NULL,
+  latitude = NULL,
   dataset = NULL,
   variable = NULL,
   countryCodes = NULL,
@@ -39,16 +39,6 @@ locations fall into and returns the variable associated with those polygons.
 
 If \code{allData = TRUE}, the entire dataframe is returned.
 }
-\examples{
-library(MazamaSpatialUtils)
-
-longitude <- seq(0, 50)
-latitude <- seq(0, 50)
-
-getVariable(longitude, latitude, "SimpleCountries", "UN_region")
-
-}
 \seealso{
 getSpatialData
 }
-\keyword{locator}

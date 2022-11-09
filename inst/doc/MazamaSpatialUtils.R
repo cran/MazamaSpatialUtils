@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(fig.width = 7, fig.height = 5)
 
 ## ----setSpatialData, eval = FALSE---------------------------------------------
-#  setSpatialDataDir('~/Data/Spatial')
+#  setSpatialDataDir('~/Data/Spatial_0.8')
 #  installSpatialData("<datasetName>")
 
 ## ----loadSpatialData, eval = FALSE--------------------------------------------
@@ -62,17 +62,16 @@ getTimezone(longitude, latitude, allData = TRUE, countryCodes = countryCodes)
 #  getUSCounty(longitude, latitude, allData = TRUE, stateCodes = stateCodes)
 
 ## ----timezoneMap--------------------------------------------------------------
-library(sp)         # For spatial plotting
-
 # Assign time zones polygons an index based on UTC_offset
-colorIndices <- .bincode(SimpleTimezones@data$UTC_offset, breaks = seq(-12.5,12.5,1))
+colorIndices <- .bincode(SimpleTimezones$UTC_STD_offset, breaks = seq(-12.5,12.5,1))
 
 # Color our time zones by UTC_offset
-plot(SimpleTimezones, col = rainbow(25)[colorIndices])
+
+plot(SimpleTimezones$geometry, col = rainbow(25)[colorIndices])
 title(line = 0, 'Timezone Offsets from UTC')
 
 ## ----netExport----------------------------------------------------------------
-library(sp)         # For spatial plotting
+library(sf)         # For spatial plotting
 
 # Read in ISO-encoded oil production and consumption data
 prod <- read.csv(url('http://mazamascience.com/OilExport/BP_2016_oil_production_bbl.csv'),
@@ -100,23 +99,23 @@ exportOnlyCodes <- setdiff(prodCountryCodes,consCountryCodes)
 importOnlyCodes <- setdiff(consCountryCodes,prodCountryCodes)
 
 # Create a logical 'mask' associated with each category
-netExportMask <- SimpleCountries@data$countryCode %in% netExportCodes
-netImportMask <- SimpleCountries@data$countryCode %in% netImportCodes
-onlyExportMask <- SimpleCountries@data$countryCode %in% exportOnlyCodes
-onlyImportMask <- SimpleCountries@data$countryCode %in% importOnlyCodes
+netExportMask <- SimpleCountries$countryCode %in% netExportCodes
+netImportMask <- SimpleCountries$countryCode %in% netImportCodes
+onlyExportMask <- SimpleCountries$countryCode %in% exportOnlyCodes
+onlyImportMask <- SimpleCountries$countryCode %in% importOnlyCodes
 
 color_export = '#40CC90'
 color_import = '#EE5555'
 color_missing = 'gray90'
 
 # Base plot (without Antarctica)
-notAQ <- SimpleCountries@data$countryCode != 'AQ'
-plot(SimpleCountries[notAQ,], col = color_missing)
+notAQ <- SimpleCountries$countryCode != 'AQ'
+plot(SimpleCountries[notAQ,]$geometry, col = color_missing)
 
-plot(SimpleCountries[netExportMask,], col = color_export, add = TRUE)
-plot(SimpleCountries[onlyExportMask,], col = color_export, add = TRUE)
-plot(SimpleCountries[netImportMask,], col = color_import, add = TRUE)
-plot(SimpleCountries[onlyImportMask,], col = color_import, add = TRUE)
+plot(SimpleCountries[netExportMask,]$geometry, col = color_export, add = TRUE)
+plot(SimpleCountries[onlyExportMask,]$geometry, col = color_export, add = TRUE)
+plot(SimpleCountries[netImportMask,]$geometry, col = color_import, add = TRUE)
+plot(SimpleCountries[onlyImportMask,]$geometry, col = color_import, add = TRUE)
 
 legend(
   'bottomleft',

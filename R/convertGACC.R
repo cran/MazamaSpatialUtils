@@ -1,20 +1,19 @@
-#' @keywords datagen
 #' @importFrom rlang .data
 #' @export
 #'
 #' @title Convert Geographic Area Coordination Center shapefile
 #'
-#' @param nameOnly Logical specifying whether to only return the name without
-#' creating the file.
-#' @param simplify Logical specifying whether to create "_05", _02" and "_01"
-#' versions of the file that are simplified to 5\%, 2\% and 1\%.
-#'
-#' @description Create a SpatialPolygonsDataFrame for Geographic Area
+#' @description Create a simple features data frame for Geographic Area
 #' Coordination Centers (GACCs). These are regions defined by the National
 #' Interagency Fire Center (NIFC).
 #'
+#' The full resolution file will be named "GACC.rda". In addition,
+#' "_05", _02" and "_01" versions of the file will be created that that are
+#' simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+#' speed of both searching and plotting.
+#'
 #' @details A GACC shapefile is downloaded and converted to a
-#' SpatialPolygonsDataFrame with additional columns of data. The resulting
+#' simple features data frame with additional columns of data. The resulting
 #' file will be created in the spatial data directory which is set with
 #' \code{setSpatialDataDir()}.
 #'
@@ -82,16 +81,13 @@
 #' expressly disclaims liability for errors and omissions. No warranty of any
 #' kind, implied, expressed or statutory is given with respect to the contents.
 #'
-#' @return Name of the dataset being created.
+#' @return Name of the datasetName being created.
 #'
-#' @references https://hub.arcgis.com/datasets/7dc5f4a286bd47e0aaafa0ab05302fe9_0
+#' @references https://hub.arcgis.com/datasets/nifc::national-gacc-boundaries
 #'
 #' @seealso setSpatialDataDir
 #'
-convertGACC <- function(
-  nameOnly = FALSE,
-  simplify = TRUE
-) {
+convertGACC <- function() {
 
   # ----- Setup ----------------------------------------------------------------
 
@@ -101,64 +97,59 @@ convertGACC <- function(
   # Specify the name of the dataset and file being created
   datasetName <- 'GACC'
 
-  if (nameOnly)
-    return(datasetName)
-
   # ----- Get the data ---------------------------------------------------------
 
-  # Build appropriate request URL
-  # NOTE:  The .zip extension returns a shapefile.
-  url <- "https://opendata.arcgis.com/datasets/7dc5f4a286bd47e0aaafa0ab05302fe9_0.zip"
+  # # Build appropriate request URL
+  # # NOTE:  The .zip extension returns a shapefile.
+  # url <- "https://opendata.arcgis.com/datasetNames/7dc5f4a286bd47e0aaafa0ab05302fe9_0.zip"
+  #
+  # filePath <- file.path(dataDir,basename(url))
+  # utils::download.file(url,filePath)
+  # # NOTE:  This zip file has no directory so extra subdirectory needs to be created
+  # utils::unzip(filePath,exdir = file.path(dataDir, 'gacc'))
 
-  filePath <- file.path(dataDir,basename(url))
-  utils::download.file(url,filePath)
-  # NOTE:  This zip file has no directory so extra subdirectory needs to be created
-  utils::unzip(filePath,exdir = file.path(dataDir, 'gacc'))
+  # NOTE:  This shape file must now be downloaded and unzipped by hand from:
+  # NOTE:    https://hub.arcgis.com/datasets/nifc::national-gacc-boundaries/about
 
-  # ----- Convert to SPDF ------------------------------------------------------
+  # ----- Convert to SFDF ------------------------------------------------------
 
-  # Convert shapefile into SpatialPolygonsDataFrame
+  # Convert shapefile into simple features data frame
   # NOTE: Prior to update, it read in as geojson file
 
-  dsnPath <- file.path(dataDir,'gacc')
-  shpName <- 'National_GACC_Current_20200226'
-  SPDF <- convertLayer(dsn = dsnPath, layerName = shpName)
+  dsnPath <- file.path(dataDir, 'National_GACC_Boundaries')
+  shpName <- 'National_GACC_Current'
+  SFDF <- convertLayer(
+    dsn = dsnPath,
+    layer = shpName
+  )
 
   # ----- Select useful columns and rename -------------------------------------
 
-  # > dplyr::glimpse(SPDF@data)
-  # Observations: 10
-  # Variables: 15
-  # $ FID        <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-  # $ GeometryID <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
-  # $ GACCName   <chr> "Alaska Interagency Coordination Center", "Eastern Area Coo…
-  # $ GACCUnitID <chr> "USAKACC", "USWIEACC", "USUTGBC", "USCAONCC", "USMTNRC", "U…
-  # $ GACCAbbrev <chr> "AICC", "EACC", "GBCC", "ONCC", "NRCC", "NWCC", "RMCC", "SA…
-  # $ GACCLocati <chr> "Fairbanks, AK", "Milwaukee, WI", "Boise, ID", "Redding, CA…
-  # $ ContactPho <chr> "907-356-5680", "414-944-3811", "800-844-5497", "530-226-28…
-  # $ Comments   <chr> "Also dispatches Aleutian Islands; Boundaries updated to 20…
-  # $ DateCurren <chr> "2020/02/26", "2020/02/26", "2020/02/26", "2020/02/26", "20…
-  # $ MapMethod  <chr> "MixedMethods", "MixedMethods", "MixedMethods", "MixedMetho…
-  # $ PrepLevel  <chr> "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"
-  # $ PL_GACC_ID <chr> "ACC", "EACC", "GBC", "ONCC", "NRC", "NWCC", "RMC", "SAC", …
-  # $ GlobalID   <chr> "{FF5A2D4B-92DB-4BFE-9F7A-E6BC8A4AA923}", "{67E09F2C-E492-4…
-  # $ SHAPE_Leng <dbl> 252.07947, 123.22253, 72.08031, 61.11868, 66.64548, 35.7842…
-  # $ SHAPE_Area <dbl> 314.10571, 208.80319, 73.74553, 20.60835, 74.53020, 50.8581…
+  # > dplyr::glimpse(SFDF, width = 75)
+  # Rows: 10
+  # Columns: 11
+  # $ OBJECTID   <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+  # $ GACCName   <chr> "Alaska Interagency Coordination Center", "Eastern Are…
+  # $ GACCUnitID <chr> "USAKACC", "USWIEACC", "USUTGBC", "USCAONCC", "USMTNRC…
+  # $ GACCAbbrev <chr> "AICC", "EACC", "GBCC", "ONCC", "NRCC", "NWCC", "RMCC"…
+  # $ GACCLocati <chr> "Fairbanks,AK (Fort Wainwright,AK)", "Milwaukee, WI", …
+  # $ ContactPho <chr> "907-356-5680", "414-944-3811", "801-531-5320", "530-2…
+  # $ Comments   <chr> "Also dispatches Aleutian Islands; Boundaries updated …
+  # $ MapMethod  <chr> "MixedMethods", "MixedMethods", "MixedMethods", "Mixed…
+  # $ SHAPE_Leng <dbl> 252.07947, 123.22253, 72.08032, 61.11868, 66.64548, 35…
+  # $ SHAPE_Area <dbl> 314.10571, 208.80319, 73.74553, 20.60835, 74.53020, 50…
+  # $ geometry   <MULTIPOLYGON [°]> MULTIPOLYGON (((-178.824 51..., MULTIPOLYGON (((-71.58…
 
   # Data Dictionary:
   #   FID --------> FID:
   #   GeometryID -> (drop)
   #   GACCName ---> GACCName: human readable name
   #   GACCUnitID -> unitID: identifier
-  #   GACCAbbrev -> abbreviation, GACC_NWCG_Code (to match 2017 GACC dataset)
+  #   GACCAbbrev -> abbreviation, GACC_NWCG_Code (to match 2017 GACC datasetName)
   #   GACCLocati -> location: city, state
   #   ContactPho -> contactPhone: contact phone number
   #   Comments ---> comments: update information
-  #   DateCurren -> lastUpdate: date of last update
   #   MapMethod --> (drop)
-  #   PrepLevel --> (drop)
-  #   PL_GACC_ID -> PL_GACC_ID
-  #   GlobalID ---> (drop)
   #   SHAPE_Leng -> (drop)
   #   SHAPE_Area -> (drop)
 
@@ -166,8 +157,8 @@ convertGACC <- function(
   # NOTE:  * create "label"
   # NOTE:  * create GACC_NWCG_Code
 
-  SPDF@data$countryCode <- 'US'
-  SPDF@data$stateCode <- stringr::str_extract(SPDF$GACCLocati, "[[:upper:]]{2}$")
+  SFDF$countryCode <- 'US'
+  SFDF$stateCode <- stringr::str_sub(SFDF$GACCUnitID, 3, 4)
 
   # Recreate 2017 labels
   labels_2017 <- c(
@@ -178,83 +169,78 @@ convertGACC <- function(
     "EACC", "ONCC", "NWCC", "RMCC", "SACC",
     "SWCC", "OSCC", "GBCC", "NRCC", "AICC"
   )
-  SPDF@data$label <- labels_2017[SPDF@data$GACCAbbrev]
+  SFDF$label <- labels_2017[SFDF$GACCAbbrev]
+  SFDF$name <- SFDF$GACCName
+  SFDF$GACC_NWCG_Code <- SFDF$GACCAbbrev
 
-  SPDF@data <- dplyr::select(
-    .data = SPDF@data,
-    countryCode = .data$countryCode,
-    stateCode = .data$stateCode,
-    unitID = .data$GACCUnitID,
-    name = .data$GACCName,
-    GACCName = .data$GACCName,         # to support systems built with 2017 version
-    abbreviation = .data$GACCAbbrev,
-    label = .data$label,
-    location = .data$GACCLocati,
-    contactPhone = .data$ContactPho,
-    comments = .data$Comments,
-    GACC_NWCG_Code = .data$GACCAbbrev, # to support systems built with 2017 version
-    PL_GACC_ID = .data$PL_GACC_ID,
-    lastUpdate = .data$DateCurren
+  SFDF <-
+    SFDF %>%
+    dplyr::select(
+      countryCode = .data$countryCode,
+      stateCode = .data$stateCode,
+      unitID = .data$GACCUnitID,
+      name = .data$name,
+      GACCName = .data$GACCName,         # to support systems built with 2017 version
+      abbreviation = .data$GACCAbbrev,
+      label = .data$label,
+      contactPhone = .data$ContactPho,
+      comments = .data$Comments,
+      GACC_NWCG_Code = .data$GACC_NWCG_Code  # to support systems built with 2017 version
+    )
+
+  # ----- Simplify and save ----------------------------------------------------
+
+  uniqueIdentifier <- "unitID"
+
+  simplifyAndSave(
+    SFDF = SFDF,
+    datasetName = datasetName,
+    uniqueIdentifier = uniqueIdentifier,
+    dataDir = dataDir
   )
-
-  # ----- Organize polygons ----------------------------------------------------
-
-  # Group polygons with the same identifier (unitID)
-  SPDF <- organizePolygons(
-    SPDF,
-    uniqueID = 'unitID',
-    sumColumns = NULL
-  )
-
-  # ----- Name and save the data -----------------------------------------------
-
-  # Assign a name and save the data
-  message("Saving full resolution version...\n")
-  assign(datasetName, SPDF)
-  save(list = c(datasetName), file = paste0(dataDir,'/', datasetName, '.rda'))
-  rm(list = datasetName)
-
-  # ----- Simplify -------------------------------------------------------------
-
-  # simplify
-  if ( simplify ) {
-    # Create new, simplified datsets: one with 5%, 2%, and one with 1% of the vertices of the original
-    # NOTE:  This may take several minutes.
-    message("Simplifying to 5%...\n")
-    SPDF_05 <- rmapshaper::ms_simplify(SPDF, 0.05)
-    SPDF_05@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    datasetName_05 <- paste0(datasetName, "_05")
-    message("Saving 5% version...\n")
-    assign(datasetName_05, SPDF_05)
-    save(list = datasetName_05, file = paste0(dataDir,"/",datasetName_05, '.rda'))
-    rm(list = c("SPDF_05",datasetName_05))
-
-    message("Simplifying to 2%...\n")
-    SPDF_02 <- rmapshaper::ms_simplify(SPDF, 0.02)
-    SPDF_02@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    datasetName_02 <- paste0(datasetName, "_02")
-    message("Saving 2% version...\n")
-    assign(datasetName_02, SPDF_02)
-    save(list = datasetName_02, file = paste0(dataDir,"/",datasetName_02, '.rda'))
-    rm(list = c("SPDF_02",datasetName_02))
-
-    message("Simplifying to 1%...\n")
-    SPDF_01 <- rmapshaper::ms_simplify(SPDF, 0.01)
-    SPDF_01@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    datasetName_01 <- paste0(datasetName, "_01")
-    message("Saving 1% version...\n")
-    assign(datasetName_01, SPDF_01)
-    save(list = datasetName_01, file = paste0(dataDir,"/",datasetName_01, '.rda'))
-    rm(list = c("SPDF_01",datasetName_01))
-  }
 
   # ----- Clean up and return --------------------------------------------------
 
-  # Clean up
-  unlink(filePath, force = TRUE)
-  unlink(dsnPath, recursive = TRUE, force = TRUE)
+  # NOTE:  The source file was manually downloaded
+
+  # # Clean up
+  # unlink(filePath, force = TRUE)
+  # unlink(dsnPath, recursive = TRUE, force = TRUE)
+  message("You may delete the manually downloaded source data.")
 
   return(invisible(datasetName))
 
 }
 
+# ===== TEST ===================================================================
+
+if ( FALSE ) {
+
+  library(sf)
+
+  # Look or horizontal lines from polygons that cross the dateline.
+  # NOTE:  These are sometimes created by sf::st_make_valid()
+  loadSpatialData(datasetName)
+  SFDF <- get(paste0(datasetName, ""))
+  SFDF_05 <- get(paste0(datasetName, "_05"))
+  SFDF_02 <- get(paste0(datasetName, "_02"))
+  SFDF_01 <- get(paste0(datasetName, "_01"))
+
+  plot(SFDF_01$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_02$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_05$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  #plot(SFDF$geometry)
+
+  # Try out getSpatialData()
+  lons <- c(-120:-110, 0:10)
+  lats <- c(30:40, 30:40)
+
+  df <- getSpatialData(lons, lats, SFDF_01)
+  df <- getSpatialData(lons, lats, SFDF_02)
+  df <- getSpatialData(lons, lats, SFDF_05)
+  df <- getSpatialData(lons, lats, SFDF)
+
+}

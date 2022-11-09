@@ -2,26 +2,24 @@
 % Please edit documentation in R/convertUSCensusCBSA.R
 \name{convertUSCensusCBSA}
 \alias{convertUSCensusCBSA}
-\title{Convert US Core Based Statistical Areas Shapefile}
+\title{Convert US Core Based Statistical Areas shapefile}
 \usage{
-convertUSCensusCBSA(nameOnly = FALSE, simplify = TRUE)
-}
-\arguments{
-\item{nameOnly}{Logical specifying whether to only return the name without
-creating the file.}
-
-\item{simplify}{Logical specifying whether to create "_05", _02" and "_01"
-versions of the file that are simplified to 5\%, 2\% and 1\%.}
+convertUSCensusCBSA()
 }
 \value{
-Name of the dataset being created.
+Name of the datasetName being created.
 }
 \description{
-Returns a SpatialPolygonsDataFrame for US CBSAs
+Returns a simple features data frame for US CBSAs
+
+The full resolution file will be named "USCensusCBSA.rda". In addition,
+"_05", _02" and "_01" versions of the file will be created that that are
+simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+speed of both searching and plotting.
 }
 \details{
 A US Core Based Statistical Areas (CBSA) shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting file
+simple features data frame with additional columns of data. The resulting file
 will be created in the spatial data directory which is set with
 \code{setSpatialDataDir()}.
 }
@@ -39,15 +37,14 @@ based on urbanized areas of 50,000 or more population; and Micropolitan Statisti
 Areas, based on urban clusters of at least 10,000 population but less than 50,000
 population.
 
-The CBSA boundaries are those defined by OMB based on the 2010 Census, published
-in 2013, and updated in 2018
+The CBSA boundaries are those defined by OMB based on the 2010 Census,
+published in 2013, and updated in 2020.
 }
 \references{
-\url{https://www2.census.gov/geo/tiger/TIGER2019/CBSA/}
+\url{https://www2.census.gov/geo/tiger/TIGER2021/CBSA/}
 }
 \seealso{
 setSpatialDataDir
 
 getUSCounty
 }
-\keyword{datagen}

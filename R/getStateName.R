@@ -4,7 +4,7 @@
 #'
 #' @param longitude Vector of longitudes in decimal degrees East.
 #' @param latitude Vector of latitudes in decimal degrees North.
-#' @param dataset Name of spatial dataset to use.
+#' @param datasetName Name of spatial dataset to use.
 #' @param countryCodes Vector of ISO 3166-1 alpha-2 country codes.
 #' @param allData Logical specifying whether a full dataframe should be returned.
 #' @param useBuffering Logical flag specifying the use of location buffering to
@@ -24,7 +24,7 @@
 #' @examples
 #' \dontrun{
 #' library(MazamaSpatialUtils)
-#' setSpatialData("~/Data/Spatial")
+#' setSpatialData("~/Data/Spatial_0.8")
 #'
 #' loadSpatialData("NaturalEarthAdm1")
 #'
@@ -37,7 +37,7 @@
 getStateName <- function(
   longitude = NULL,
   latitude = NULL,
-  dataset = "NaturalEarthAdm1",
+  datasetName = "NaturalEarthAdm1",
   countryCodes = NULL,
   allData = FALSE,
   useBuffering = FALSE
@@ -47,35 +47,27 @@ getStateName <- function(
 
   MazamaCoreUtils::stopIfNull(longitude)
   MazamaCoreUtils::stopIfNull(latitude)
-  MazamaCoreUtils::stopIfNull(dataset)
+  MazamaCoreUtils::stopIfNull(datasetName)
   MazamaCoreUtils::stopIfNull(allData)
   MazamaCoreUtils::stopIfNull(useBuffering)
 
-  # Check existence of dataset
-  if ( !exists(dataset) ) {
-    stop("Missing dataset. Please loadSpatialData(\"",dataset,"\")",
+  # Check existence of datasetName
+  if ( !exists(datasetName) ) {
+    stop("Missing datasetName. Please loadSpatialData(\"",datasetName,"\")",
          call. = FALSE)
   }
 
-  # Check longitude, latitude ranges
-  if ( min(longitude, na.rm = TRUE) < -180 ||
-       max(longitude, na.rm = TRUE) > 180) {
-    stop("'longitude' must be specified in the range -180:180.")
-  }
-  if ( min(latitude, na.rm = TRUE) < -90 ||
-       max(latitude, na.rm = TRUE) > 90 ) {
-    stop("'latitude' must be specified in the range -90:90.")
-  }
+  MazamaCoreUtils::validateLonsLats(longitude, latitude, na.rm = TRUE)
 
   # ----- Get the data ---------------------------------------------------------
 
-  SPDF <- get(dataset)
+  SFDF <- get(datasetName)
 
   # Subset by country before searching
   if ( !is.null(countryCodes) )
-    SPDF <- SPDF[SPDF$countryCode %in% countryCodes,]
+    SFDF <- SFDF[SFDF$countryCode %in% countryCodes,]
 
-  locationsDF <- getSpatialData(longitude, latitude, SPDF, useBuffering = useBuffering)
+  locationsDF <- getSpatialData(longitude, latitude, SFDF, useBuffering = useBuffering)
 
   if (allData) {
 

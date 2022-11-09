@@ -5,7 +5,7 @@
 \alias{SimpleCountriesEEZ}
 \title{Simplified spatial dataset of EEZ/country combined boundaries.}
 \format{
-A SpatialPolygonsDataFrame with 319 records and 5 columns of data.
+A simple features data frame with 319 records and 5 columns of data.
 }
 \usage{
 SimpleCountriesEEZ
@@ -23,11 +23,11 @@ This dataset is equivalent to EEZCountries but with fewer columns of data.
 \seealso{
 convertEEZCountries
 
-This dataset was generated on 2020-11-18 by running:
+This dataset was generated on 2022-11-03 by running:
 
 \preformatted{
 library(MazamaSpatialUtils)
-setSpatialDataDir("~/Data/Spatial")
+setSpatialDataDir("~/Data/Spatial_0.8")
 
 convertEEZCountries()
 

@@ -2,8 +2,7 @@
 testthat::context("getCountry()")
 
 testthat::test_that("handles errors correctly", {
-  testthat::expect_error(getCountry(),
-                         "argument 'longitude' must not be NULL.")
+  testthat::expect_error(getCountry())
   testthat::expect_error(getCountry(0,100))
 })
 

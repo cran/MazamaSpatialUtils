@@ -21,9 +21,8 @@ Converts a vector of state names to an ISO 3166-2 two character
 state codes.
 }
 \details{
-For this function to work, you must first run
-\code{initializeSpatialData()} to
-download, convert and install the necessary spatial data.
+For this function to work, you must install and load the
+"NaturalEarthAdm1" dataset.
 }
 \examples{
 \dontrun{
@@ -35,4 +34,3 @@ stateToCode("Shandong")
 \seealso{
 convertNaturalEarthAdm1
 }
-\keyword{conversion}

@@ -11,7 +11,7 @@
 #' If \code{verbose = TRUE}, a brief description is provided for each locally
 #' installed dataset.
 #'
-#' @return Vector of dataset names().
+#' @return Invisibly returns a vector of dataset names().
 
 installedSpatialData <- function(
   verbose = TRUE

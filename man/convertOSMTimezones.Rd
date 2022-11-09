@@ -2,26 +2,24 @@
 % Please edit documentation in R/convertOSMTimezones.R
 \name{convertOSMTimezones}
 \alias{convertOSMTimezones}
-\title{Convert OSM Timezone Shapefile}
+\title{Convert OSM timezone shapefile}
 \usage{
-convertOSMTimezones(nameOnly = FALSE, simplify = TRUE)
-}
-\arguments{
-\item{nameOnly}{Logical specifying whether to only return the name without
-creating the file.}
-
-\item{simplify}{Logical specifying whether to create "_05", _02" and "_01"
-versions of the file that are simplified to 5\%, 2\% and 1\%.}
+convertOSMTimezones()
 }
 \value{
-Name of the dataset being created.
+Name of the datasetName being created.
 }
 \description{
-Create a SpatialPolygonsDataFrame for world timezones.
+Create a simple features data frame for world timezones.
+
+The full resolution file will be named "OSMTimezones.rda". In addition,
+"_05", _02" and "_01" versions of the file will be created that that are
+simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+speed of both searching and plotting.
 }
 \details{
 A world timezone shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting file
+simple features data frame with additional columns of data. The resulting file
 will be created in the spatial data directory which is set with
 \code{setSpatialDataDir()}.
 
@@ -29,7 +27,7 @@ There are 2 timezones which have polygons but the associated rows in the datafra
 These timezones also have no \code{countryCode} assigned. We hope to rectify this in a future release.
 These are the missing timezones:
 \preformatted{
-> OSMTimezones@data$timezone[is.na(OSMTimezones$countryCode)]
+> OSMTimezones$timezone[is.na(OSMTimezones$countryCode)]
  [1] "America/Nuuk"  "Asia/Qostanay"
 }
 }
@@ -54,10 +52,5 @@ performed to the boundary definitions of an existing zone within this project.
 }
 \references{
 \url{https://github.com/evansiroky/timezone-boundary-builder}
-}
-\seealso{
-setSpatialDataDir
-
-getVariable
 }
 \keyword{datagen}

@@ -6,6 +6,7 @@ pagetitle: MazamaSpatialUtils
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/MazamaSpatialUtils)](https://cran.r-project.org/package=MazamaSpatialUtils)
 [![Downloads](http://cranlogs.r-pkg.org/badges/MazamaSpatialUtils)](https://cran.r-project.org/package=MazamaSpatialUtils)
 [![Build Status](https://travis-ci.org/MazamaScience/MazamaSpatialUtils.svg?branch=master)](https://travis-ci.org/MazamaScience/MazamaSpatialUtils)
+[![DOI](https://zenodo.org/badge/46367920.svg)](https://zenodo.org/badge/latestdoi/46367920)
 
 # MazamaSpatialUtils
 
@@ -42,7 +43,7 @@ datasets, this package provides `convert~()` functions for other spatial dataset
 that we currently use. These convert functions all follow the same recipe:
 
  * download spatial data in shapefile format into a standard directory
- * convert shapefile data into a sp SpatialPolygonsDataFrame
+ * convert shapefile data into a sp simple features data frame
  * modify the dataframe in the `@data` slot so that it adheres to package internal standards
 
 Other datasets can be added following the same procedure.
@@ -70,7 +71,7 @@ return the country, state or time zone associated with a set of locations.
 ## Installation
 
 This package is designed to be used with [R](https://cran.r-project.org) (>= 3.1.0)
-and [RStudio](https://www.rstudio.com/) so make sure you have those installed first.
+and [RStudio](https://posit.co/) so make sure you have those installed first.
 
 Users can use the **devtools** package to install the latest version of the 
 package which may have new features that are not yet available on CRAN:

@@ -10,7 +10,7 @@ installedSpatialData(verbose = TRUE)
 \item{verbose}{Logical specifying whether or not to print dataset descriptions.}
 }
 \value{
-Vector of dataset names().
+Invisibly returns a vector of dataset names().
 }
 \description{
 Searches the directory set with \code{\link{setSpatialDataDir}}

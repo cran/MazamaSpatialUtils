@@ -4,26 +4,24 @@
 \alias{convertGACC}
 \title{Convert Geographic Area Coordination Center shapefile}
 \usage{
-convertGACC(nameOnly = FALSE, simplify = TRUE)
-}
-\arguments{
-\item{nameOnly}{Logical specifying whether to only return the name without
-creating the file.}
-
-\item{simplify}{Logical specifying whether to create "_05", _02" and "_01"
-versions of the file that are simplified to 5\%, 2\% and 1\%.}
+convertGACC()
 }
 \value{
-Name of the dataset being created.
+Name of the datasetName being created.
 }
 \description{
-Create a SpatialPolygonsDataFrame for Geographic Area
+Create a simple features data frame for Geographic Area
 Coordination Centers (GACCs). These are regions defined by the National
 Interagency Fire Center (NIFC).
+
+The full resolution file will be named "GACC.rda". In addition,
+"_05", _02" and "_01" versions of the file will be created that that are
+simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+speed of both searching and plotting.
 }
 \details{
 A GACC shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting
+simple features data frame with additional columns of data. The resulting
 file will be created in the spatial data directory which is set with
 \code{setSpatialDataDir()}.
 
@@ -93,9 +91,8 @@ expressly disclaims liability for errors and omissions. No warranty of any
 kind, implied, expressed or statutory is given with respect to the contents.
 }
 \references{
-https://hub.arcgis.com/datasets/7dc5f4a286bd47e0aaafa0ab05302fe9_0
+https://hub.arcgis.com/datasets/nifc::national-gacc-boundaries
 }
 \seealso{
 setSpatialDataDir
 }
-\keyword{datagen}

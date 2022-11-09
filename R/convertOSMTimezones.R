@@ -2,17 +2,17 @@
 #' @importFrom rlang .data
 #' @export
 #'
-#' @title Convert OSM Timezone Shapefile
+#' @title Convert OSM timezone shapefile
 #'
-#' @param nameOnly Logical specifying whether to only return the name without
-#' creating the file.
-#' @param simplify Logical specifying whether to create "_05", _02" and "_01"
-#' versions of the file that are simplified to 5\%, 2\% and 1\%.
+#' @description Create a simple features data frame for world timezones.
 #'
-#' @description Create a SpatialPolygonsDataFrame for world timezones.
+#' The full resolution file will be named "OSMTimezones.rda". In addition,
+#' "_05", _02" and "_01" versions of the file will be created that that are
+#' simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+#' speed of both searching and plotting.
 #'
 #' @details A world timezone shapefile is downloaded and converted to a
-#' SpatialPolygonsDataFrame with additional columns of data. The resulting file
+#' simple features data frame with additional columns of data. The resulting file
 #' will be created in the spatial data directory which is set with
 #' \code{setSpatialDataDir()}.
 #'
@@ -20,7 +20,7 @@
 #' These timezones also have no \code{countryCode} assigned. We hope to rectify this in a future release.
 #' These are the missing timezones:
 #' \preformatted{
-#' > OSMTimezones@data$timezone[is.na(OSMTimezones$countryCode)]
+#' > OSMTimezones$timezone[is.na(OSMTimezones$countryCode)]
 #'  [1] "America/Nuuk"  "Asia/Qostanay"
 #' }
 #'
@@ -42,17 +42,12 @@
 #' then this project will only create a release if there have been changes
 #' performed to the boundary definitions of an existing zone within this project.
 #'
-#' @return Name of the dataset being created.
+#' @return Name of the datasetName being created.
 #'
 #' @references \url{https://github.com/evansiroky/timezone-boundary-builder}
 #'
-#' @seealso setSpatialDataDir
-#' @seealso getVariable
 
-convertOSMTimezones <- function(
-  nameOnly = FALSE,
-  simplify = TRUE
-) {
+convertOSMTimezones <- function() {
 
   # ----- Setup ----------------------------------------------------------------
 
@@ -62,37 +57,34 @@ convertOSMTimezones <- function(
   # Specify the name of the dataset and file being created
   datasetName <- 'OSMTimezones'
 
-  if (nameOnly)
-    return(datasetName)
-
   # ----- Get the data ---------------------------------------------------------
 
   # Build appropriate request URL
-  url <- "https://github.com/evansiroky/timezone-boundary-builder/releases/download/2020a/timezones.shapefile.zip"
+  url <- "https://github.com/evansiroky/timezone-boundary-builder/releases/download/2022f/timezones.shapefile.zip"
 
   filePath <- file.path(dataDir, basename(url))
   utils::download.file(url, filePath)
   # NOTE:  This zip file has no directory so extra subdirectory needs to be created
   utils::unzip(filePath, exdir = file.path(dataDir, 'OSMTimezones'))
 
-  # ----- Convert to SPDF ------------------------------------------------------
+  # ----- Convert to SFDF ------------------------------------------------------
 
-  # Convert shapefile into SpatialPolygonsDataFrame
+  # Convert shapefile into simple features data frame
   # NOTE:  The 'OSMTimezones' directory has been created
-  dsnPath <- file.path(dataDir, 'OSMTimezones/dist')
+  dsnPath <- file.path(dataDir, 'OSMTimezones')
   shpName <- 'combined-shapefile'
-  SPDF <- convertLayer(
+  SFDF <- convertLayer(
     dsn = dsnPath,
-    layerName = shpName,
-    encoding = 'UTF-8'
+    layer = shpName
   )
 
   # ----- Select useful columns and rename -------------------------------------
 
-  # > dplyr::glimpse(SPDF@data)
-  # Observations: 426
-  # Variables: 1
-  # $ tzid <chr> "Africa/Abidjan", "Africa/Accra", "Africa/Addis_Ababa", "Africa/…
+  # > dplyr::glimpse(SFDF, width = 75)
+  # Rows: 426
+  # Columns: 2
+  # $ tzid     <chr> "Africa/Abidjan", "Africa/Accra", "Africa/Addis_Ababa", …
+  # $ geometry <MULTIPOLYGON [°]> MULTIPOLYGON (((-5.440683 4..., MULTIPOLYGO…
 
   # Data Dictionary:
   #   tzid --------> timezone: The name of the timezone
@@ -100,96 +92,39 @@ convertOSMTimezones <- function(
   # Get additional data from Wikipedia
   wikipediaTimezoneTable <- convertWikipediaTimezoneTable()
 
-  # Merge the additional data onto the @data slot of the SPDF
-  SPDF@data <- dplyr::left_join(SPDF@data, wikipediaTimezoneTable, by = c('tzid' = 'timezone'))
+  # Merge the additional data onto the SFDF
+  SFDF <- dplyr::left_join(SFDF, wikipediaTimezoneTable, by = c('tzid' = 'timezone'))
 
-  # > dplyr::glimpse(SPDF@data)
-  # Rows: 427
-  # Columns: 6
-  # $ tzid           <chr> "Africa/Abidjan", "Africa/Accra", "Africa/Addis_Ababa", "Af…
-  # $ UTC_offset     <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
-  # $ UTC_DST_offset <dbl> 0, 0, 3, 1, 3, 0, 1, 0, 0, 2, 1, 2, 2, 1, 1, 0, 0, 3, 3, 1,…
-  # $ countryCode    <chr> "CI", "GH", "ET", "DZ", "ER", "ML", "CF", "GM", "GW", "MW",…
-  # $ longitude      <dbl> NA, NA, 38.70000, 3.05000, 38.88333, NA, 18.58333, NA, NA, …
-  # $ latitude       <dbl> NA, NA, 9.0338889, 36.7963889, 15.3388889, NA, 4.3727778, N…
+  # > dplyr::glimpse(SFDF, width = 75)
+  # Rows: 426
+  # Columns: 9
+  # $ tzid                      <chr> "Africa/Abidjan", "Africa/Accra", "Afri…
+  # $ countryCode               <chr> "CI", "GH", "ET", "DZ", "ER", "ML", "CF…
+  # $ countryCodes              <chr> "CI, BF, GH, GM, GN, IS, ML, MR, SH, SL…
+  # $ timezone_STD_abbreviation <chr> "GMT", "GMT", "EAT", "CET", "EAT", "GMT…
+  # $ timezone_DST_abbreviation <chr> "GMT", "GMT", "EAT", "CET", "EAT", "GMT…
+  # $ UTC_STD_offset            <dbl> 0, 0, 3, 1, 3, 0, 1, 0, 0, 2, 1, 2, 2, …
+  # $ UTC_DST_offset            <dbl> 0, 0, 3, 1, 3, 0, 1, 0, 0, 2, 1, 2, 2, …
+  # $ notes                     <chr> "", "Link to Africa/Abidjan", "Link to …
+  # $ geometry                  <MULTIPOLYGON [°]> MULTIPOLYGON (((-5.440683 …
 
   # Create the new dataframe in a specific column order
-  SPDF@data <-
-    dplyr::select(
-      .data = SPDF@data,
-      timezone = .data$tzid,
-      countryCode = .data$countryCode,
-      UTC_offset = .data$UTC_DST_offset,
-      longitude = .data$longitude,
-      latitude = .data$latitude
+  SFDF <-
+    SFDF %>%
+    dplyr::rename(
+      timezone = .data$tzid
     )
 
-  # ----- Clean SPDF -----------------------------------------------------------
+  # ----- Simplify and save ----------------------------------------------------
 
-  # Group polygons with the same identifier (timezone)
-  SPDF <- organizePolygons(
-    SPDF,
-    uniqueID = 'timezone',
-    sumColumns = NULL
+  uniqueIdentifier <- "claimants"
+
+  simplifyAndSave(
+    SFDF = SFDF,
+    datasetName = datasetName,
+    uniqueIdentifier = uniqueIdentifier,
+    dataDir = dataDir
   )
-
-  # Clean topology errors
-  if ( !cleangeo::clgeo_IsValid(SPDF) ) {
-    SPDF <- cleangeo::clgeo_Clean(SPDF)
-  }
-
-  # ----- Name and save the data -----------------------------------------------
-
-  # Assign a name and save the data
-  message("Saving full resolution version...\n")
-  assign(datasetName, SPDF)
-  save(list = c(datasetName), file = paste0(dataDir, '/', datasetName, '.rda'))
-  rm(list = datasetName)
-
-  # ----- Simplify -------------------------------------------------------------
-
-  if ( simplify ) {
-    # Create new, simplified datsets: one with 5%, 2%, and one with 1% of the vertices of the original
-    # NOTE:  This may take several minutes.
-    message("Simplifying to 5%...\n")
-    SPDF_05 <- rmapshaper::ms_simplify(SPDF, 0.05)
-    SPDF_05@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_05) ) {
-      SPDF_05 <- cleangeo::clgeo_Clean(SPDF_05)
-    }
-    datasetName_05 <- paste0(datasetName, "_05")
-    message("Saving 5% version...\n")
-    assign(datasetName_05, SPDF_05)
-    save(list = datasetName_05, file = paste0(dataDir,"/", datasetName_05, '.rda'))
-    rm(list = c("SPDF_05",datasetName_05))
-
-    message("Simplifying to 2%...\n")
-    SPDF_02 <- rmapshaper::ms_simplify(SPDF, 0.02)
-    SPDF_02@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_02) ) {
-      SPDF_02 <- cleangeo::clgeo_Clean(SPDF_02)
-    }
-    datasetName_02 <- paste0(datasetName, "_02")
-    message("Saving 2% version...\n")
-    assign(datasetName_02, SPDF_02)
-    save(list = datasetName_02, file = paste0(dataDir,"/", datasetName_02, '.rda'))
-    rm(list = c("SPDF_02",datasetName_02))
-
-    message("Simplifying to 1%...\n")
-    SPDF_01 <- rmapshaper::ms_simplify(SPDF, 0.01)
-    SPDF_01@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_01) ) {
-      SPDF_01 <- cleangeo::clgeo_Clean(SPDF_01)
-    }
-    datasetName_01 <- paste0(datasetName, "_01")
-    message("Saving 1% version...\n")
-    assign(datasetName_01, SPDF_01)
-    save(list = datasetName_01, file = paste0(dataDir,"/", datasetName_01, '.rda'))
-    rm(list = c("SPDF_01",datasetName_01))
-  }
 
   # ----- Clean up and return --------------------------------------------------
 
@@ -198,5 +133,41 @@ convertOSMTimezones <- function(
   unlink(dsnPath, recursive = TRUE, force = TRUE)
 
   return(invisible(datasetName))
+
+}
+
+# ===== TEST ===================================================================
+
+if ( FALSE ) {
+
+  library(sf)
+
+  # Look or horizontal lines from polygons that cross the dateline.
+  # NOTE:  These are sometimes created by sf::st_make_valid()
+  loadSpatialData(datasetName)
+  SFDF <- get(paste0(datasetName, ""))
+  SFDF_05 <- get(paste0(datasetName, "_05"))
+  SFDF_02 <- get(paste0(datasetName, "_02"))
+  SFDF_01 <- get(paste0(datasetName, "_01"))
+
+  plot(SFDF_01$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_02$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_05$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  #plot(SFDF$geometry)
+
+  # Try out getSpatialData()
+  lons <- c(-120:-110, 0:10)
+  lats <- c(30:40, 30:40)
+
+  df <- getSpatialData(lons, lats, SFDF_01)
+  df <- getSpatialData(lons, lats, SFDF_02)
+  df <- getSpatialData(lons, lats, SFDF_05)
+  df <- getSpatialData(lons, lats, SFDF)
+
+  # Special Case of Russian failing to plot properly
+  SFDF %>% dplyr::filter(countryCode == "RU") %>% sf::st_geometry() %>% plot()
 
 }

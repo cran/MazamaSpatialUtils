@@ -4,30 +4,32 @@
 \alias{convertWeatherZones}
 \title{Convert NWS Public Forecast Zones Shapefile.}
 \usage{
-convertWeatherZones(nameOnly = FALSE, simplify = TRUE)
-}
-\arguments{
-\item{nameOnly}{Logical specifying whether to only return the name without
-creating the file.}
-
-\item{simplify}{Logical specifying whether to create "_05", _02" and "_01"
-versions of the file that are simplified to 5\%, 2\% and 1\%.}
+convertWeatherZones()
 }
 \value{
-Name of the dataset being created.
+Name of the datasetName being created.
 }
 \description{
-Create a SpatialPolygonsDataFrame for NWS weather forecast zones.
+Create a simple features data frame for NWS weather forecast zones.
+
+The full resolution file will be named "WeatherZones.rda". In addition,
+"_05", _02" and "_01" versions of the file will be created that that are
+simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+speed of both searching and plotting.
 }
 \details{
 A weather forecast zone shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting file
+simple features data frame with additional columns of data. The resulting file
 will be created in the spatial data directory which is set with
 \code{setSpatialDataDir()}.
 
-The source data is from 2020.
+The source data is from 2022-09-13.
 }
 \note{
+Records with a duplicated \code{zoneID} column (typically representing
+coastal land and its watery inlets separately) are combined so that \code{zoneID}
+becomes a unique identifier.
+
 From the source documentation:
 
 The NWS issues forecasts and some watches and warnings for public zones which
@@ -39,9 +41,3 @@ or proximity to large bodies of water.
 \references{
 \url{https://www.weather.gov/gis/PublicZones}
 }
-\seealso{
-setSpatialDataDir
-
-getVariale
-}
-\keyword{datagen}

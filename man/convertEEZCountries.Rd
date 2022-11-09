@@ -4,23 +4,21 @@
 \alias{convertEEZCountries}
 \title{Convert Exclusive Economic Zones countries shapefile}
 \usage{
-convertEEZCountries(nameOnly = FALSE, simplify = TRUE)
-}
-\arguments{
-\item{nameOnly}{Logical specifying whether to only return the name without
-creating the file.}
-
-\item{simplify}{Logical specifying whether to create "_05", _02" and "_01"
-versions of the file that are simplified to 5\%, 2\% and 1\%.}
+convertEEZCountries()
 }
 \value{
-Name of the dataset being created.
+Name of the datasetName being created.
 }
 \description{
-Create a SpatialPolygonsDataFrame for combined EEZ/country boundaries
+Create a simple features dataframe for combined EEZ/country boundaries.
+
+The full resolution file will be named "EEZCountries.rda". In addition,
+"_05", _02" and "_01" versions of the file will be created that that are
+simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+speed of both searching and plotting.
 }
 \details{
-A world EEZ/countries shapefile is converted to a SpatialPolygonsDataFrame
+A world EEZ/countries shapefile is converted to a simple features dataframe
 with additional columns of data. To use this function, the file
 "EEZ_land_union_v3_202003.zip" must be downloaded into the user's spatial
 directory which is set with \code{setSpatialDataDir()}. The resulting file
@@ -65,7 +63,7 @@ regional and national data providers and relevant experts. By setting up
 Collaboration Agreements, data providers will benefit from belonging to the
 Marine Regions partnership as they would get increased visibility, gain access
 to a variety of data analysis services which will benefit from integration of
-several distributed spatial datasets, as well as enjoying the benefit of the
+several distributed spatial datasetNames, as well as enjoying the benefit of the
 creation of stable unique identifiers. An example template of a Collaboration
 Agreement can be found here. Please contact info@marineregions.org if your
 organisation is interested to explore this collaboration.
@@ -74,6 +72,7 @@ Citation:
 Flanders Marine Institute (2020). Union of the ESRI Country shapefile and the
 Exclusive Economic Zones (version 3). Available online at
 https://www.marineregions.org/. https://doi.org/10.14284/403
+#'
 }
 \references{
 \url{https://www.marineregions.org/sources.php#unioneezcountry}
@@ -81,4 +80,3 @@ https://www.marineregions.org/. https://doi.org/10.14284/403
 \seealso{
 setSpatialDataDir
 }
-\keyword{datagen}

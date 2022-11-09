@@ -1,32 +1,41 @@
-#' @keywords datagen
 #' @importFrom rlang .data
 #' @export
 #'
-#' @title Convert US Census State Shapefile
+#' @title Convert US Census state shapefile
 #'
-#' @param nameOnly Logical specifying whether to only return the name without
-#' creating the file.
-#' @param simplify Logical specifying whether to create "_05", _02" and "_01"
-#' versions of the file that are simplified to 5\%, 2\% and 1\%.
+#' @description Create a simple features dataframe for US states
 #'
-#' @description Create a SpatialPolygonsDataFrame for US states
+#' The full resolution file will be named "USCensusStates". In addition,
+#' "_05", _02" and "_01" versions of the file will be created that that are
+#' simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+#' speed of both searching and plotting.
 #'
 #' @details A US state borders shapefile is downloaded and converted to a
-#' SpatialPolygonsDataFrame with additional columns of data. The resulting file
+#' simple features dataframe with additional columns of data. The resulting file
 #' will be created in the spatial data directory which is set with
-#' \code{setSpatialDataDir()}.
+#' \link{setSpatialDataDir}.
 #'
-#' The source data is from 2019.
+#' The source data is from 2021.
 #'
 #' @note From the source documentation:
 #'
-#' The 2019 cartographic boundary shapefiles are simplified representations of
+#' \strong{Cartographic Boundary Files}
+#'
+#' The cartographic boundary files are simplified representations of
 #' selected geographic areas from the U.S. Census Bureau's Master Address File /
 #' Topologically Integrated Geographic Encoding and Referencing (MAF/TIGER)
 #' Database (MTDB). These boundary files are specifically designed for
 #' small-scale thematic mapping. When possible, generalization is performed with
 #' the intent to maintain the hierarchical relationships among geographies and
 #' to maintain the alignment of geographies within a file set for a given year.
+#' To improve the appearance of shapes, areas are represented with fewer vertices
+#' than detailed TIGER/Line equivalents. Some small holes or discontiguous parts
+#' of areas are not included in generalized files. Generalized boundary files
+#' are clipped to a simplified version of the U.S. outline. As a result, some
+#' offshore areas may be excluded from the generalized files.
+#'
+#' \strong{Limitations}
+#'
 #' Geographic areas may not align with the same areas from another year. Some
 #' geographies are available as nation-based files while others are available
 #' only as state-based files.
@@ -50,19 +59,12 @@
 #' detailed boundaries are required, please use the TIGER/Line Shapefiles instead
 #' of the generalized cartographic boundary files.
 #'
-#' @return Name of the dataset being created.
+#' @return Name of the datasetName being created.
 #'
-#' @references \url{https://www2.census.gov/geo/tiger/GENZ2019/}
+#' @references \url{https://www2.census.gov/geo/tiger/GENZ2021/}
 #'
-#' @seealso setSpatialDataDir
-#' @seealso getState
-#' @seealso getCode
-#' @seealso getName
 
-convertUSCensusStates <- function(
-  nameOnly = FALSE,
-  simplify = TRUE
-) {
+convertUSCensusStates <- function() {
 
   # ----- Setup ----------------------------------------------------------------
 
@@ -72,49 +74,47 @@ convertUSCensusStates <- function(
   # Specify the name of the dataset and file being created
   datasetName <- 'USCensusStates'
 
-  if (nameOnly)
-    return(datasetName)
-
   # ----- Get the data ---------------------------------------------------------
 
   # Build appropriate request URL
   # NOTE: 500k means resolution level 1:500k.
-  url <- 'https://www2.census.gov/geo/tiger/GENZ2019/shp/cb_2019_us_state_500k.zip'
+  url <- 'https://www2.census.gov/geo/tiger/GENZ2021/shp/cb_2021_us_state_500k.zip'
 
   filePath <- file.path(dataDir, basename(url))
   utils::download.file(url, filePath)
   # NOTE:  This zip file has no directory so extra subdirectory needs to be created
   utils::unzip(filePath, exdir = file.path(dataDir, 'states'))
 
-  # ----- Convert to SPDF ------------------------------------------------------
+  # ----- Convert to SFDF ------------------------------------------------------
 
-  # Convert shapefile into SpatialPolygonsDataFrame
-  # NOTE:  The 'states' directory has been created
+  # Convert shapefile into simple features data frame
   dsnPath <- file.path(dataDir, 'states')
-  shpName <- 'cb_2019_us_state_500k'
-  SPDF <- convertLayer(
+  shpName <- 'cb_2021_us_state_500k'
+  SFDF <- convertLayer(
     dsn = dsnPath,
-    layerName = shpName,
-    encoding = 'UTF-8'
+    layer = shpName
   )
 
   # ----- Select useful columns and rename -------------------------------------
 
-  # > dplyr::glimpse(SPDF@data)
-  # Observations: 56
-  # Variables: 9
-  # $ STATEFP  <chr> "12", "78", "30", "27", "24", "45", "23", "15", "11", "69", "4…
-  # $ STATENS  <chr> "00294478", "01802710", "00767982", "00662849", "01714934", "0…
-  # $ AFFGEOID <chr> "0400000US12", "0400000US78", "0400000US30", "0400000US27", "0…
-  # $ GEOID    <chr> "12", "78", "30", "27", "24", "45", "23", "15", "11", "69", "4…
-  # $ STUSPS   <chr> "FL", "VI", "MT", "MN", "MD", "SC", "ME", "HI", "DC", "MP", "R…
-  # $ NAME     <chr> "Florida", "United States Virgin Islands", "Montana", "Minneso…
-  # $ LSAD     <chr> "00", "00", "00", "00", "00", "00", "00", "00", "00", "00", "0…
-  # $ ALAND    <chr> "138947364717", "348021896", "376966832749", "206230065476", "…
-  # $ AWATER   <chr> "31362872853", "1550236199", "3869031338", "18942261495", "697…
+  # > dplyr::glimpse(SFDF, width = 75)
+  # Rows: 56
+  # Columns: 10
+  # $ STATEFP  <chr> "56", "02", "24", "60", "05", "38", "10", "66", "35", "4…
+  # $ STATENS  <chr> "01779807", "01785533", "01714934", "01802701", "0006808…
+  # $ AFFGEOID <chr> "0400000US56", "0400000US02", "0400000US24", "0400000US6…
+  # $ GEOID    <chr> "56", "02", "24", "60", "05", "38", "10", "66", "35", "4…
+  # $ STUSPS   <chr> "WY", "AK", "MD", "AS", "AR", "ND", "DE", "GU", "NM", "U…
+  # $ NAME     <chr> "Wyoming", "Alaska", "Maryland", "American Samoa", "Arka…
+  # $ LSAD     <chr> "00", "00", "00", "00", "00", "00", "00", "00", "00", "0…
+  # $ ALAND    <dbl> 2.514587e+11, 1.478943e+12, 2.515199e+10, 1.977591e+08, …
+  # $ AWATER   <dbl> 1867503716, 245378425142, 6979074857, 1307243751, 312195…
+  # $ geometry <MULTIPOLYGON [°]> MULTIPOLYGON (((-111.0546 4..., MULTIPOLYGO…
 
   # Remove outlying territories
-  SPDF <- subset(SPDF, SPDF@data$STUSPS %in% US_52)
+  SFDF <-
+    SFDF %>%
+    dplyr::filter(.data$STUSPS %in% US_52)
 
   # Data Dictionary:
   #   STATEFP -----> stateFIPS: 2-digit FIPS code
@@ -128,15 +128,15 @@ convertUSCensusStates <- function(
   #   AWATER ------> waterArea: water area (in sq. meters)
 
   # Guarantee that ALAND and AWATER are numeric
-  SPDF@data$ALAND <- as.numeric(SPDF@data$ALAND)
-  SPDF@data$AWATER <- as.numeric(SPDF@data$AWATER)
+  SFDF$ALAND <- as.numeric(SFDF$ALAND)
+  SFDF$AWATER <- as.numeric(SFDF$AWATER)
 
-  SPDF@data$countryCode <- "US"
+  SFDF$countryCode <- "US"
 
   # Create the new dataframe in a specific column order
-  SPDF@data <-
+  SFDF <-
+    SFDF %>%
     dplyr::select(
-      .data = SPDF@data,
       countryCode = .data$countryCode,
       stateCode = .data$STUSPS,
       stateFIPS = .data$STATEFP,
@@ -146,72 +146,16 @@ convertUSCensusStates <- function(
       AFFGEOID = .data$AFFGEOID
     )
 
-  # ----- Clean SPDF -----------------------------------------------------------
+  # ----- Simplify and save ----------------------------------------------------
 
-  # Group polygons with the same identifier (stateFIPS)
-  SPDF <- organizePolygons(
-    SPDF,
-    uniqueID = 'stateFIPS',
-    sumColumns = c('landArea', 'waterArea')
+  uniqueIdentifier <- "stateFIPS"
+
+  simplifyAndSave(
+    SFDF = SFDF,
+    datasetName = datasetName,
+    uniqueIdentifier = uniqueIdentifier,
+    dataDir = dataDir
   )
-
-  # Clean topology errors
-  if ( !cleangeo::clgeo_IsValid(SPDF) ) {
-    SPDF <- cleangeo::clgeo_Clean(SPDF, verbose = TRUE)
-  }
-
-  # ----- Name and save the data -----------------------------------------------
-
-  # Assign a name and save the data
-  message("Saving full resolution version...\n")
-  assign(datasetName, SPDF)
-  save(list = c(datasetName), file = paste0(dataDir, '/', datasetName, '.rda'))
-  rm(list = datasetName)
-
-  # ----- Simplify -------------------------------------------------------------
-
-  if ( simplify ) {
-    # Create new, simplified datsets: one with 5%, 2%, and one with 1% of the vertices of the original
-    # NOTE:  This may take several minutes.
-    message("Simplifying to 5%...\n")
-    SPDF_05 <- rmapshaper::ms_simplify(SPDF, 0.05)
-    SPDF_05@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_05) ) {
-      SPDF_05 <- cleangeo::clgeo_Clean(SPDF_05)
-    }
-    datasetName_05 <- paste0(datasetName, "_05")
-    message("Saving 5% version...\n")
-    assign(datasetName_05, SPDF_05)
-    save(list = datasetName_05, file = paste0(dataDir,"/", datasetName_05, '.rda'))
-    rm(list = c("SPDF_05",datasetName_05))
-
-    message("Simplifying to 2%...\n")
-    SPDF_02 <- rmapshaper::ms_simplify(SPDF, 0.02)
-    SPDF_02@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_02) ) {
-      SPDF_02 <- cleangeo::clgeo_Clean(SPDF_02)
-    }
-    datasetName_02 <- paste0(datasetName, "_02")
-    message("Saving 2% version...\n")
-    assign(datasetName_02, SPDF_02)
-    save(list = datasetName_02, file = paste0(dataDir,"/", datasetName_02, '.rda'))
-    rm(list = c("SPDF_02",datasetName_02))
-
-    message("Simplifying to 1%...\n")
-    SPDF_01 <- rmapshaper::ms_simplify(SPDF, 0.01)
-    SPDF_01@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_01) ) {
-      SPDF_01 <- cleangeo::clgeo_Clean(SPDF_01)
-    }
-    datasetName_01 <- paste0(datasetName, "_01")
-    message("Saving 1% version...\n")
-    assign(datasetName_01, SPDF_01)
-    save(list = datasetName_01, file = paste0(dataDir,"/", datasetName_01, '.rda'))
-    rm(list = c("SPDF_01",datasetName_01))
-  }
 
   # ----- Clean up and return --------------------------------------------------
 
@@ -223,3 +167,35 @@ convertUSCensusStates <- function(
 
 }
 
+# ===== TEST ===================================================================
+
+if ( FALSE ) {
+
+  library(sf)
+
+  # Look or horizontal lines from polygons that cross the dateline.
+  # NOTE:  These are sometimes created by sf::st_make_valid()
+  loadSpatialData(datasetName)
+  SFDF <- get(paste0(datasetName, ""))
+  SFDF_05 <- get(paste0(datasetName, "_05"))
+  SFDF_02 <- get(paste0(datasetName, "_02"))
+  SFDF_01 <- get(paste0(datasetName, "_01"))
+
+  plot(SFDF_01$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_02$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_05$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  #plot(SFDF$geometry)
+
+  # Try out getSpatialData()
+  lons <- c(-120:-110, 0:10)
+  lats <- c(30:40, 30:40)
+
+  df <- getSpatialData(lons, lats, SFDF_01)
+  df <- getSpatialData(lons, lats, SFDF_02)
+  df <- getSpatialData(lons, lats, SFDF_05)
+  df <- getSpatialData(lons, lats, SFDF)
+
+}

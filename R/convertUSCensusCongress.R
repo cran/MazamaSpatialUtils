@@ -1,22 +1,22 @@
 #' @keywords datagen
 #' @export
-
+#'
 #' @title Convert US congressional districts shapefile
-
-#' @param nameOnly Logical specifying whether to only return the name without
-#' creating the file.
-#' @param simplify Logical specifying whether to create "_05", _02" and "_01"
-#' versions of the file that are simplified to 5\%, 2\% and 1\%.
-
-#' @description Returns a SpatialPolygonsDataFrame for US Congressional Districts
+#'
+#' @description Returns a simple features data frame for US Congressional Districts
 #' for the 116th US House of Representatives.
-
+#'
+#' The full resolution file will be named "USCensus116thCongress.rda". In addition,
+#' "_05", _02" and "_01" versions of the file will be created that that are
+#' simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+#' speed of both searching and plotting.
+#'
 #' @details A US congressional district shapefile is downloaded and converted to
-#' a SpatialPolygonsDataFrame with additional columns of data. The resulting
+#' a simple features data frame with additional columns of data. The resulting
 #' file will be created in the spatial data directory which is set with
 #' \code{setSpatialDataDir()}.
 #'
-#' #' The source data is from 2019.
+#' #' The source data is from 2021.
 #'
 #' @note From the source documentation:
 #'
@@ -36,16 +36,13 @@
 #' You can join this file with table data downloaded from American FactFinder by
 #' using the AFFGEOID field in the cartographic boundary file.
 #'
-#' @return Name of the dataset being created.
+#' @return Name of the datasetName being created.
 #'
-#' @references \url{https://www2.census.gov/geo/tiger/GENZ2019/}
+#' @references \url{https://www2.census.gov/geo/tiger/GENZ2021/}
 #'
 #' @seealso setSpatialDataDir
 
-convertUSCensusCongress <- function(
-  nameOnly = FALSE,
-  simplify = TRUE
-) {
+convertUSCensusCongress <- function() {
 
   # ----- Setup ----------------------------------------------------------------
 
@@ -55,71 +52,70 @@ convertUSCensusCongress <- function(
   # Specify the name of the dataset and file being created
   datasetName <- 'USCensus116thCongress'
 
-  if (nameOnly)
-    return(datasetName)
-
   # ----- Get the data ---------------------------------------------------------
 
   # Build appropriate request URL
   # NOTE: 500k means resolution level 1:500k.
-  # RC Note: cd116 means Congressional District (116th Congress)  -- old url: 'http://www2.census.gov/geo/tiger/GENZ2016/shp/cb_2016_us_cd115_500k.zip'
-  url <- 'https://www2.census.gov/geo/tiger/GENZ2019/shp/cb_2019_us_cd116_500k.zip'
+  # RC Note: cd116 means Congressional District (116th Congress)
+  url <- 'https://www2.census.gov/geo/tiger/GENZ2021/shp/cb_2021_us_cd116_500k.zip'
 
   filePath <- file.path(dataDir, basename(url))
   utils::download.file(url, filePath)
   # NOTE:  This zip file has no directory so extra subdirectory needs to be created
   utils::unzip(filePath, exdir = file.path(dataDir, 'congress'))
 
-  # ----- Convert to SPDF ------------------------------------------------------
+  # ----- Convert to SFDF ------------------------------------------------------
 
-  # Convert shapefile into SpatialPolygonsDataFrame
+  # Convert shapefile into simple features data frame
   # NOTE:  The 'congress' directory has been created
   dsnPath <- file.path(dataDir,'congress')
-  shpName <- 'cb_2019_us_cd116_500k'
-  SPDF <- convertLayer(
+  shpName <- 'cb_2021_us_cd116_500k'
+  SFDF <- convertLayer(
     dsn = dsnPath,
-    layerName = shpName,
-    encoding = 'UTF-8'
+    layer = shpName
   )
 
   # ----- Select useful columns and rename -------------------------------------
 
-  # > dplyr::glimpse(SPDF@data)
+  # > dplyr::glimpse(SFDF, width = 75)
   # Rows: 441
-  # Columns: 8
-  # $ STATEFP  <chr> "48", "26", "35", "17", "17", "17", "05", "06", "06", "06", …
-  # $ CD116FP  <chr> "24", "05", "01", "10", "11", "15", "01", "49", "05", "08", …
-  # $ AFFGEOID <chr> "5001600US4824", "5001600US2605", "5001600US3501", "5001600 …
-  # $ GEOID    <chr> "4824", "2605", "3501", "1710", "1711", "1715", "0501", "06 …
-  # $ LSAD     <chr> "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", …
-  # $ CDSESSN  <chr> "116", "116", "116", "116", "116", "116", "116", "116", "11 …
-  # $ ALAND    <chr> "680637123", "6083502244", "11916427486", "777275115", "725 …
-  # $ AWATER   <chr> "23057547", "4835444214", "16512286", "31723330", "16209000"…
+  # Columns: 10
+  # $ STATEFP  <chr> "06", "22", "35", "41", "53", "06", "36", "01", "09", "2…
+  # $ CD116FP  <chr> "15", "04", "03", "02", "03", "31", "06", "01", "04", "0…
+  # $ AFFGEOID <chr> "5001600US0615", "5001600US2204", "5001600US3503", "5001…
+  # $ GEOID    <chr> "0615", "2204", "3503", "4102", "5303", "0631", "3606", …
+  # $ NAMELSAD <chr> "Congressional District 15", "Congressional District 4",…
+  # $ LSAD     <chr> "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C2", "C…
+  # $ CDSESSN  <chr> "116", "116", "116", "116", "116", "116", "116", "116", …
+  # $ ALAND    <dbl> 1549309489, 32210673963, 116460386484, 179877899384, 236…
+  # $ AWATER   <dbl> 73721922, 1104876825, 301515882, 1885211282, 1216260406,…
+  # $ geometry <MULTIPOLYGON [°]> MULTIPOLYGON (((-122.1709 3..., MULTIPOLYGO…
 
   # Data Dictionary:
   #   STATEFP -----> stateFIPS: 2-digit FIPS code
   #   CD116FP -----> congressionalDistrictFIPS
   #   AFFGEOID ----> AFFGEOID
   #   GEOID -------> GeoID
+  #   NAMELSAD ----> (drop)
   #   LSAD --------> (drop)
-  #   CDSESSN ------> (drop) this is the congressional district session number of the dataset (116 for all)
+  #   CDSESSN ------> (drop) this is the congressional district session number of the datasetName (116 for all)
   #   ALAND -------> landArea: land area (in sq. meters)
   #   AWATER ------> waterArea: water area (in sq. meters)
 
   # Guarantee that ALAND and AWATER are numeric
-  SPDF@data$ALAND <- as.numeric(SPDF@data$ALAND)
-  SPDF@data$AWATER <- as.numeric(SPDF@data$AWATER)
+  SFDF$ALAND <- as.numeric(SFDF$ALAND)
+  SFDF$AWATER <- as.numeric(SFDF$AWATER)
 
-  SPDF@data$countryCode <- "US"
-  SPDF@data$stateCode <- US_stateFIPSToCode(SPDF$STATEFP)
+  SFDF$countryCode <- "US"
+  SFDF$stateCode <- US_stateFIPSToCode(SFDF$STATEFP)
 
   # Remove outlying territories
-  SPDF <- subset(SPDF, SPDF@data$stateCode %in% US_52)
+  SFDF <- dplyr::filter(SFDF, .data$stateCode %in% US_52)
 
   # Create the new dataframe in a specific column order
-  SPDF@data <-
+  SFDF <-
+    SFDF %>%
     dplyr::select(
-      .data = SPDF@data,
       countryCode = .data$countryCode,
       stateCode = .data$stateCode,
       stateFIPS = .data$STATEFP,
@@ -130,72 +126,16 @@ convertUSCensusCongress <- function(
       GeoID = .data$GEOID
     )
 
-  # ----- Clean SPDF -----------------------------------------------------------
+  # ----- Simplify and save ----------------------------------------------------
 
-  # Group polygons with the same identifier
-  SPDF <- organizePolygons(
-    SPDF,
-    uniqueID = 'GeoID',
-    sumColumns = c('landArea', 'waterArea')
+  uniqueIdentifier <- "GeoID"
+
+  simplifyAndSave(
+    SFDF = SFDF,
+    datasetName = datasetName,
+    uniqueIdentifier = uniqueIdentifier,
+    dataDir = dataDir
   )
-
-  # Clean topology errors
-  if ( !cleangeo::clgeo_IsValid(SPDF) ) {
-    SPDF <- cleangeo::clgeo_Clean(SPDF)
-  }
-
-  # ----- Name and save the data -----------------------------------------------
-
-  # Assign a name and save the data
-  message("Saving full resolution version...\n")
-  assign(datasetName, SPDF)
-  save(list = c(datasetName), file = paste0(dataDir, '/', datasetName, '.rda'))
-  rm(list = datasetName)
-
-  # ----- Simplify -------------------------------------------------------------
-
-  if ( simplify ) {
-    # Create new, simplified datsets: one with 5%, 2%, and one with 1% of the vertices of the original
-    # NOTE:  This may take several minutes.
-    message("Simplifying to 5%...\n")
-    SPDF_05 <- rmapshaper::ms_simplify(SPDF, 0.05)
-    SPDF_05@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_05) ) {
-      SPDF_05 <- cleangeo::clgeo_Clean(SPDF_05)
-    }
-    datasetName_05 <- paste0(datasetName, "_05")
-    message("Saving 5% version...\n")
-    assign(datasetName_05, SPDF_05)
-    save(list = datasetName_05, file = paste0(dataDir,"/", datasetName_05, '.rda'))
-    rm(list = c("SPDF_05",datasetName_05))
-
-    message("Simplifying to 2%...\n")
-    SPDF_02 <- rmapshaper::ms_simplify(SPDF, 0.02)
-    SPDF_02@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_02) ) {
-      SPDF_02 <- cleangeo::clgeo_Clean(SPDF_02)
-    }
-    datasetName_02 <- paste0(datasetName, "_02")
-    message("Saving 2% version...\n")
-    assign(datasetName_02, SPDF_02)
-    save(list = datasetName_02, file = paste0(dataDir,"/", datasetName_02, '.rda'))
-    rm(list = c("SPDF_02",datasetName_02))
-
-    message("Simplifying to 1%...\n")
-    SPDF_01 <- rmapshaper::ms_simplify(SPDF, 0.01)
-    SPDF_01@data$rmapshaperid <- NULL # Remove automatically generated "rmapshaperid" column
-    # Clean topology errors
-    if ( !cleangeo::clgeo_IsValid(SPDF_01) ) {
-      SPDF_01 <- cleangeo::clgeo_Clean(SPDF_01)
-    }
-    datasetName_01 <- paste0(datasetName, "_01")
-    message("Saving 1% version...\n")
-    assign(datasetName_01, SPDF_01)
-    save(list = datasetName_01, file = paste0(dataDir,"/", datasetName_01, '.rda'))
-    rm(list = c("SPDF_01",datasetName_01))
-  }
 
   # ----- Clean up and return --------------------------------------------------
 
@@ -207,6 +147,38 @@ convertUSCensusCongress <- function(
 
 }
 
+# ===== TEST ===================================================================
+
+if ( FALSE ) {
+
+  library(sf)
+
+  # Look or horizontal lines from polygons that cross the dateline.
+  # NOTE:  These are sometimes created by sf::st_make_valid()
+  loadSpatialData(datasetName)
+  SFDF <- get(paste0(datasetName, ""))
+  SFDF_05 <- get(paste0(datasetName, "_05"))
+  SFDF_02 <- get(paste0(datasetName, "_02"))
+  SFDF_01 <- get(paste0(datasetName, "_01"))
+
+  plot(SFDF_01$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_02$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  plot(SFDF_05$geometry)
+  dev.off(dev.list()["RStudioGD"])
+  #plot(SFDF$geometry)
+
+  # Try out getSpatialData()
+  lons <- c(-120:-110, 0:10)
+  lats <- c(30:40, 30:40)
+
+  df <- getSpatialData(lons, lats, SFDF_01)
+  df <- getSpatialData(lons, lats, SFDF_02)
+  df <- getSpatialData(lons, lats, SFDF_05)
+  df <- getSpatialData(lons, lats, SFDF)
+
+}
 
 
 

@@ -2,41 +2,49 @@
 % Please edit documentation in R/convertUSCensusStates.R
 \name{convertUSCensusStates}
 \alias{convertUSCensusStates}
-\title{Convert US Census State Shapefile}
+\title{Convert US Census state shapefile}
 \usage{
-convertUSCensusStates(nameOnly = FALSE, simplify = TRUE)
-}
-\arguments{
-\item{nameOnly}{Logical specifying whether to only return the name without
-creating the file.}
-
-\item{simplify}{Logical specifying whether to create "_05", _02" and "_01"
-versions of the file that are simplified to 5\%, 2\% and 1\%.}
+convertUSCensusStates()
 }
 \value{
-Name of the dataset being created.
+Name of the datasetName being created.
 }
 \description{
-Create a SpatialPolygonsDataFrame for US states
+Create a simple features dataframe for US states
+
+The full resolution file will be named "USCensusStates". In addition,
+"_05", _02" and "_01" versions of the file will be created that that are
+simplified to 5\%, 2\% and 1\%. Simplified versions will greatly improve the
+speed of both searching and plotting.
 }
 \details{
 A US state borders shapefile is downloaded and converted to a
-SpatialPolygonsDataFrame with additional columns of data. The resulting file
+simple features dataframe with additional columns of data. The resulting file
 will be created in the spatial data directory which is set with
-\code{setSpatialDataDir()}.
+\link{setSpatialDataDir}.
 
-The source data is from 2019.
+The source data is from 2021.
 }
 \note{
 From the source documentation:
 
-The 2019 cartographic boundary shapefiles are simplified representations of
+\strong{Cartographic Boundary Files}
+
+The cartographic boundary files are simplified representations of
 selected geographic areas from the U.S. Census Bureau's Master Address File /
 Topologically Integrated Geographic Encoding and Referencing (MAF/TIGER)
 Database (MTDB). These boundary files are specifically designed for
 small-scale thematic mapping. When possible, generalization is performed with
 the intent to maintain the hierarchical relationships among geographies and
 to maintain the alignment of geographies within a file set for a given year.
+To improve the appearance of shapes, areas are represented with fewer vertices
+than detailed TIGER/Line equivalents. Some small holes or discontiguous parts
+of areas are not included in generalized files. Generalized boundary files
+are clipped to a simplified version of the U.S. outline. As a result, some
+offshore areas may be excluded from the generalized files.
+
+\strong{Limitations}
+
 Geographic areas may not align with the same areas from another year. Some
 geographies are available as nation-based files while others are available
 only as state-based files.
@@ -61,15 +69,5 @@ detailed boundaries are required, please use the TIGER/Line Shapefiles instead
 of the generalized cartographic boundary files.
 }
 \references{
-\url{https://www2.census.gov/geo/tiger/GENZ2019/}
+\url{https://www2.census.gov/geo/tiger/GENZ2021/}
 }
-\seealso{
-setSpatialDataDir
-
-getState
-
-getCode
-
-getName
-}
-\keyword{datagen}

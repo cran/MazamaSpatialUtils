@@ -4,10 +4,10 @@
 \alias{loadSpatialData}
 \title{Load spatial datasets}
 \usage{
-loadSpatialData(pattern = "*\\\\.[rR][dD]a?t?a")
+loadSpatialData(pattern = "*\\\\.rda")
 }
 \arguments{
-\item{pattern}{Regular expression used to match filenames.}
+\item{pattern}{Regular expression used to match file names.}
 }
 \value{
 Invisibly returns a vector of spatial dataset names loaded into the
@@ -17,7 +17,7 @@ global environment.
 Load datasets found in the directory previously set with
 \code{setSpatialDataDir()}.
 Only files matching \code{pattern} will be loaded.
-By default, only \code{.RData} and \code{.rda} files are matched.
+By default, all \code{.rda} files are matched.
 
 Core datastes available for the package include:
 \itemize{
@@ -36,4 +36,3 @@ setSpatialDataDir
 
 installSpatialData
 }
-\keyword{environment}

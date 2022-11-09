@@ -1,15 +1,14 @@
-#' @keywords environment
 #' @export
 #' @importFrom rlang .data
 #'
 #' @title Load spatial datasets
 #'
-#' @param pattern Regular expression used to match filenames.
+#' @param pattern Regular expression used to match file names.
 #'
 #' @description Load datasets found in the directory previously set with
 #' \code{setSpatialDataDir()}.
 #' Only files matching \code{pattern} will be loaded.
-#' By default, only \code{.RData} and \code{.rda} files are matched.
+#' By default, all \code{.rda} files are matched.
 #'
 #' Core datastes available for the package include:
 #' \itemize{
@@ -30,7 +29,7 @@
 #' @seealso installSpatialData
 #'
 loadSpatialData <- function(
-  pattern = "*\\.[rR][dD]a?t?a"
+  pattern = "*\\.rda"
 ) {
 
   # Use package internal data directory
@@ -57,10 +56,9 @@ loadSpatialData <- function(
       load(filePath, envir = .GlobalEnv)
     }
 
-    # Return names of all SPDF loaded into the global environment
+    # Return names of all SFDF loaded into the global environment
     names <-
       base::basename(filePaths) %>%
-      stringr::str_replace("\\.RData", "") %>%
       stringr::str_replace("\\.rda", "") %>%
       unique() %>%
       sort()

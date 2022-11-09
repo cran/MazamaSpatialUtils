@@ -23,5 +23,4 @@ testthat::test_that("allData returns are correct dimension and type", {
 testthat::test_that("getPolygonID handles errors correctly", {
   testthat::expect_error(getPolygonID(iris))
   testthat::expect_is(getPolygonID(SimpleTimezones), "character")
-  testthat::expect_is(getPolygonID(SimpleCountries), "character")
 })

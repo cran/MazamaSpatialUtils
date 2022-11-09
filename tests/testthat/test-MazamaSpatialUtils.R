@@ -12,7 +12,7 @@ setup_spatial_data <- function() {
   if (!exists('NaturalEarthAdm1')) {
     tryCatch(getSpatialDataDir(),
              error = function(error) {
-               setSpatialDataDir("~/Data/Spatial")
+               setSpatialDataDir("~/Data/Spatial_0.8")
              })
     tryCatch(loadSpatialData("NaturalEarthAdm1"),
              error = function(error) {
@@ -47,7 +47,7 @@ testthat::test_that("setSpatialDataDir and getSpatialDataDir work correctly", {
   if (class(spatialDataDir) == "character") {
     setSpatialDataDir(spatialDataDir)
   } else {
-    removeSpatialDataDir()
+    .removeSpatialDataDir()
   }
 
 })
@@ -113,7 +113,7 @@ test_that("returns expected output", {
   if (class(spatialDataDir) == "character") {
     setSpatialDataDir(spatialDataDir)
   } else {
-    removeSpatialDataDir()
+    .removeSpatialDataDir()
   }
 
 })
@@ -137,7 +137,7 @@ test_that("returns expected output", {
   if (class(spatialDataDir) == "character") {
     setSpatialDataDir(spatialDataDir)
   } else {
-    removeSpatialDataDir()
+    .removeSpatialDataDir()
   }
 
 })
@@ -157,28 +157,28 @@ test_that("warns when there are multiple states for a code", {
   if (class(spatialDataDir) == "character") {
     setSpatialDataDir(spatialDataDir)
   } else {
-    removeSpatialDataDir()
+    .removeSpatialDataDir()
   }
 
 })
 
-# -----------------------------------------------------------------------------
-context("dissolve")
-
-test_that("errors are handled intellegently", {
-  expect_error(dissolve(SimpleCountries, field = "missing"), "Field 'missing' not found")
-})
-
-# NOTE:  This takes a long time and is only tested before CRAN submission
-
-# test_that("dissolves into correct object", {
+# # -----------------------------------------------------------------------------
+# context("dissolve")
 #
-#   skip_on_cran()
-#   skip_on_travis()
-#
-#   regions <- dissolve(SimpleCountries, field = "UN_region")
-#   expect_is(regions, "SpatialPolygonsDataFrame")
-#   expect_equal(length(unique(SimpleCountries$UN_region)), length(regions$UN_region))
-#
+# test_that("errors are handled intellegently", {
+#   expect_error(dissolve(SimpleCountries, field = "missing"), "Field 'missing' not found")
 # })
+#
+# # NOTE:  This takes a long time and is only tested before CRAN submission
+#
+# # test_that("dissolves into correct object", {
+# #
+# #   skip_on_cran()
+# #   skip_on_travis()
+# #
+# #   regions <- dissolve(SimpleCountries, field = "UN_region")
+# #   expect_is(regions, "simple features data frame")
+# #   expect_equal(length(unique(SimpleCountries$UN_region)), length(regions$UN_region))
+# #
+# # })
 

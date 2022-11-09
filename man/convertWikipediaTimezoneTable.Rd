@@ -2,7 +2,7 @@
 % Please edit documentation in R/convertWikipediaTimezoneTable.R
 \name{convertWikipediaTimezoneTable}
 \alias{convertWikipediaTimezoneTable}
-\title{Convert Wikipedia Timezone Table to Dataframe}
+\title{Convert Wikipedia timezone table to dataframe}
 \usage{
 convertWikipediaTimezoneTable()
 }

@@ -2,12 +2,12 @@
 % Please edit documentation in R/MazamaSpatialUtils.R
 \name{dissolve}
 \alias{dissolve}
-\title{Aggregate shapes in a SpatialPolygonsDataFrame}
+\title{Aggregate shapes in a simple features data frame}
 \usage{
-dissolve(SPDF, field = NULL, sum_fields = NULL, copy_fields = NULL, ...)
+dissolve(SFDF, field = NULL, sum_fields = NULL, copy_fields = NULL, ...)
 }
 \arguments{
-\item{SPDF}{Object of class SpatialPolygonsDataFrame.}
+\item{SFDF}{Object of class simple features data frame.}
 
 \item{field}{Name of the field to dissolve on.}
 
@@ -23,12 +23,12 @@ A spatial polygons dataframe with aggregated shapes.
 }
 \description{
 Aggregate shapes in a spatial polygons dataframe. This is a
-convenience wrapper for \code{rmapshaper::ms_dissolve()}
+convenience wrapper for \code{\link[rmapshaper]{ms_dissolve}}.
 }
 \examples{
 \donttest{
 regions <- dissolve(SimpleCountries, field = "UN_region", sum_fields = "area")
 plot(regions)
-regions@data
+dplyr::glimpse(regions)
 }
 }

@@ -5,9 +5,9 @@
 \title{Return country names at specified locations}
 \usage{
 getCountry(
-  longitude,
-  latitude,
-  dataset = "SimpleCountriesEEZ",
+  longitude = NULL,
+  latitude = NULL,
+  datasetName = "SimpleCountriesEEZ",
   countryCodes = NULL,
   allData = FALSE,
   useBuffering = FALSE
@@ -18,7 +18,7 @@ getCountry(
 
 \item{latitude}{Vector of latitudes in decimal degrees North.}
 
-\item{dataset}{Name of spatial dataset to use.}
+\item{datasetName}{Name of spatial dataset to use.}
 
 \item{countryCodes}{Vector of ISO 3166-1 alpha-2 country codes.}
 
@@ -46,7 +46,7 @@ getCountry(longitude, latitude)
 
 }
 \references{
-\url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}
+http://www.naturalearthdata.com/downloads/10m-cultural-vectors/
 }
 \seealso{
 SimpleCountries

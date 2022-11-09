@@ -5,8 +5,8 @@
 \title{Return US county name at specified locations}
 \usage{
 getUSCounty(
-  longitude,
-  latitude,
+  longitude = NULL,
+  latitude = NULL,
   dataset = "USCensusCounties",
   stateCodes = NULL,
   allData = FALSE,
@@ -42,7 +42,7 @@ If \code{allData = TRUE}, additional data is returned.
 \examples{
 \dontrun{
 library(MazamaSpatialUtils)
-setSpatialDataDir("~/Data/Spatial")
+setSpatialDataDir("~/Data/Spatial_0.8")
 
 loadSpatialData("USCensusCounties")
 
@@ -53,7 +53,7 @@ getUSCounty(longitude, latitude)
 
 }
 \references{
-\url{http://www.naturalearthdata.com/downloads/10m-cultural-vectors/}
+http://www.naturalearthdata.com/downloads/10m-cultural-vectors/
 }
 \seealso{
 getSpatialData

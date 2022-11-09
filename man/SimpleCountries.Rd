@@ -5,7 +5,7 @@
 \alias{SimpleCountries}
 \title{Simplified spatial dataset of country boundaries.}
 \format{
-A SpatialPolygonsDataFrame with 246 records and 6 columns of data.
+A simple features data frame with 246 records and 7 columns of data.
 }
 \usage{
 SimpleCountries
@@ -23,16 +23,20 @@ This dataset is equivalent to TMWorldBordersSimple but with fewer columns of dat
 \seealso{
 convertTMWorldBordersSimple
 
-This dataset was generated on 2020-11-19 by running:
+This dataset was generated on 2022-11-04 by running:
 
 \preformatted{
 library(MazamaSpatialUtils)
-setSpatialDataDir("~/Data/Spatial")
+setSpatialDataDir("~/Data/Spatial_0.8")
 
-convertTMWorldBordersSimple()
+convertTMWorldBorders()
 
-loadSpatialData("TMWorldBordersSimple")
+loadSpatialData("NaturalEarthAdm0_05")
 
+columnNames <- c("countryCode", "countryName", "ISO3", "FIPS",
+                 "UN_region", "polygonID")
+SimpleCountries <- NaturalEarthAdm0_05[, columnNames]
+save(SimpleCountries, file = "data/SimpleCountries.rda")
 }
 }
 \keyword{datasets}
