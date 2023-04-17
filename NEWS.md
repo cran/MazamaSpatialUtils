@@ -1,3 +1,44 @@
+# MazamaSpatialUtils 0.8.5rm 
+
+* Tweaks to satisfy CRAN submission checks.
+
+# MazamaSpatialUtils 0.8.4
+
+* Added dependency on **sf**.
+
+This addresses the following error seen when using internal data in a **dplyr** context:
+
+```
+> IS <- SimpleCountriesEEZ %>% dplyr::filter(countryCode == "IS")
+Error in `vec_size()`:
+! `x` must be a vector, not a <sfc_MULTIPOLYGON/sfc> object.
+```
+
+This error is explained here:
+<https://www.mm218.dev/posts/2022-12-01-sf-in-packages/> and the simplest 
+solution for this spatially-oriented package is to simply move **sf** from an
+_import_ to a _dependency_ (by moving it to the "Depends:" section of `DESCRIPTION`).
+
+# MazamaSpatialUtils 0.8.3
+
+* Added handling of "Sparse geometry binary predicate list of length 1" error in 
+`getSpatialData()` by simply choosing the first polygon returned.
+* Added `convertWBDHUC()` and pre-generated spatial data files: `WBDHU2`, 
+`WBDHU4`, `WBDHU6`, `WBDHU8` and `WBDHU10`.
+* Added `getHUC()` and `getHUCName()`.
+
+Added the following datasets to the archive at: 
+http://data.mazamascience.com/MazamaSpatialUtils/Spatial_0.8/
+* `WBDHU2` (and simplified versions)
+* `WBDHU4` (and simplified versions)
+* `WBDHU6` (and simplified versions)
+* `WBDHU8`
+* `WBDHU10`
+
+# MazamaSpatialUtils 0.8.2
+
+* Documentation fixes associated with change from **sp** to **sf**.
+
 # MazamaSpatialUtils 0.8.1
 
 * Tweaks to satisfy CRAN submission checks.
