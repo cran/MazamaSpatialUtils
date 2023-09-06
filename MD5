@@ -1,8 +1,8 @@
-18f6ac62049b6b9a0249012511ccd589 *DESCRIPTION
+24438f47d1acbce3ec40fae84907fd89 *DESCRIPTION
 07be953b0d5ff450f2c5bd06c66bcf61 *NAMESPACE
-9f29931342cfd62679d00740ec330722 *NEWS.md
+b2da975e5135dc1fdd96a2d44c9e50bd *NEWS.md
 fd497db4cff6986a18d96db89da4f658 *R/CONVERT_TEMPLATE.R
-57a5cee8bb3cdfdd6f960d598109aff7 *R/MazamaSpatialUtils.R
+b8306cb015888a14c720c1983f4ca768 *R/MazamaSpatialUtils.R
 e92cd9641bd43f79069789be2a56f16d *R/US_countyConversion.R
 0ceb2949a460f2f77fe79babf12dc75e *R/US_stateConversion.R
 b6433478dc12d435962b92a401c32ff6 *R/convertEEZCountries.R
@@ -20,9 +20,9 @@ fb7540f4dbda8a02cacc36a7b26ec720 *R/convertWBDHUC.R
 04100eb0ee6ecff5dd337c1a61b84d16 *R/convertWeatherZones.R
 d5622e2930b2d883c2c5157781fa2764 *R/convertWikipediaTimezoneTable.R
 0c62cac066248455821121117ac4f9ba *R/data.R
-2e8798281c94b9bf8002563bf7552e6e *R/getCountry.R
-c23f0b373cdeb7109d8d04a27b3c53ac *R/getCountryCode.R
-2c8c74df789add16673aafd57a3c81df *R/getCountryName.R
+fe536ef700fd79644522be994a97d9cf *R/getCountry.R
+b6957625797deb71652f26d31fff0cd8 *R/getCountryCode.R
+ce7b1039bd9a63d3860e72ea885f2657 *R/getCountryName.R
 fee65769c6d4a3de470457be7c2a51e4 *R/getHUC.R
 93b7598d301ca2e6fb29adc927db5e9c *R/getHUCName.R
 68a8fd212cd1eddb046d4509b758e725 *R/getPolygonID.R
@@ -30,7 +30,7 @@ fee65769c6d4a3de470457be7c2a51e4 *R/getHUC.R
 7712289dab70515701f0ddfd5c0526eb *R/getState.R
 4babd9011f6709214fbf11bbf194bd42 *R/getStateCode.R
 857784ea217d8922cc0b8ccb7d2a081b *R/getStateName.R
-08229521e1006fe87dd2425da412aa99 *R/getTimezone.R
+733473ebab90df062111da2b12a80306 *R/getTimezone.R
 9a89342a782d68b00461547ab5c186d1 *R/getUSCounty.R
 47dbdd3d585359ecac831571e930ab85 *R/getVariable.R
 bad52c76b912f0d24ef3e02886fb1c67 *R/installSpatialData.R
@@ -39,7 +39,7 @@ c6e634bca50493386da5d0d399a6d013 *R/installedSpatialData.R
 04d953ea4234ad77c93b0319ecb42c57 *R/summarizeByPolygon.R
 50d5cd50a002722098ded496ee6255a0 *R/utils-convert.R
 65cef5e0674056f6fc07dd2b3ca85c13 *R/utils-pipe.R
-017d783e950f7d5e063e382c359e404f *README.md
+d81914a714d16cedbf4163a0d6e503af *README.md
 14d248737fa0d8a7abe40c2c459a7507 *build/vignette.rds
 e920fd1918a598aa5796dc9e3fda3bce *data/SimpleCountries.rda
 e73bcc5b1e2e8ca16575ef644c5d8591 *data/SimpleCountriesEEZ.rda
@@ -60,7 +60,7 @@ ae87446b70bc242788cff2c5b4640e33 *inst/shiny_examples/map_app/README.md
 84fb8ae19d1afb108dc5fb68343549c1 *inst/shiny_examples/map_app/helpers/bridgePlot.R
 423d8e9c4961fd0066876f67dbc1ddaf *inst/shiny_examples/map_app/helpers/bridgeTable.R
 dc5e165deb671889fad73ec3600e174e *man/CONUS.Rd
-6834bbeb15f3624eeb5666ad8d89d19e *man/MazamaSpatialUtils.Rd
+8bac8bd7da4a9e204988fc22db94f3b8 *man/MazamaSpatialUtils.Rd
 acc70198de8269b386a06c0844aaea96 *man/SimpleCountries.Rd
 a5b022a5b8ce4245eae1a4a69ef06b4c *man/SimpleCountriesEEZ.Rd
 9e95d1e7fc658da011fed21481f5ddf3 *man/SimpleTimezones.Rd
