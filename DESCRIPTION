@@ -1,6 +1,6 @@
 Type: Package
 Package: MazamaSpatialUtils
-Version: 0.8.6
+Version: 0.8.7
 Title: Spatial Data Download and Utility Functions
 Authors@R: c(
     person("Jonathan", "Callahan", email="jonathan.s.callahan@gmail.com", role=c("aut","cre")), 
@@ -44,7 +44,7 @@ Suggests: knitr, markdown, readr, rmarkdown, testthat
 Encoding: UTF-8
 VignetteBuilder: knitr
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 NeedsCompilation: no
-Packaged: 2023-09-06 16:55:45 UTC; jonathancallahan
-Date/Publication: 2023-09-06 17:50:08 UTC
+Packaged: 2024-11-01 21:04:37 UTC; jonathancallahan
+Date/Publication: 2024-11-03 05:30:26 UTC
